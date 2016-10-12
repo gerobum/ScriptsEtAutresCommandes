@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for i in *.wma 
+do
+    nom=`basename "$i" .wma`
+    echo $nom
+    cvlc "$nom.wma" -I dummy -vvv --sout=#transcode\{acodec=flac,ab=192\}:std\{access=file,mux=raw,dst="$nom.flac"\} vlc://quit
+done    
+
+
+#cvlc 1.wma -I dummy -vvv --sout=#transcode\{acodec=flac,ab=192\}:std\{access=file,mux=raw,dst="B.flac"\} vlc:\\quit
