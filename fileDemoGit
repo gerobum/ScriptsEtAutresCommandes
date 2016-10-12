@@ -1,0 +1,17 @@
+mkdir demoGit
+cd demoGit
+git init
+git status
+touch f1
+git status
+git add f1
+git status
+git commit -m "V0"
+git status
+echo OK > f1
+git status
+git commit -a -m "V1"
+git status
+git log
+touch f2
+git status
