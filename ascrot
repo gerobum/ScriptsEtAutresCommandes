@@ -1,0 +1,29 @@
+#!/bin/bash
+clear
+if [ $# -eq 2 ]
+then
+    if [ -f "$1" ]
+    then
+        if [ -d "$2" ]
+        then
+            cd "$2"
+            dimage=`pwd`
+            cd ..
+            i=1
+            while read line  
+            do   
+                clear
+                echo "\$ $line"  
+                eval $line
+                scrot -u -d 1 "$dimage/$i.png"
+                let i+=1
+            done < $1
+        else
+            echo "Le second paramètre doit être un dossier qui contiendra les images"
+        fi
+    else
+        echo "Le premier paramètre doit être un fichier bash"
+    fi
+else
+    echo "usage : `basename $0` <un fichier bash> <un dossier où mettre les images>"
+fi
