@@ -1,5 +1,5 @@
 #!/bin/bash
-clear
+# clear
 if [ $# -eq 2 ]
 then
     if [ -f "$1" ]
@@ -12,7 +12,6 @@ then
             i=1
             while read line  
             do   
-                clear
                 echo "\$ $line"  
                 eval $line
                 scrot -u -d 1 "$dimage/$i.png"
