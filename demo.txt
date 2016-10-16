@@ -1,0 +1,149 @@
+# Création d'un dossier de test
+$ mkdir testGit
+# On se place dans ce dossier
+$ cd testGit
+# La commance suivante donne une erreur car le dossier n'est pas un dépôt demoGit
+$ git status
+fatal: Not a git repository (or any of the parent directories): .git
+# Il faut commencer par l'initialiser
+$ git init
+Dépôt Git vide initialisé dans /home/yvan/tmp/demoGit/testGit/.git/
+# Maintenant, c'est bien un dossier Git. Il n'y rien dedans.
+$ git status
+Sur la branche master
+
+Validation initiale
+
+rien à valider (créez/copiez des fichiers et utilisez "git add" pour les suivre)
+# Création d'un nouveau fichier f0
+$ touch f0
+# Git indique que le fichier est "non suivi" (f0 est nouvean dans la zone de travail)
+$ git status
+Sur la branche master
+
+Validation initiale
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+
+        f0
+
+aucune modification ajoutée à la validation mais des fichiers non suivis sont présents (utilisez "git add" pour les suivre)
+# Pour demander à Git de le suivre, il faut l'ajouter
+$ git add f0
+# Git indique que la future validation de f0 est prête (f0 est indexé)
+$ git status
+Sur la branche master
+
+Validation initiale
+
+Modifications qui seront validées :
+  (utilisez "git rm --cached <fichier>..." pour désindexer)
+
+        nouveau fichier : f0
+
+# Pour valider f0, il faut faire un "commit". Le message "V0" l'accompagne.
+$ git commit -m "V0"
+[master (commit racine) 71ab899] V0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 f0
+# Git indique que tout va bien. Le dossier de travail est identique au dossier de validation.
+$ git status
+Sur la branche master
+rien à valider, la copie de travail est propre
+# f0 est modifié (édité)
+$ echo V1 > f0
+# Git a bien remarqué cette modification
+$ git status
+Sur la branche master
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git checkout -- <fichier>..." pour annuler les modifications dans la copie de travail)
+
+        modifié :         f0
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+# Validation de f0
+$ git add f0
+# Git indique de f0 est indexé
+$ git status
+Sur la branche master
+Modifications qui seront validées :
+  (utilisez "git reset HEAD <fichier>..." pour désindexer)
+
+        modifié :         f0
+
+# Affichage de toutes les versions
+$ git log
+commit 71ab899d35801db52d5cfcf8583a2f28350503c3
+Author: yvan <yvan.maillot@gmail.com>
+Date:   Sun Oct 16 20:47:57 2016 +0200
+
+    V0
+# Modification de f0
+$ echo V2 > f0
+# Git l'a remarqué
+$ git status
+Sur la branche master
+Modifications qui seront validées :
+  (utilisez "git reset HEAD <fichier>..." pour désindexer)
+
+        modifié :         f0
+
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git checkout -- <fichier>..." pour annuler les modifications dans la copie de travail)
+
+        modifié :         f0
+
+# L'indexation et la validation de f0 avec le commentaire "V1" est faite en une fois
+$ git commit -a -m "V1"
+[master adb87e2] V1
+ 1 file changed, 1 insertion(+)
+# Tout va bien
+$ git status
+Sur la branche master
+rien à valider, la copie de travail est propre
+# Affiche de toutes les versions et les différences entre deux versions consécutives.
+$ git log -p
+commit adb87e23f854ab8bbaf2bf2803aba943303ae261
+Author: yvan <yvan.maillot@gmail.com>
+Date:   Sun Oct 16 20:48:17 2016 +0200
+
+    V1
+
+diff --git a/f0 b/f0
+index e69de29..beef424 100644
+--- a/f0
++++ b/f0
+@@ -0,0 +1 @@
++V2
+
+commit 71ab899d35801db52d5cfcf8583a2f28350503c3
+Author: yvan <yvan.maillot@gmail.com>
+Date:   Sun Oct 16 20:47:57 2016 +0200
+
+    V0
+
+diff --git a/f0 b/f0
+new file mode 100644
+index 0000000..e69de29
+# Création d'un nouveau fichier f1
+$ touch f1
+# Modification de f0
+$ echo V3 > f0
+# Git indique que f0 a été modifié et que f1 a été ajouté
+$ git status
+Sur la branche master
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git checkout -- <fichier>..." pour annuler les modifications dans la copie de travail)
+
+        modifié :         f0
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+
+        f1
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
