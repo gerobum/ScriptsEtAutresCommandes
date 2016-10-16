@@ -1,48 +1,74 @@
-# Création d'un dossier de démo
+# Création d'un dossier de test
 mkdir testGit
-# On se place dans ce dossier
+# Placement dans ce dossier
 cd testGit
-# La commance suivante donne une erreur car le dossier n'est pas un dépôt demoGit
+# La commance suivante donne une erreur car le dossier n'est pas un dépôt Git.
 git status
-# Il faut commencer par l'initialiser
+# Il faut commencer par l'initialiser.
 git init
-# Maintenant, c'est bien un dossier Git. Il n'y rien dedans.
+# Maintenant c'est bien un dossier Git. 
+# La commande suivante le précise ainsi que d'autres choses.
 git status
 # Création d'un nouveau fichier f0
 touch f0
-# Git indique que le fichier est "non suivi" (f0 est nouvean dans la zone de travail)
+# Git indique que ce fichier est "non suivi" (f0 est nouveau dans la zone de travail).
 git status
-# Pour demander à Git de le suivre, il faut l'ajouter 
+# Pour demander à Git de le "suivre", il faut l'ajouter ou plutôt l'indexer.
 git add f0
-# Git indique que la future validation de f0 est prête (f0 est indexé)
+# Git indique que la future validation de f0 est prête (f0 est indexé).
 git status
 # Pour valider f0, il faut faire un "commit". Le message "V0" l'accompagne.
 git commit -m "V0"
 # Git indique que tout va bien. Le dossier de travail est identique au dossier de validation.
 git status
-# f0 est modifié (édité)
+# f0 est modifié (édité).
 echo V1 > f0
-# Git a bien remarqué cette modification
+# Git a bien remarqué cette modification.
 git status
-# Validation de f0 
+# Indexation de f0 
 git add f0
-# Git indique de f0 est indexé
+# Git indique que f0 est indexé.
 git status
 # Affichage de toutes les versions
 git log
 # Modification de f0
 echo V2 > f0
-# Git l'a remarqué
+# Git l'a remarqué.
 git status
-# L'indexation et la validation de f0 avec le commentaire "V1" est faite en une fois
+# L'indexation et la validation de f0 avec le commentaire "V1" est faite en une fois.
+# C'est l'option -a qui demande l'indexation de tous les fichiers modifiés avant validation.
 git commit -a -m "V1"
 # Tout va bien
 git status
-# Affiche de toutes les versions et les différences entre deux versions consécutives. 
+# Affichage de toutes les versions et des différences entre deux versions consécutives. 
 git log -p
 # Création d'un nouveau fichier f1
 touch f1
 # Modification de f0
 echo V3 > f0
-# Git indique que f0 a été modifié et que f1 a été ajouté
+# Git indique que f0 a été modifié et que f1 a été ajouté.
+git status
+# Il est possible d'indexer les deux fichiers.
+git add f0 f1
+# Validation
+git commit -m "Version 2"
+# Visualisation des versions
+git log
+# Les noms des versions ne sont pas cohérents. 
+# Annulation et remplacement du message du dernier commit
+git commit --amend -m "V2"
+# C'est plus cohérent ainsi.
+git log
+# Finalement f1 est en trop.
+rm f1
+# Git signale que f1 a disparu de la zone de travail
+git status
+# Il faut préparer la suppression.
+git rm f1
+# La suppression est indexée. Comme ce fichier f1 était une erreur
+# On écrase le dernier commit.
+git commit --amend -m "V2"
+# Affichage des versions
+git log
+# Tout est bon
 git status
