@@ -15,4 +15,4 @@ do
         pdflatex -halt-on-error "$j"
     fi
 done
-rm *.aux *.log *.out *.snm *.toc *.nav
+rm *.aux *.log *.out *.snm *.toc *.nav *.vrb
