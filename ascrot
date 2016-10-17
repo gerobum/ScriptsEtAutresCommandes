@@ -1,22 +1,45 @@
 #!/bin/bash
-noir='\e[0;30m'
-gris='\e[1;30m'
-rougefonce='\e[0;31m'
-rose='\e[1;31m'
-vertfonce='\e[0;32m'
-vertclair='\e[1;32m'
-orange='\e[0;33m'
-jaune='\e[1;33m'
-bleufonce='\e[0;34m'
-bleuclair='\e[1;34m'
-violetfonce='\e[0;35m'
-violetclair='\e[1;35m'
-cyanfonce='\e[0;36m'
-cyanclair='\e[1;36m'
-grisclair='\e[0;37m'
-blanc='\e[1;37m'
+if [ $# -ge 1 ] && [ "$1" = "--color" ]
+then
+    shift
+    noir='\e[0;30m'
+    gris='\e[1;30m'
+    rougefonce='\e[0;31m'
+    rose='\e[1;31m'
+    vertfonce='\e[0;32m'
+    vertclair='\e[1;32m'
+    orange='\e[0;33m'
+    jaune='\e[1;33m'
+    bleufonce='\e[0;34m'
+    bleuclair='\e[1;34m'
+    violetfonce='\e[0;35m'
+    violetclair='\e[1;35m'
+    cyanfonce='\e[0;36m'
+    cyanclair='\e[1;36m'
+    grisclair='\e[0;37m'
+    blanc='\e[1;37m'
 
-neutre='\e[0;m'
+    neutre='\e[0;m'
+else
+    noir=''
+    gris=''
+    rougefonce=''
+    rose=''
+    vertfonce=''
+    vertclair=''
+    orange=''
+    jaune=''
+    bleufonce=''
+    bleuclair=''
+    violetfonce=''
+    violetclair=''
+    cyanfonce=''
+    cyanclair=''
+    grisclair=''
+    blanc=''
+
+    neutre=''
+fi
 
 clear
 if [ $# -eq 2 ]
@@ -48,5 +71,5 @@ then
         echo "Le premier paramètre doit être un fichier bash"
     fi
 else
-    echo "usage : `basename $0` <un fichier bash> <un dossier où mettre les images>"
+    echo "usage : `basename $0` [--color] <un fichier bash> <un dossier où mettre les images>"
 fi
