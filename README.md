@@ -1,2 +1,2 @@
 # ScriptsEtAutresCommandes
-Des scripts en bash qui me sont utiles
+Des scripts en bash et en python qui me sont utiles.
