@@ -3,6 +3,8 @@ package log_gestion;
 import exceptions.WrongLineException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 public class Log {
     
     private List<LogLine> liste = new LinkedList<>();
+    private static final DateFormat DF = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
     public enum Statut {
         ON, OFF;
@@ -30,9 +33,6 @@ public class Log {
                     System.err.println("ERREUR ---> " + line);
                 }
             }
-            for(LogLine line : liste) {
-                System.out.println(line.getStatus());
-            }
         }
     }
     
@@ -40,9 +40,12 @@ public class Log {
         liste.clear();
     }
     
-    public void quiEtaientConnectes() {
+    public void quiEtaientConnectes(String salle, Date debut, Date fin) {
         List<LogLine> on = liste.stream()
-                .filter(p -> p.getStatus() == Statut.ON)
+                .filter(p -> p.getDateTime().after(debut))
+                .filter(p -> p.getDateTime().before(fin))
+                .filter(p -> p.getSalle() != null ? p.getSalle().equals(salle) : p.getLieu().contains(salle))
+                .filter(p -> p.getStatus() == Statut.ON)                
                 .collect(Collectors.toList());
         List<LogLine> off = liste.stream()
                 .filter(p -> p.getStatus() == Statut.OFF)
@@ -50,10 +53,13 @@ public class Log {
                 
         for(LogLine line : on) {
             off.stream()
+                .filter(p -> p.getDateTime().after(debut))
+                .filter(p -> p.getDateTime().before(fin))
+                .filter(p -> p.getSalle() != null ? p.getSalle().equals(salle) : p.getLieu().contains(salle))
                     .filter(p -> p.getNum().equals(line.getNum()))
                     .filter(p -> p.getDateTime().after(line.getDateTime()))
                     .forEach(p -> { 
-                        System.out.println(line.getNum() + " de " + line.getDateTime() + " à " + p.getDateTime());
+                        System.out.println(line.getNum() + " en " + line.getLieu() + " de " + DF.format(line.getDateTime()) + " à " + DF.format(p.getDateTime()));
                     });
         }
     }
