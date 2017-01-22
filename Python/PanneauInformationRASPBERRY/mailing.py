@@ -35,6 +35,12 @@ class Mailing(Thread):
         if self.dernierMessage < len(self.lmes):
             self.lmes[self.dernierMessage].config(text = message)
             self.dernierMessage+=1
+        else:
+            i = 1
+            while i < self.dernierMessage:
+                self.lmes[i-1].config(text = self.lmes[i]['text'])
+                i+=1
+            self.lmes[len(self.lmes)-1].config(text = message)
 
     def run(self):
         while self.ok:            

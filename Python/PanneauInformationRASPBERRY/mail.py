@@ -42,14 +42,6 @@ lheure = Label(fmain, text=the_time(), bg='black', fg='white', font=thefont)
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [Label(fmain, text='', bg='black', fg='white', font=thefont),
         Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
         Label(fmain, text='', bg='black', fg='white', font=thefont)]
 
 ldate.pack()
