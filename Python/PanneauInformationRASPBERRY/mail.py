@@ -74,10 +74,15 @@ def the_end():
     fmain.destroy()
     
 bexit = Button(fmain, text='Quitter', command = the_end)
-bexit.pack()  
  
 bminmax = Button(fmain, text='Minimise', command = mini_maxi)
-bminmax.pack()
+
+ldate.pack()
+lheure.pack()
+lsep.pack()
+lmes.pack();
+bexit.pack(side='left')  
+bminmax.pack(side='left')
     
 
 class DateHeure(Thread):
