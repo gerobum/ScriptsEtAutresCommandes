@@ -34,7 +34,7 @@ fmain.config(bg='black')
 fmain.title('Bonjour Maman')
 fmain.attributes('-fullscreen', True)
 
-thefont = tkFont.Font(family='Helvetica',size=50, weight='bold')
+thefont = tkFont.Font(family='Helvetica',size=30, weight='bold')
 
 def the_date():
     return datetime.date.today().strftime('Aujourd\'hui, nous sommes %A %d %B %Y')
