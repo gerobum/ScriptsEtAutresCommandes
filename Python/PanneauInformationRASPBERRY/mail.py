@@ -3,7 +3,6 @@
 Lecture mail
 """
 
-import imapy
 
 # -*- coding: utf-8 -*-
 """
@@ -22,11 +21,7 @@ from threading import Thread
 
 import time
 
-from imapy.query_builder import Q
-
-fp = open('fp')
-thepasswd = fp.read()
-fp.close()
+from mailing import Mailing
 
 
 fmain = Tk();
@@ -45,12 +40,23 @@ def the_time():
 ldate = Label(fmain, text=the_date(), bg='black', fg='white', font=thefont)
 lheure = Label(fmain, text=the_time(), bg='black', fg='white', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
-lmes = Label(fmain, text='', bg='black', fg='white', font=thefont)  
+lmes = [Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont),
+        Label(fmain, text='', bg='black', fg='white', font=thefont)]
 
 ldate.pack()
 lheure.pack()
 lsep.pack()
-lmes.pack();
+for lm in lmes:
+    lm.pack()
 
 def mini_maxi():
     global fmain
@@ -80,7 +86,8 @@ bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 ldate.pack()
 lheure.pack()
 lsep.pack()
-lmes.pack();
+for lm in lmes:
+    lm.pack()
 bexit.pack(side='left')  
 bminmax.pack(side='left')
     
@@ -104,51 +111,11 @@ class DateHeure(Thread):
             time.sleep(1)
         print 'fin de la mise à jour de la date'
 
-class Mailing(Thread):
-    """Thread chargé simplement d'afficher une lettre dans la console."""
-    def __init__(self):
-        Thread.__init__(self)
-        self.q = Q()
-        self.ok = True
-    
-    def the_end(self):
-        print 'fin de courrier'
-        self.ok = False            
 
-    def run(self):
-        while self.ok:            
-            box = imapy.connect(
-                host='imap.gmail.com',
-                username='mamie.rasp@gmail.com',
-                password=thepasswd,
-                # you may also specify custom port:
-                # port=993
-                ssl=True,
-            )
-            
-            emails = box.folder('INBOX').emails(self.q.unseen())
-
-            if len(emails) > 0:    
-                for mail in emails:
-                    print mail
-                    mail.mark(['seen'])
-                    if mail['subject'] == 'STOP':
-                        mail.mark(['seen'])
-                        the_end()
-                    else:
-                        lmes.config(text=mail['text'][0]['text_normalized'])
-                        print mail
-            else:
-                print 'Nothing to do'
-            
-            box.logout()
-            #time.sleep(300)
-            time.sleep(10)
-        print 'fin de la collecte du courrier'
 
 
 dh = DateHeure(ldate, lheure)
-mail = Mailing()
+mail = Mailing(ldate, lheure, lmes)
 
 dh.start()
 mail.start()
