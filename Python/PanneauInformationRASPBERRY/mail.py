@@ -4,7 +4,6 @@ Lecture mail
 """
 
 import imapy
-from Tkinter import *
 
 # -*- coding: utf-8 -*-
 """
@@ -27,7 +26,6 @@ from imapy.query_builder import Q
 
 fp = open('fp')
 thepasswd = fp.read()
-print "le mot de passe ", thepasswd
 fp.close()
 
 
@@ -54,6 +52,15 @@ lheure.pack()
 lsep.pack()
 lmes.pack();
 
+def mini_maxi():
+    global fmain
+    global bminmax
+    if bminmax['text'] == 'Minimise':
+        bminmax['text']='Maximise'
+        fmain.attributes('-fullscreen', False)
+    else:
+        bminmax['text']='Minimise'
+        fmain.attributes('-fullscreen', True)
 
 def the_end():
     print 'fin générale'
@@ -61,11 +68,16 @@ def the_end():
     global dh
     global mail
     dh.the_end()
+    dh.join()
     mail.the_end()
+    mail.join()
     fmain.destroy()
     
 bexit = Button(fmain, text='Quitter', command = the_end)
-bexit.pack()
+bexit.pack()  
+ 
+bminmax = Button(fmain, text='Minimise', command = mini_maxi)
+bminmax.pack()
     
 
 class DateHeure(Thread):
