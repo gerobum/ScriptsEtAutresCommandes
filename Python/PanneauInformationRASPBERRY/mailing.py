@@ -9,6 +9,7 @@ from imapy.query_builder import Q
 from threading import Thread
 import time
 import tkFont
+import re
 
 
 class Mailing(Thread):

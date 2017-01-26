@@ -40,16 +40,16 @@ def the_time():
 ldate = Label(fmain, text=the_date(), bg='black', fg='white', font=thefont)
 lheure = Label(fmain, text=the_time(), bg='black', fg='white', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
-lmes = [Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont),
-        Label(fmain, text='', bg='black', fg='white', font=thefont)]
+lmes = [Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
+        Label(fmain, text='', bg='#FF6810', fg='white', font=thefont),
+        Label(fmain, text='', bg='#FFE810', fg='white', font=thefont),
+        Label(fmain, text='', bg='#D1FF03', fg='white', font=thefont),
+        Label(fmain, text='', bg='#6CFF11', fg='white', font=thefont),
+        Label(fmain, text='', bg='#07FF5A', fg='white', font=thefont),
+        Label(fmain, text='', bg='#09FFFF', fg='white', font=thefont),
+        Label(fmain, text='', bg='#3209FF', fg='white', font=thefont),
+        Label(fmain, text='', bg='#B60AFF', fg='white', font=thefont),
+        Label(fmain, text='', bg='#FF0BB6', fg='white', font=thefont)]
 
 ldate.pack()
 lheure.pack()
@@ -82,11 +82,11 @@ bexit = Button(fmain, text='Quitter', command = the_end)
  
 bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 
-ldate.pack()
-lheure.pack()
-lsep.pack()
+ldate.pack(fill='both')
+lheure.pack(fill='both')
+lsep.pack(fill='both')
 for lm in lmes:
-    lm.pack()
+    lm.pack(fill='both')
 bexit.pack(side='left')  
 bminmax.pack(side='left')
     
