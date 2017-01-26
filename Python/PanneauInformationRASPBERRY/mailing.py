@@ -9,6 +9,7 @@ from imapy.query_builder import Q
 from threading import Thread
 import time
 import tkFont
+import commands
 import re
 
 class SendOneMail(Thread):
@@ -34,6 +35,10 @@ class SendOneMail(Thread):
                 if mail['subject'] == 'STOP':
                     mail.mark(['seen'])
                     # the_end()
+                elif mail['subject'] == 'SCREEN ON':
+                    commands.getoutput('xset dpms force on')
+                elif mail['subject'] == 'SCREEN OFF':
+                    commands.getoutput('xset dpms force off')
                 elif mail['subject'] == 'FONT':
                     thesize = mail['text'][0]['text_normalized']
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')

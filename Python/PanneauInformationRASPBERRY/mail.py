@@ -33,6 +33,7 @@ fmain.attributes('-fullscreen', True)
 tkFont.families()
 
 thefont = tkFont.Font(family='Helvetica',size=30, weight='bold')
+theMiddlefont = tkFont.Font(family='Geogia',size=40, weight='bold', slant='italic')
 theBigfont = tkFont.Font(family='Geogia',size=50, weight='bold', slant='italic')
 
 def the_date():
@@ -42,8 +43,8 @@ def the_time():
     return datetime.datetime.now().strftime('Il est %H:%M:%S')
     
 lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='white', font=theBigfont)
-ldate = Label(fmain, text=the_date(), bg='black', fg='white', font=thefont)
-lheure = Label(fmain, text=the_time(), bg='white', fg='black', font=thefont)  
+ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='white', font=theMiddlefont, height=2)
+lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='white', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
         Label(fmain, text='', bg='#FF6810', fg='white', font=thefont),
@@ -88,7 +89,7 @@ bexit = Button(fmain, text='Quitter', command = the_end)
  
 bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 
-ldate.pack(fill='both')
+ldate.pack(fill='both', pady=1)
 lheure.pack(fill='both')
 lsep.pack(fill='both')
 for lm in lmes:
