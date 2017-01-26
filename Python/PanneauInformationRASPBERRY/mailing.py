@@ -11,6 +11,38 @@ import time
 import tkFont
 import re
 
+class SendOneMail(Thread):
+    def __init__(self, parent):
+        Thread.__init__(self)
+        self.parent = parent
+
+    def run(self):          
+        box = imapy.connect(
+            host='imap.gmail.com',
+            username='mamie.rasp@gmail.com',
+            password=self.parent.thepasswd,
+            # you may also specify custom port:
+            # port=993
+            ssl=True,
+        )
+        
+        emails = box.folder('INBOX').emails(self.parent.q.unseen())
+
+        if len(emails) > 0:    
+            for mail in emails:
+                mail.mark(['seen'])
+                if mail['subject'] == 'STOP':
+                    mail.mark(['seen'])
+                    # the_end()
+                elif mail['subject'] == 'FONT':
+                    thesize = mail['text'][0]['text_normalized']
+                    thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
+                    self.parent.ldate.config(font=thefont)
+                else:                        
+                    self.parent.placer(mail['text'][0]['text_normalized'])
+        
+        box.logout()
+
 
 class Mailing(Thread):
     """Thread chargé simplement d'afficher une lettre dans la console."""
@@ -26,12 +58,8 @@ class Mailing(Thread):
         fp = open('fp')
         self.thepasswd = fp.read()
         fp.close()
-
-    
-    def the_end(self):
-        print 'fin de courrier'
-        self.ok = False     
         
+               
     def placer(self, message):
         if self.dernierMessage < len(self.lmes):
             self.lmes[self.dernierMessage].config(text = message)
@@ -43,33 +71,15 @@ class Mailing(Thread):
                 i+=1
             self.lmes[len(self.lmes)-1].config(text = message)
 
+    
+    def the_end(self):
+        print 'fin de courrier'
+        self.ok = False  
+
     def run(self):
         while self.ok:            
-            box = imapy.connect(
-                host='imap.gmail.com',
-                username='mamie.rasp@gmail.com',
-                password=self.thepasswd,
-                # you may also specify custom port:
-                # port=993
-                ssl=True,
-            )
-            
-            emails = box.folder('INBOX').emails(self.q.unseen())
-
-            if len(emails) > 0:    
-                for mail in emails:
-                    mail.mark(['seen'])
-                    if mail['subject'] == 'STOP':
-                        mail.mark(['seen'])
-                        # the_end()
-                    elif mail['subject'] == 'FONT':
-                        thesize = mail['text'][0]['text_normalized']
-                        thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
-                        self.ldate.config(font=thefont)
-                    else:                        
-                        self.placer(mail['text'][0]['text_normalized'])
-            
-            box.logout()
+            som = SendOneMail(self)
+            som.start()
             #time.sleep(300)
             time.sleep(10)
         print 'fin de la collecte du courrier'

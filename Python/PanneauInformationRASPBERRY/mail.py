@@ -29,7 +29,11 @@ fmain.config(bg='black')
 fmain.title('Bonjour Maman')
 fmain.attributes('-fullscreen', True)
 
+
+tkFont.families()
+
 thefont = tkFont.Font(family='Helvetica',size=30, weight='bold')
+theBigfont = tkFont.Font(family='Geogia',size=50, weight='bold', slant='italic')
 
 def the_date():
     return datetime.date.today().strftime('Aujourd\'hui, nous sommes %A %d %B %Y')
@@ -37,22 +41,24 @@ def the_date():
 def the_time():
     return datetime.datetime.now().strftime('Il est %H:%M:%S')
     
+lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='white', font=theBigfont)
 ldate = Label(fmain, text=the_date(), bg='black', fg='white', font=thefont)
-lheure = Label(fmain, text=the_time(), bg='black', fg='white', font=thefont)  
+lheure = Label(fmain, text=the_time(), bg='white', fg='black', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
         Label(fmain, text='', bg='#FF6810', fg='white', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='white', font=thefont),
-        Label(fmain, text='', bg='#D1FF03', fg='white', font=thefont),
-        Label(fmain, text='', bg='#6CFF11', fg='white', font=thefont),
-        Label(fmain, text='', bg='#07FF5A', fg='white', font=thefont),
-        Label(fmain, text='', bg='#09FFFF', fg='white', font=thefont),
-        Label(fmain, text='', bg='#3209FF', fg='white', font=thefont),
-        Label(fmain, text='', bg='#B60AFF', fg='white', font=thefont),
-        Label(fmain, text='', bg='#FF0BB6', fg='white', font=thefont)]
+        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#D1FF03', fg='black', font=thefont),
+        Label(fmain, text='', bg='#6CFF11', fg='#FF116C', font=thefont),
+        Label(fmain, text='', bg='#07FF5A', fg='#FF5A07', font=thefont),
+        Label(fmain, text='', bg='#09FFFF', fg='#FFFF09', font=thefont),
+        Label(fmain, text='', bg='#3209FF', fg='#09FF32', font=thefont),
+        Label(fmain, text='', bg='#B60AFF', fg='#0AFFB6', font=thefont),
+        Label(fmain, text='', bg='#FF0BB6', fg='#0BB6FF', font=thefont)]
 
-ldate.pack()
-lheure.pack()
+lintro.pack(fill='both');
+ldate.pack(fill='both')
+lheure.pack(fill='both')
 lsep.pack()
 for lm in lmes:
     lm.pack()
