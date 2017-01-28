@@ -34,7 +34,8 @@ class SendOneMail(Thread):
                 mail.mark(['seen'])
                 if mail['subject'] == 'STOP':
                     mail.mark(['seen'])
-                    # the_end()
+                elif mail['subject'] == 'GIT PULL REBOOT':
+                    commands.getoutput('git-pull-reboot')
                 elif mail['subject'] == 'SCREEN ON':
                     commands.getoutput('xset dpms force on')
                 elif mail['subject'] == 'SCREEN OFF':
