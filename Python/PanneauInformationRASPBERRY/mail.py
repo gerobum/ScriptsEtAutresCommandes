@@ -43,7 +43,7 @@ def the_time():
     return datetime.datetime.now().strftime('Il est %H:%M:%S')
     
 lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='white', font=theBigfont)
-ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='white', font=theMiddlefont, height=2)
+ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='white', font=thefont, height=2)
 lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='white', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
