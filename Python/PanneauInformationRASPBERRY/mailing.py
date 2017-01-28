@@ -11,6 +11,7 @@ import time
 import tkFont
 import commands
 import re
+import datetime
 
 class SendOneMail(Thread):
     def __init__(self, parent):
@@ -72,8 +73,12 @@ class Mailing(Thread):
     def replace(self, i, message):
         print 'Placement de ', message, ' en position ', i
         self.lmes[i].config(text = message)
-
         
+    def __switchscreen():
+        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
+            commands.getoutput('xset dpms force on')
+        else:
+            commands.getoutput('xset dpms force off')
                
     def push(self, message):
         if self.dernierMessage < len(self.lmes):
@@ -96,5 +101,6 @@ class Mailing(Thread):
             som = SendOneMail(self)
             som.start()
             #time.sleep(300)
+            self.__switchscreen()
             time.sleep(10)
         print 'fin de la collecte du courrier'
