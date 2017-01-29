@@ -65,13 +65,11 @@ class Mailing(Thread):
         self.ldate = ldate
         self.lheure = lheure
         self.lmes = lmes
-        self.dernierMessage = 0;
         
         with open('fp') as fp:
             self.thepasswd = fp.read() 
                
     def replace(self, i, message):
-        print 'Placement de ', message, ' en position ', i
         self.lmes[i].config(text = message)
         
     def __switchscreen(self):
@@ -84,24 +82,35 @@ class Mailing(Thread):
         try:
             with open('lmes', 'w') as fp:
                 for label in self.lmes:
-                    print label['text']
-                    fp.write(label['text'])  
+                    fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
+            #with open('lmes', 'w', 'utf-8') as fp:
+                #for label in self.lmes:
+                    #print label
+                    #print label['text']
+                    #fp.write(label['text']) 
+        except TypeError as e:
+            print "Type error({0})".format(e.message)   
+            pass
         except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)                  
+            print "I/O error({0}): {1}".format(e.errno, e.strerror) 
+            pass                 
         except:
             print "Unexpected error:", sys.exc_info()[0]
             pass
                
     def push(self, message):
-        if self.dernierMessage < len(self.lmes):
-            self.lmes[self.dernierMessage].config(text = message)
-            self.dernierMessage+=1
-        else:
-            i = 1
-            while i < self.dernierMessage:
-                self.lmes[i-1].config(text = self.lmes[i]['text'])
-                i+=1
-            self.lmes[len(self.lmes)-1].config(text = message)
+        i = 0
+        while i < len(self.lmes):
+            if self.lmes[i]['text'].strip() == '':
+                self.lmes[i].config(text = message)
+                return
+            i+=1
+        
+        i = 1
+        while i < len(self.lmes):
+            self.lmes[i-1].config(text = self.lmes[i]['text'])
+            i+=1
+        self.lmes[len(self.lmes)-1].config(text = message)
 
     
     def the_end(self):
@@ -113,7 +122,7 @@ class Mailing(Thread):
             som = SendOneMail(self)
             som.start()
             #time.sleep(300)
-            self.__switchscreen()
+            #self.__switchscreen()
             self.__writelabels()
             time.sleep(10)
         print 'fin de la collecte du courrier'

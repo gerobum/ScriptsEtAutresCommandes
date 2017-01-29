@@ -15,6 +15,8 @@ from Tkinter import Label, Button, Tk
 import tkFont
 import datetime
 import locale
+import sys
+
 locale.setlocale(locale.LC_TIME,'')
 
 from threading import Thread
@@ -74,10 +76,17 @@ i = 0
 try:
     with open('lmes') as fp:
         for line in fp:
-            lmes[i].config(text=line)
+            lmes[i].config(text=line.rstrip().decode('utf-8'))
             i+=1
+
+except TypeError as e:
+    print "Type error({0})".format(e.message)   
+    pass
+except IOError as e:
+    print "I/O error({0}): {1}".format(e.errno, e.strerror) 
+    pass                 
 except:
-    print 'Erreur'
+    print "Unexpected error:", sys.exc_info()[0]
     pass
 
 lintro.pack(fill='both');
