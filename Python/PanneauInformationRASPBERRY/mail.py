@@ -46,16 +46,39 @@ lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='white', font=theBi
 ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='white', font=thefont, height=2)
 lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='white', font=thefont)  
 lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
-lmes = [Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='white', font=thefont),
+lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
+        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#D1FF03', fg='black', font=thefont),
-        Label(fmain, text='', bg='#6CFF11', fg='#FF116C', font=thefont),
-        Label(fmain, text='', bg='#07FF5A', fg='#FF5A07', font=thefont),
-        Label(fmain, text='', bg='#09FFFF', fg='#FFFF09', font=thefont),
-        Label(fmain, text='', bg='#3209FF', fg='#09FF32', font=thefont),
-        Label(fmain, text='', bg='#B60AFF', fg='#0AFFB6', font=thefont),
-        Label(fmain, text='', bg='#FF0BB6', fg='#0BB6FF', font=thefont)]
+        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        #Label(fmain, text='', bg='#D1FF03', fg='black', font=thefont),
+        #Label(fmain, text='', bg='#6CFF11', fg='#FF116C', font=thefont),
+        #Label(fmain, text='', bg='#07FF5A', fg='#FF5A07', font=thefont),
+#        Label(fmain, text='', bg='#09FFFF', fg='#FFFF09', font=thefont),
+#        Label(fmain, text='', bg='#B60AFF', fg='#0AFFB6', font=thefont),
+#        Label(fmain, text='', bg='#09FFFF', fg='#FFFF09', font=thefont),
+#        Label(fmain, text='', bg='#6CFF11', fg='#FF116C', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
+        #Label(fmain, text='', bg='#B60AFF', fg='#0AFFB6', font=thefont),
+        #Label(fmain, text='', bg='#FF0BB6', fg='#0BB6FF', font=thefont)
+        ]
+        
+i = 0
+try:
+    with open('lmes') as fp:
+        for line in fp:
+            lmes[i].config(text=line)
+            i+=1
+except:
+    print 'Erreur'
+    pass
 
 lintro.pack(fill='both');
 ldate.pack(fill='both')

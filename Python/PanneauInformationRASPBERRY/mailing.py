@@ -12,6 +12,7 @@ import tkFont
 import commands
 import re
 import datetime
+import sys
 
 class SendOneMail(Thread):
     def __init__(self, parent):
@@ -66,19 +67,30 @@ class Mailing(Thread):
         self.lmes = lmes
         self.dernierMessage = 0;
         
-        fp = open('fp')
-        self.thepasswd = fp.read()
-        fp.close()     
+        with open('fp') as fp:
+            self.thepasswd = fp.read() 
                
     def replace(self, i, message):
         print 'Placement de ', message, ' en position ', i
         self.lmes[i].config(text = message)
         
-    def __switchscreen():
+    def __switchscreen(self):
         if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
             commands.getoutput('xset dpms force on')
         else:
             commands.getoutput('xset dpms force off')
+            
+    def __writelabels(self):
+        try:
+            with open('lmes', 'w') as fp:
+                for label in self.lmes:
+                    print label['text']
+                    fp.write(label['text'])  
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)                  
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+            pass
                
     def push(self, message):
         if self.dernierMessage < len(self.lmes):
@@ -102,5 +114,6 @@ class Mailing(Thread):
             som.start()
             #time.sleep(300)
             self.__switchscreen()
+            self.__writelabels()
             time.sleep(10)
         print 'fin de la collecte du courrier'
