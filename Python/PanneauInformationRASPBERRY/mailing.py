@@ -34,6 +34,10 @@ class SendOneMail(Thread):
                 mail.mark(['seen'])
                 if mail['subject'] == 'STOP':
                     mail.mark(['seen'])
+                elif re.match('REP ([0-9]+)', mail['subject']):
+                    m = re.search('REP ([0-9]+)', mail['subject'])
+                    p = int(m.group(1))
+                    self.parent.replace(p, mail['text'][0]['text_normalized'])
                 elif mail['subject'] == 'GIT PULL REBOOT':
                     commands.getoutput('git-pull-reboot')
                 elif mail['subject'] == 'SCREEN ON':
@@ -45,7 +49,7 @@ class SendOneMail(Thread):
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
                     self.parent.ldate.config(font=thefont)
                 else:                        
-                    self.parent.placer(mail['text'][0]['text_normalized'])
+                    self.parent.push(mail['text'][0]['text_normalized'])
         
         box.logout()
 
@@ -63,10 +67,15 @@ class Mailing(Thread):
         
         fp = open('fp')
         self.thepasswd = fp.read()
-        fp.close()
+        fp.close()     
+               
+    def replace(self, i, message):
+        print 'Placement de ', message, ' en position ', i
+        self.lmes[i].config(text = message)
+
         
                
-    def placer(self, message):
+    def push(self, message):
         if self.dernierMessage < len(self.lmes):
             self.lmes[self.dernierMessage].config(text = message)
             self.dernierMessage+=1
