@@ -1,11 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
 Lecture mail
-"""
 
-
-# -*- coding: utf-8 -*-
-"""
 Created on Sat Jan 21 17:28:43 2017
 
 @author: yvan
@@ -16,6 +12,7 @@ import tkFont
 import datetime
 import locale
 import sys
+
 
 locale.setlocale(locale.LC_TIME,'')
 
@@ -32,11 +29,33 @@ fmain.title('Bonjour Maman')
 fmain.attributes('-fullscreen', True)
 
 
-tkFont.families()
+#tkFont.families()
 
-thefont = tkFont.Font(family='Helvetica',size=30, weight='bold')
-theMiddlefont = tkFont.Font(family='Geogia',size=40, weight='bold', slant='italic')
-theBigfont = tkFont.Font(family='Geogia',size=50, weight='bold', slant='italic')
+#thefont = tkFont.Font(family='Caladea',size=35, weight='bold')
+#theMiddlefont = tkFont.Font(family='Caladea',size=45, weight='bold', slant='italic')
+#theBigfont = tkFont.Font(family='Caladea',size=55, weight='bold', slant='italic')
+# La police ci-dessous est rigolote (genre Scrabble) mais pas très lisible
+#thefont = tkFont.Font(family='Linux Biolinum Keyboard O',size=35, weight='bold')
+#theMiddlefont = tkFont.Font(family='Linux Biolinum Keyboard O',size=45, weight='bold', slant='italic')
+#theBigfont = tkFont.Font(family='Linux Biolinum Keyboard O',size=55, weight='bold', slant='italic')
+
+#thefont = tkFont.Font(family='Purisa',size=25, weight='bold')
+#theMiddlefont = tkFont.Font(family='Purisa',size=35, weight='bold', slant='italic')
+#theBigfont = tkFont.Font(family='Purisa',size=45, weight='bold', slant='italic')
+
+#thefont = tkFont.Font(family='URW Chancery L',size=25, weight='bold')
+#theMiddlefont = tkFont.Font(family='URW Chancery L',size=35, weight='bold', slant='italic')
+#theBigfont = tkFont.Font(family='URW Chancery L',size=45, weight='bold', slant='italic')
+
+#thefont = tkFont.Font(family='URW Palladio L',size=25, weight='bold')
+#theMiddlefont = tkFont.Font(family='URW Palladio L',size=35, weight='bold', slant='italic')
+#theBigfont = tkFont.Font(family='URW Palladio L',size=45, weight='bold', slant='italic')
+
+thefont = tkFont.Font(family='Purisa',size=25, weight='bold')
+theMiddlefont = tkFont.Font(family='Purisa',size=35, weight='bold', slant='italic')
+theBigfont = tkFont.Font(family='Purisa',size=45, weight='bold', slant='italic')
+
+
 
 def the_date():
     return datetime.date.today().strftime('Aujourd\'hui, nous sommes %A %d %B %Y')
@@ -44,21 +63,33 @@ def the_date():
 def the_time():
     return datetime.datetime.now().strftime('Il est %H:%M:%S')
     
-lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='white', font=theBigfont)
-ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='white', font=thefont, height=2)
-lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='white', font=thefont)  
-lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
+lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=theBigfont)
+ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='#FFFFDA', font=theMiddlefont)
+lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='#FFFFDA', font=theBigfont)  
+#lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+        Label(fmain, text='', bg='#D0FFFF', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+
+#        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
+#        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
+
         #Label(fmain, text='', bg='#D1FF03', fg='black', font=thefont),
         #Label(fmain, text='', bg='#6CFF11', fg='#FF116C', font=thefont),
         #Label(fmain, text='', bg='#07FF5A', fg='#FF5A07', font=thefont),
@@ -92,7 +123,7 @@ except:
 lintro.pack(fill='both');
 ldate.pack(fill='both')
 lheure.pack(fill='both')
-lsep.pack()
+#lsep.pack()
 for lm in lmes:
     lm.pack()
 
@@ -123,7 +154,7 @@ bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 
 ldate.pack(fill='both', pady=1)
 lheure.pack(fill='both')
-lsep.pack(fill='both')
+#lsep.pack(fill='both')
 for lm in lmes:
     lm.pack(fill='both')
 bexit.pack(side='left')  
