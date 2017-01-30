@@ -50,7 +50,7 @@ class SendOneMail(Thread):
                     thesize = mail['text'][0]['text_normalized']
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
                     self.parent.ldate.config(font=thefont)
-                else:                        
+                elif mail['subject'] == 'MSG':                        
                     self.parent.push(mail['text'][0]['text_normalized'])
         
         box.logout()
