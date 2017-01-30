@@ -68,16 +68,17 @@ ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='#FFFFDA', font=theMiddle
 lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='#FFFFDA', font=theBigfont)  
 #lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
-        Label(fmain, text='', bg='#D0FFFF', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFDA', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+
 
 #        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
 #        Label(fmain, text='', bg='#FFE810', fg='black', font=thefont),
@@ -153,10 +154,10 @@ bexit = Button(fmain, text='Quitter', command = the_end)
 bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 
 ldate.pack(fill='both', pady=1)
-lheure.pack(fill='both')
+lheure.pack(fill='both', pady=1)
 #lsep.pack(fill='both')
 for lm in lmes:
-    lm.pack(fill='both')
+    lm.pack(fill='both', pady=1)
 bexit.pack(side='left')  
 bminmax.pack(side='left')
     

