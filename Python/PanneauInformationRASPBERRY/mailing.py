@@ -13,13 +13,14 @@ import commands
 import re
 import datetime
 import sys
+import os
 
-class SendOneMail(Thread):
+class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
         self.parent = parent
 
-    def run(self):          
+    def run(self):     
         box = imapy.connect(
             host='imap.gmail.com',
             username=self.parent.thename,
@@ -29,10 +30,12 @@ class SendOneMail(Thread):
             ssl=True,
         )
         
+        
         emails = box.folder('INBOX').emails(self.parent.q.unseen())
 
         if len(emails) > 0:    
             for mail in emails:
+                print mail['subject']
                 mail.mark(['seen'])
                 if mail['subject'] == 'STOP':
                     mail.mark(['seen'])
@@ -54,6 +57,7 @@ class SendOneMail(Thread):
                     self.parent.push(mail['text'][0]['text_normalized'])
                 elif mail['subject'] == 'CMD':                        
                     print commands.getoutput(mail['text'][0]['text_normalized'])
+
         box.logout()
 
 
@@ -75,10 +79,16 @@ class Mailing(Thread):
         self.lmes[i].config(text = message)
         
     def __switchscreen(self):
-        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
-            commands.getoutput('xset dpms force on')
-        else:
-            commands.getoutput('xset dpms force off')
+#        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
+#            commands.getoutput('xset dpms force on')
+#        else:
+#            commands.getoutput('xset dpms force off')
+        if datetime.datetime.now().hour <= 8 or datetime.datetime.now().hour >= 20:
+            if os.path.exists('lmes'):
+                for label in self.lmes:
+                    label['text'] = ''
+                os.remove('lmes') 
+        
             
     def __writelabels(self):
         try:
@@ -101,6 +111,7 @@ class Mailing(Thread):
             pass
                
     def push(self, message):
+        print "PUSH ", message
         i = 0
         while i < len(self.lmes):
             if self.lmes[i]['text'].strip() == '':
@@ -121,10 +132,10 @@ class Mailing(Thread):
 
     def run(self):
         while self.ok:            
-            som = SendOneMail(self)
+            som = ReceiveMail(self)
             som.start()
             #time.sleep(300)
-            #self.__switchscreen()
+            self.__switchscreen()
             self.__writelabels()
-            time.sleep(10)
+            time.sleep(15)
         print 'fin de la collecte du courrier'
