@@ -66,6 +66,14 @@ def the_time():
 lintro = Label(fmain, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=theBigfont)
 ldate = Label(fmain, text=the_date(), bg='#3209FF', fg='#FFFFDA', font=theMiddlefont)
 lheure = Label(fmain, text=the_time(), bg='#3209FF', fg='#FFFFDA', font=theBigfont)  
+
+lperm = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
+        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+        ]
+
 #lsep = Label(fmain, text='____________________________________________', bg='black', fg='white', font=thefont)   
 lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
         Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
@@ -75,9 +83,7 @@ lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
         Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
         Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
         Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
-        Label(fmain, text='', bg='#BAFFA8', fg='black', font=thefont),
-        Label(fmain, text='', bg='#FFFFD0', fg='black', font=thefont),
+
 
 
 #        Label(fmain, text='', bg='#FF6810', fg='black', font=thefont),
@@ -103,7 +109,8 @@ lmes = [#Label(fmain, text='', bg='#FF3314', fg='white', font=thefont),
         #Label(fmain, text='', bg='#B60AFF', fg='#0AFFB6', font=thefont),
         #Label(fmain, text='', bg='#FF0BB6', fg='#0BB6FF', font=thefont)
         ]
-        
+   
+# Chargement des labels enregistrés
 i = 0
 try:
     with open('lmes') as fp:
@@ -125,8 +132,39 @@ lintro.pack(fill='both');
 ldate.pack(fill='both')
 lheure.pack(fill='both')
 #lsep.pack()
-for lm in lmes:
-    lm.pack()
+
+   
+# Chargement des labels permanents  
+# Chaque ligne du fichier lperm a la forme suivante
+#<j>,<message>
+# où j est dans {1,2,3,4,5,6,7} pour 1 = lundi, 2 mardi, etc.
+now=datetime.datetime.now()   
+i = 0
+try:
+    with open('lperm') as fp:
+        for line in fp:
+            line = line.decode('utf-8').strip().encode('utf-8')
+            if not line.startswith('#',0):
+                t = line.split(',')
+                if int(t[0]) == now.weekday():
+                    lperm[i].config(text=t[1])
+                    i+=1
+
+except TypeError as e:
+    print "Type error({0})".format(e.message)   
+    pass
+except IOError as e:
+    print "I/O error({0}): {1}".format(e.errno, e.strerror) 
+    pass                 
+except:
+    print "Unexpected error:", sys.exc_info()[0]
+    pass
+
+lintro.pack(fill='both');
+ldate.pack(fill='both')
+lheure.pack(fill='both')
+#lsep.pack()
+
 
 def mini_maxi():
     global fmain
@@ -153,9 +191,11 @@ bexit = Button(fmain, text='Quitter', command = the_end)
  
 bminmax = Button(fmain, text='Minimise', command = mini_maxi)
 
-ldate.pack(fill='both', pady=1)
-lheure.pack(fill='both', pady=1)
+ldate.pack(fill='both')
+lheure.pack(fill='both')
 #lsep.pack(fill='both')
+for lm in lperm:
+    lm.pack(fill='both', pady=1)
 for lm in lmes:
     lm.pack(fill='both', pady=1)
 bexit.pack(side='left')  

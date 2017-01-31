@@ -22,7 +22,7 @@ class SendOneMail(Thread):
     def run(self):          
         box = imapy.connect(
             host='imap.gmail.com',
-            username='mamie.rasp@gmail.com',
+            username=self.parent.thename,
             password=self.parent.thepasswd,
             # you may also specify custom port:
             # port=993
@@ -68,7 +68,8 @@ class Mailing(Thread):
         self.lmes = lmes
         
         with open('fp') as fp:
-            self.thepasswd = fp.read() 
+            self.thename = fp.readline().rstrip()
+            self.thepasswd = fp.readline().rstrip()
                
     def replace(self, i, message):
         self.lmes[i].config(text = message)
