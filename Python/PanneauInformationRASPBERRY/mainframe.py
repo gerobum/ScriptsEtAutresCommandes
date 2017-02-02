@@ -14,7 +14,7 @@ import locale
 import sys, commands
 from mailing import Mailing
 from mailing import send
-import re
+from listes import get_liste
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -28,6 +28,8 @@ import time
 class MainFrame(Tk):
     def __init__(self):
         Tk.__init__(self) 
+        
+        print get_liste()
         
         self.config(bg='black')
         self.title('Bonjour Maman')
@@ -46,7 +48,7 @@ class MainFrame(Tk):
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
-        self.delay = 300 # Délai de 5 minutes entre chaque collecte de courrier.
+        self.delay = 60 # Délai de 1 minute entre chaque collecte de courrier.
         #self.jour = True
 
         self.lintro.pack(fill='both')
@@ -54,6 +56,8 @@ class MainFrame(Tk):
         self.lheure.pack(fill='both')        
         
         self.init_labels()
+        self.fill_labels()
+            
        
 #        self.bexit.pack(side='left')  
 #        self.bminmax.pack(side='left')
@@ -66,87 +70,28 @@ class MainFrame(Tk):
         self.dh.start()
         self.mail.start()
         self.copie_ecran.start()
-        self.mainloop()              
-                
-    def init_labels(self):  
-#        
-#        self.bexit.pack_forget()
-#        self.bminmax.pack_forget()
-#        self.bjournuit.pack_forget()
-        
+        self.mainloop()    
+
+    def init_labels(self):
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
-        # Chargement des labels permanents  
-        # Chaque ligne du fichier lperm a la forme suivante
-        #<j>,<message>
-        # où j est dans {1,2,3,4,5,6,7} pour 1 = lundi, 2 mardi, etc.
-        try:
-            for label in self.lperm:
-                label.destroy()
-        except AttributeError as e:
-            pass   
         
-            
-        self.lperm = []
-        now=datetime.datetime.now()   
-        i = 0
-        try:
-            with open('lperm') as fp:
-                for line in fp:
-                    line = line.decode('utf-8').strip().encode('utf-8')
-                    if not line.startswith('#',0):
-                        t = line.split(',')
-                        if int(t[0]) == now.weekday():
-                            label = Label(self, text=t[1], bg=colors[i%nbcolors], fg='black', font=self.thefont)
-                            label.pack(fill='both', pady=1)
-                            self.lperm.append(label)
-                            i+=1
-        except TypeError as e:
-            print "Type error({0})".format(e.message)   
-            pass
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-            pass                 
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
-            pass
         
-            
-        try:
-            for label in self.lmes:
-                label.destroy()
-        except AttributeError as e:
-            pass 
+        self.labels = []        
         
-        self.lmes = []
-        
-        try:
-            with open('lmes') as fp:
-                for line in fp:
-                    label = Label(self, text=line.rstrip().decode('utf-8'), bg=colors[i%nbcolors], fg='black', font=self.thefont)
-                    label.pack(fill='both', pady=1)
-                    self.lmes.append(label)
-                    i+=1
-        
-        except TypeError as e:
-            print "Type error({0})".format(e.message)   
-            pass
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-            pass                 
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
-            pass
-        
-        while i < 10:
+        for i in range(10):
             label = Label(self, text='', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
-            self.lmes.append(label)
+            self.labels.append(label)
+            
+    def fill_labels(self):
+        for label in self.labels:
+            label['text'] = ''
+            
+        i = 0
+        for s in get_liste():
+            self.labels[i]['text'] = s
             i+=1
-#
-#        self.bexit.pack(side='left')
-#        self.bminmax.pack(side='left')
-#        self.bjournuit.pack(side='left')
 
     def mini_maxi(self):
         if self.bminmax['text'] == 'Minimise':
@@ -224,13 +169,6 @@ class CopieEcran(Thread):
             time.sleep(60*60)
         print 'fin de la mise à jour de la date'
 
-# Critère de tri pour la liste
-def f(s):
-    if re.match('.*([0-9]+[h:][0-9]*).*', s):
-    #if re.match('-(?)-', s):
-        m = re.search('[^0-9]*([0-9]+[h:][0-9]*).*', s)
-        return m.group(1)
-    else:
-        return 'zzzz'
+
 
 MainFrame()

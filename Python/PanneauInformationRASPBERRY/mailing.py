@@ -77,9 +77,8 @@ class ReceiveMail(Thread):
                 elif re.match('REP ([0-9]+)', mail['subject']):
                     try:
                         m = re.search('REP ([0-9]+)', mail['subject'])
-                        p = int(m.group(1))
-                        if p >= 0 and p < 9:
-                            self.parent.replace(p, mail['text'][0]['text_normalized'])
+                        p = int(m.group(1))                      
+                        self.parent.replace(p, mail['text'][0]['text_normalized'])
                     except ValueError:
                         pass
                 elif mail['subject'] == 'GIT PULL REBOOT':
@@ -148,10 +147,8 @@ class Mailing(Thread):
             self.thepasswd = fp.readline().rstrip()
                
     def replace(self, i, message):
-        if i < len(self.parent.lperm):
-            self.parent.lperm[i].config(text = message)
-        else:
-            self.parent.lmes[i-len(self.parent.lperm)].config(text = message)
+        if i >= 0 and i < len(self.parent.labels):
+            self.parent.labels[i].config(text = message)
                 
         
     def __switchscreen(self):        
@@ -160,46 +157,24 @@ class Mailing(Thread):
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
                     pass
-                self.parent.init_labels()
+                self.parent.fill_labels()
                 commands.getoutput('xset dpms force on')
         else:
             if os.path.exists('lmes'):
-                for label in self.parent.lmes:
-                    label['text'] = ''
-                for label in self.parent.lperm:
-                    label['text'] = ''
                 os.remove('lmes') 
-                commands.getoutput('xset dpms force off')
+            for label in self.parent.labels:
+                label['text'] = ''
+            commands.getoutput('xset dpms force off')
                 
-#        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
-#            if not os.path.exists('lmes'):   
-#                # La création du fichier indique qu'il fait jour
-#                with open('lmes', 'w'):
-#                    print 'Jour'
-#                self.parent.init_labels()
-#                commands.getoutput('xset dpms force on')
-#        else:
-#            if os.path.exists('lmes'):
-#                print 'Nuit'
-#                for label in self.parent.lmes:
-#                    label['text'] = ''
-#                for label in self.parent.lperm:
-#                    label['text'] = ''
-#                os.remove('lmes') 
-#                commands.getoutput('xset dpms force off')
             
     def __writelabels(self):
         try:
             # Si le fichier n'existe pas, c'est la nuit
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
-                    for label in self.parent.lmes:
+                    for label in self.parent.labels:
                         fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
-            #with open('lmes', 'w', 'utf-8') as fp:
-                #for label in self.lmes:
-                    #print label
-                    #print label['text']
-                    #fp.write(label['text']) 
+
         except TypeError as e:
             print "Type error({0})".format(e.message)   
             pass
@@ -212,17 +187,17 @@ class Mailing(Thread):
                
     def push(self, message):
         i = 0
-        while i < len(self.parent.lmes):
-            if self.parent.lmes[i]['text'].strip() == '':
-                self.parent.lmes[i].config(text = message)
+        while i < len(self.parent.labels):
+            if self.parent.labels[i]['text'].strip() == '':
+                self.parent.labels[i].config(text = message)
                 return
             i+=1
         
         i = 1
-        while i < len(self.parent.lmes):
-            self.parent.lmes[i-1].config(text = self.parent.lmes[i]['text'])
+        while i < len(self.parent.labels):
+            self.parent.labels[i-1].config(text = self.parent.labels[i]['text'])
             i+=1
-        self.parent.lmes[len(self.parent.lmes)-1].config(text = message)
+        self.parent.labels[len(self.parent.labels)-1].config(text = message)
 
     
     def the_end(self):
