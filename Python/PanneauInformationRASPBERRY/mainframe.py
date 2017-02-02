@@ -16,9 +16,6 @@ from mailing import Mailing
 from mailing import send
 from listes import get_liste
 import re
-import thread
-import os
-import signal
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -83,7 +80,7 @@ class MainFrame(Tk):
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
                 
-        self.labels = []        
+        self.labels = []  
         
         for i in range(10):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
