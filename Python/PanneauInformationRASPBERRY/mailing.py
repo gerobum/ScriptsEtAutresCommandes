@@ -20,6 +20,37 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 
+
+def send(user, password, subject, body=None, files=None):       
+    try:
+        s = smtplib.SMTP("smtp.gmail.com", 587)
+        s.ehlo()
+        s.starttls()
+        s.ehlo
+        s.login(user, password)
+        msg = MIMEMultipart()
+        msg['From'] = user
+        msg['To'] = user
+        msg['Subject'] = subject
+        if body is not None:  
+            msg.attach(MIMEText(body, 'plain'))     
+        for img in files or []:
+            print img
+            if os.path.isfile(img):
+                print "OK pour ", img
+                with open(img, "rb") as fil:
+                    part = MIMEApplication(
+                        fil.read(),
+                        Name=os.path.basename(img)
+                    )
+                part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(img)
+                msg.attach(part)
+        s.sendmail(user, user, msg.as_string())
+        s.quit()
+    except Exception:
+        sys.stderr.write(traceback.format_exc())    
+        pass
+
 class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
@@ -44,36 +75,7 @@ class ReceiveMail(Thread):
 #            sys.stderr.write(traceback.format_exc())    
 #            pass
         
-    def send(self, subject, body=None, files=None):
-        user = self.parent.thename
-        password = self.parent.thepasswd
-        
-        try:
-            s = smtplib.SMTP("smtp.gmail.com", 587)
-            s.ehlo()
-            s.starttls()
-            s.ehlo
-            s.login(user, password)
-            msg = MIMEMultipart()
-            msg['From'] = user
-            msg['To'] = user
-            msg['Subject'] = subject
-            if body is not None:  
-                msg.attach(MIMEText(body, 'plain'))     
-            for img in files or []:
-                if os.path.isfile(img):
-                    with open(img, "rb") as fil:
-                        part = MIMEApplication(
-                            fil.read(),
-                            Name=os.path.basename(img)
-                        )
-                    part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(img)
-                    msg.attach(part)
-            s.sendmail(user, user, msg.as_string())
-            s.quit()
-        except Exception:
-            sys.stderr.write(traceback.format_exc())    
-            pass
+
         
     
 #    def sendMail(self, subject, body=None, files=None):
@@ -144,7 +146,10 @@ class ReceiveMail(Thread):
                     cmd = mail['text'][0]['text_normalized']
                     txt = commands.getoutput(cmd)
                     print cmd, '\n', txt
-                    self.send (cmd, txt)
+                    send (self.parent.thename, self.parent.thepasswd, cmd, txt)
+                elif mail['subject'] == 'SCROT':  
+                    commands.getoutput('scrot screen.png')
+                    send(self.parent.thename, self.parent.thepasswd, 'Copie d\'écran', None, ['screen.png'])
                 elif mail['subject'] == 'MINMAX':                        
                     self.parent.parent.mini_maxi()
 

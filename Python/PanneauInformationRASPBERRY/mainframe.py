@@ -18,6 +18,8 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import signal
+from mailing import Mailing
+from mailing import send
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -26,7 +28,7 @@ from threading import Thread
 
 import time
 
-from mailing import Mailing
+
 
 class MainFrame(Tk):
     def __init__(self):
@@ -219,42 +221,11 @@ class CopieEcran(Thread):
     def the_end(self):
         print 'fin de copie écran demandée'
         self.ok = False 
-        
-    def send(self, subject, body=None, files=None):
-        user = self.thename
-        password = self.thepasswd
-        
-        try:
-            s = smtplib.SMTP("smtp.gmail.com", 587)
-            s.ehlo()
-            s.starttls()
-            s.ehlo
-            s.login(user, password)
-            msg = MIMEMultipart()
-            msg['From'] = user
-            msg['To'] = user
-            msg['Subject'] = subject
-            if body is not None:  
-                msg.attach(MIMEText(body, 'plain'))     
-            for img in files or []:
-                if os.path.isfile(img):
-                    with open(img, "rb") as fil:
-                        part = MIMEApplication(
-                            fil.read(),
-                            Name=os.path.basename(img)
-                        )
-                    part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(img)
-                    msg.attach(part)
-            s.sendmail(user, user, msg.as_string())
-            s.quit()
-        except Exception:
-            sys.stderr.write(traceback.format_exc())    
-            pass
 
     def run(self):
         while self.ok:
             commands.getoutput('scrot screen.png')
-            self.send('Copie d\'écran', None, ['screen.png'])
+            send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])
             time.sleep(60*60)
         print 'fin de la mise à jour de la date'
 
