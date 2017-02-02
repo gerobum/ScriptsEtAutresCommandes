@@ -25,6 +25,7 @@ from mailing import Mailing
 class MainFrame(Tk):
     def __init__(self):
         Tk.__init__(self) 
+        
         self.config(bg='black')
         self.title('Bonjour Maman')
         self.attributes('-fullscreen', True)
@@ -35,28 +36,31 @@ class MainFrame(Tk):
         self.theBigfont = tkFont.Font(family='Purisa',size=45, weight='bold', slant='italic')
 
     
-        self.lintro = Label(self, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont)
-        self.ldate = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont)
-        self.lheure = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont) 
+        self.lintro = Label(self, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
+        self.ldate = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
+        self.lheure = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
         
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
-        self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)
+        self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
+        self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
+        #self.jour = True
 
         self.lintro.pack(fill='both')
         self.ldate.pack(fill='both')
         self.lheure.pack(fill='both')
         
         
-        self.__init_labels()
+        self.init_labels()
 
        
-        self.bexit.pack(side='left')  
-        self.bminmax.pack(side='left')
+#        self.bexit.pack(side='left')  
+#        self.bminmax.pack(side='left')
+#        self.bjournuit.pack(side='left')
                 
         
 
         self.dh = DateHeure(self.ldate, self.lheure)
-        self.mail = Mailing(self.ldate, self.lheure, self.lmes)
+        self.mail = Mailing(self)
         
         self.dh.start()
         self.mail.start()
@@ -64,13 +68,25 @@ class MainFrame(Tk):
                 
 
                 
-    def __init_labels(self):     
+    def init_labels(self):  
+        
+        self.bexit.pack_forget()
+        self.bminmax.pack_forget()
+        self.bjournuit.pack_forget()
+        
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
         # Chargement des labels permanents  
         # Chaque ligne du fichier lperm a la forme suivante
         #<j>,<message>
         # où j est dans {1,2,3,4,5,6,7} pour 1 = lundi, 2 mardi, etc.
+        try:
+            for label in self.lperm:
+                label.destroy()
+        except AttributeError as e:
+            pass   
+        
+            
         self.lperm = []
         now=datetime.datetime.now()   
         i = 0
@@ -95,7 +111,15 @@ class MainFrame(Tk):
             print "Unexpected error:", sys.exc_info()[0]
             pass
         
+            
+        try:
+            for label in self.lmes:
+                label.destroy()
+        except AttributeError as e:
+            pass 
+        
         self.lmes = []
+        
         try:
             with open('lmes') as fp:
                 for line in fp:
@@ -119,7 +143,10 @@ class MainFrame(Tk):
             label.pack(fill='both', pady=1)
             self.lmes.append(label)
             i+=1
-
+#
+#        self.bexit.pack(side='left')
+#        self.bminmax.pack(side='left')
+#        self.bjournuit.pack(side='left')
 
     def mini_maxi(self):
         if self.bminmax['text'] == 'Minimise':
@@ -128,6 +155,14 @@ class MainFrame(Tk):
         else:
             self.bminmax['text']='Minimise'
             self.attributes('-fullscreen', True)
+
+    def jour_nuit(self):
+        if self.bjournuit['text'] == 'Nuit':
+            self.bjournuit['text']='Matin'
+            #self.jour = False
+        elif self.bjournuit['text'] == 'Jour':
+            self.bjournuit['text']='Soir'
+            #self.jour = True
     
     def the_end(self):
         print 'fin générale'
@@ -163,5 +198,6 @@ class DateHeure(Thread):
 
     def the_time(self):
         return datetime.datetime.now().strftime('Il est %H:%M:%S')
+        #return datetime.datetime.now().strftime('                  Il est %H:%M:%S')
 
 MainFrame()

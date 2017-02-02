@@ -11,9 +11,9 @@ import time
 import tkFont
 import commands
 import re
-import datetime
 import sys
 import os
+import datetime
 
 class ReceiveMail(Thread):
     def __init__(self, parent):
@@ -38,7 +38,7 @@ class ReceiveMail(Thread):
                 print mail['subject']
                 mail.mark(['seen'])
                 if mail['subject'] == 'STOP':
-                    mail.mark(['seen'])
+                    self.parent.parent.the_end()
                 elif re.match('REP ([0-9]+)', mail['subject']):
                     m = re.search('REP ([0-9]+)', mail['subject'])
                     p = int(m.group(1))
@@ -57,44 +57,67 @@ class ReceiveMail(Thread):
                     self.parent.push(mail['text'][0]['text_normalized'])
                 elif mail['subject'] == 'CMD':                        
                     print commands.getoutput(mail['text'][0]['text_normalized'])
+                elif mail['subject'] == 'MINMAX':                        
+                    self.parent.parent.mini_maxi()
 
         box.logout()
 
 
 class Mailing(Thread):
     """Thread chargé simplement d'afficher une lettre dans la console."""
-    def __init__(self,ldate,lheure,lmes):
+    def __init__(self,parent):
         Thread.__init__(self)
         self.q = Q()
         self.ok = True
-        self.ldate = ldate
-        self.lheure = lheure
-        self.lmes = lmes
+        self.parent = parent
         
         with open('fp') as fp:
             self.thename = fp.readline().rstrip()
             self.thepasswd = fp.readline().rstrip()
                
     def replace(self, i, message):
-        self.lmes[i].config(text = message)
+        self.parent.lmes[i].config(text = message)
         
     def __switchscreen(self):
 #        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
 #            commands.getoutput('xset dpms force on')
 #        else:
 #            commands.getoutput('xset dpms force off')
-        if datetime.datetime.now().hour <= 8 or datetime.datetime.now().hour >= 20:
+#        if self.parent.bjournuit['text']=='Matin':
+#            self.parent.bjournuit['text']='Jour'
+#            self.parent.init_labels()
+#        elif self.parent.bjournuit['text']=='Soir':
+#            self.parent.bjournuit['text']='Nuit'
+#            if os.path.exists('lmes'):
+#                for label in self.parent.lmes:
+#                    label['text'] = ''
+#                for label in self.parent.lperm:
+#                    label['text'] = ''
+#                os.remove('lmes')   
+        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
+            if not os.path.exists('lmes'):   
+                # La création du fichier indique qu'il fait jour
+                with open('lmes', 'w'):
+                    print 'Jour'
+                self.parent.init_labels()
+                commands.getoutput('xset dpms force on')
+        else:
             if os.path.exists('lmes'):
-                for label in self.lmes:
+                print 'Nuit'
+                for label in self.parent.lmes:
+                    label['text'] = ''
+                for label in self.parent.lperm:
                     label['text'] = ''
                 os.remove('lmes') 
-        
+                commands.getoutput('xset dpms force off')
             
     def __writelabels(self):
         try:
-            with open('lmes', 'w') as fp:
-                for label in self.lmes:
-                    fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
+            # Si le fichier n'existe pas, c'est la nuit
+            if os.path.exists('lmes'):
+                with open('lmes', 'w') as fp:
+                    for label in self.parent.lmes:
+                        fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
             #with open('lmes', 'w', 'utf-8') as fp:
                 #for label in self.lmes:
                     #print label
@@ -113,17 +136,17 @@ class Mailing(Thread):
     def push(self, message):
         print "PUSH ", message
         i = 0
-        while i < len(self.lmes):
-            if self.lmes[i]['text'].strip() == '':
-                self.lmes[i].config(text = message)
+        while i < len(self.parent.lmes):
+            if self.parent.lmes[i]['text'].strip() == '':
+                self.parent.lmes[i].config(text = message)
                 return
             i+=1
         
         i = 1
-        while i < len(self.lmes):
-            self.lmes[i-1].config(text = self.lmes[i]['text'])
+        while i < len(self.parent.lmes):
+            self.parent.lmes[i-1].config(text = self.parent.lmes[i]['text'])
             i+=1
-        self.lmes[len(self.lmes)-1].config(text = message)
+        self.parent.lmes[len(self.parent.lmes)-1].config(text = message)
 
     
     def the_end(self):
