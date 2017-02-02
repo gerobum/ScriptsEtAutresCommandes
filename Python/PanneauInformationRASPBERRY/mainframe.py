@@ -37,7 +37,7 @@ class MainFrame(Tk):
 
     
         self.lintro = Label(self, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
-        self.ldate = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
+        self.ldate = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.thefont, anchor='w')
         self.lheure = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
         
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
