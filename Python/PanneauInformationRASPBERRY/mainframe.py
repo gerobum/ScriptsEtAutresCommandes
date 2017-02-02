@@ -31,9 +31,9 @@ class MainFrame(Tk):
         self.attributes('-fullscreen', True)
 
 
-        self.thefont = tkFont.Font(family='Purisa',size=25, weight='bold')
-        self.theMiddlefont = tkFont.Font(family='Purisa',size=35, weight='bold', slant='italic')
-        self.theBigfont = tkFont.Font(family='Purisa',size=45, weight='bold', slant='italic')
+        self.thefont = tkFont.Font(family='Purisa',size=20, weight='bold')
+        self.theMiddlefont = tkFont.Font(family='Purisa',size=30, weight='bold', slant='italic')
+        self.theBigfont = tkFont.Font(family='Purisa',size=40, weight='bold', slant='italic')
 
     
         self.lintro = Label(self, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
