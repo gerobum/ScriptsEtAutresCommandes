@@ -10,6 +10,7 @@ from datetime import time
 import sys
 import re
 from chronotext import ChronologicText
+import os
 
 # Retourne une liste de messages sans doublon et ordonnée
 # 
@@ -137,14 +138,15 @@ def get_liste(liste = []):
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
                 line = line.decode('utf-8').strip().encode('utf-8').strip()   
-                if not line.startswith('#', 0):
-                    chronotext = get_begin_end_day_text(line)                 
+                if not line.startswith('#', 0) and line.strip()!='': 
+                    chronotext = get_begin_end_day_text(line)  
                     if chronotext.day() == '*' or int(chronotext.day()) == now.weekday():
                         liste.append(chronotext)
     except TypeError as e:
         print "Type error({0})".format(e.message)   
         pass
     except IOError as e:
+        print "Erreur -> ",e.message()
         print "I/O error({0}): {1}".format(e.errno, e.strerror) 
         pass    
     except ValueError as e:
@@ -154,14 +156,16 @@ def get_liste(liste = []):
         pass
     
     try:
-        with open('lmes') as fp:
-            for line in fp:
-                liste.append(get_begin_end_day_text(line.strip()))
+        if os.path.exists('lmes'): 
+            with open('lmes') as fp:
+                for line in fp:
+                    liste.append(get_begin_end_day_text(line.strip()))
     
     except TypeError as e:
         print "Type error({0})".format(e.message)   
         pass
     except IOError as e:
+        print "Error à l'ouverture de lmes"
         print "I/O error({0}): {1}".format(e.errno, e.strerror) 
         pass   
     except ValueError as e:
