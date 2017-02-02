@@ -172,7 +172,7 @@ def get_liste(liste = []):
         pass
     
     liste = list(set(liste))
-    nowplus1 = time(now.hour+1, now.minute)
+    nowplus1 = time((now.hour+1)%24, now.minute)
     
     
     liste = list(filter(lambda s : s.end()>nowplus1, liste))
