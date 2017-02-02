@@ -29,8 +29,6 @@ class MainFrame(Tk):
     def __init__(self):
         Tk.__init__(self) 
         
-        print get_liste()
-        
         self.config(bg='black')
         self.title('Bonjour Maman')
         self.attributes('-fullscreen', True)
@@ -75,8 +73,7 @@ class MainFrame(Tk):
     def init_labels(self):
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
-        
-        
+                
         self.labels = []        
         
         for i in range(10):

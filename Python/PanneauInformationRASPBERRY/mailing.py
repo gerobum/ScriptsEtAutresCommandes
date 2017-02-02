@@ -35,9 +35,7 @@ def send(user, password, subject, body=None, files=None):
         if body is not None:  
             msg.attach(MIMEText(body, 'plain'))     
         for img in files or []:
-            print img
             if os.path.isfile(img):
-                print "OK pour ", img
                 with open(img, "rb") as fil:
                     part = MIMEApplication(
                         fil.read(),
@@ -96,7 +94,6 @@ class ReceiveMail(Thread):
                 elif mail['subject'] == 'COMMANDE':  
                     cmd = mail['text'][0]['text_normalized']
                     txt = commands.getoutput(cmd)
-                    print cmd, '\n', txt
                     send (self.parent.thename, self.parent.thepasswd, cmd, txt)
                 elif mail['subject'] == 'SCROT':  
                     commands.getoutput('scrot screen.png')
@@ -152,7 +149,7 @@ class Mailing(Thread):
                 
         
     def __switchscreen(self):        
-        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
+        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 22:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
