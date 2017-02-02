@@ -16,6 +16,7 @@ from mailing import Mailing
 from mailing import send
 from listes import get_liste
 from chronotext import getDelay
+import os
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -126,8 +127,8 @@ class MainFrame(Tk):
         time.sleep(1)
         print "1"
         time.sleep(1)
-        # Violence (C'est tout ce que j'ai trouvé pour l'instant)
         commands.getoutput('rm lmes')
+        commands.getoutput('rm .lock-panel')
         #os.kill(os.getpid(), 9)
         
         self.dh.the_end()
@@ -215,4 +216,10 @@ class Nettoyage(Thread):
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
-frame = MainFrame()
+if not os.path.exists('.lock-panel'):  
+    with open('.lock-panel', 'w'):
+        pass
+    frame = MainFrame()
+else:
+    print "L'application semble déjà lancée"
+    
