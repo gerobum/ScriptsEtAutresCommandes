@@ -19,6 +19,7 @@ from email.mime.image import MIMEImage
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+import listes
 
 
 def send(user, password, subject, body=None, files=None):       
@@ -149,7 +150,7 @@ class Mailing(Thread):
                 
         
     def __switchscreen(self):        
-        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour <= 23:
+        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 21:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
@@ -183,18 +184,14 @@ class Mailing(Thread):
             pass
                
     def push(self, message):
+        liste = listes.get_liste_from(self.parent.labels, message)
         i = 0
-        while i < len(self.parent.labels):
-            if self.parent.labels[i]['text'].strip() == '':
-                self.parent.labels[i].config(text = message)
-                return
+        for s in liste:
+            self.parent.labels[i]['text'] = s
             i+=1
-        
-        i = 1
-        while i < len(self.parent.labels):
-            self.parent.labels[i-1].config(text = self.parent.labels[i]['text'])
-            i+=1
-        self.parent.labels[len(self.parent.labels)-1].config(text = message)
+            
+        for i in range(i,len(self.parent.labels)):
+            self.parent.labels[i]['text'] = ''
 
     
     def the_end(self):

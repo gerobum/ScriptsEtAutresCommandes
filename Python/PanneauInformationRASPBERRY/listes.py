@@ -9,6 +9,17 @@ import datetime
 import sys
 import re
 
+# Retourne une liste de messages sans doublon et ordonnée
+# 
+def get_liste_from(labels, message):
+    liste = [message]
+    for label in labels:
+        liste.append(label['text'])
+    liste = list(set(liste))
+    liste.sort(key=lambda s : critere(s))
+    
+    return liste[-len(labels):]
+
 # Construit une liste de messages à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est autant que possible
 # triée chronologiquement.
