@@ -78,22 +78,7 @@ class Mailing(Thread):
     def replace(self, i, message):
         self.parent.lmes[i].config(text = message)
         
-    def __switchscreen(self):
-#        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
-#            commands.getoutput('xset dpms force on')
-#        else:
-#            commands.getoutput('xset dpms force off')
-#        if self.parent.bjournuit['text']=='Matin':
-#            self.parent.bjournuit['text']='Jour'
-#            self.parent.init_labels()
-#        elif self.parent.bjournuit['text']=='Soir':
-#            self.parent.bjournuit['text']='Nuit'
-#            if os.path.exists('lmes'):
-#                for label in self.parent.lmes:
-#                    label['text'] = ''
-#                for label in self.parent.lperm:
-#                    label['text'] = ''
-#                os.remove('lmes')   
+    def __switchscreen(self):        
         if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
@@ -110,6 +95,23 @@ class Mailing(Thread):
                     label['text'] = ''
                 os.remove('lmes') 
                 commands.getoutput('xset dpms force off')
+                
+#        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
+#            if not os.path.exists('lmes'):   
+#                # La création du fichier indique qu'il fait jour
+#                with open('lmes', 'w'):
+#                    print 'Jour'
+#                self.parent.init_labels()
+#                commands.getoutput('xset dpms force on')
+#        else:
+#            if os.path.exists('lmes'):
+#                print 'Nuit'
+#                for label in self.parent.lmes:
+#                    label['text'] = ''
+#                for label in self.parent.lperm:
+#                    label['text'] = ''
+#                os.remove('lmes') 
+#                commands.getoutput('xset dpms force off')
             
     def __writelabels(self):
         try:

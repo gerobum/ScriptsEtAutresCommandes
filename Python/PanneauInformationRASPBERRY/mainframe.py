@@ -53,9 +53,9 @@ class MainFrame(Tk):
         self.init_labels()
 
        
-#        self.bexit.pack(side='left')  
-#        self.bminmax.pack(side='left')
-#        self.bjournuit.pack(side='left')
+        self.bexit.pack(side='left')  
+        self.bminmax.pack(side='left')
+        self.bjournuit.pack(side='left')
                 
         
 
@@ -144,9 +144,9 @@ class MainFrame(Tk):
             self.lmes.append(label)
             i+=1
 #
-#        self.bexit.pack(side='left')
-#        self.bminmax.pack(side='left')
-#        self.bjournuit.pack(side='left')
+        self.bexit.pack(side='left')
+        self.bminmax.pack(side='left')
+        self.bjournuit.pack(side='left')
 
     def mini_maxi(self):
         if self.bminmax['text'] == 'Minimise':
