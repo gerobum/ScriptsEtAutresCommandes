@@ -51,9 +51,9 @@ class MainFrame(Tk):
         
         self.init_labels()
        
-        self.bexit.pack(side='left')  
-        self.bminmax.pack(side='left')
-        self.bjournuit.pack(side='left')                        
+#        self.bexit.pack(side='left')  
+#        self.bminmax.pack(side='left')
+#        self.bjournuit.pack(side='left')                        
 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
@@ -63,10 +63,10 @@ class MainFrame(Tk):
         self.mainloop()              
                 
     def init_labels(self):  
-        
-        self.bexit.pack_forget()
-        self.bminmax.pack_forget()
-        self.bjournuit.pack_forget()
+#        
+#        self.bexit.pack_forget()
+#        self.bminmax.pack_forget()
+#        self.bjournuit.pack_forget()
         
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
@@ -138,9 +138,9 @@ class MainFrame(Tk):
             self.lmes.append(label)
             i+=1
 #
-        self.bexit.pack(side='left')
-        self.bminmax.pack(side='left')
-        self.bjournuit.pack(side='left')
+#        self.bexit.pack(side='left')
+#        self.bminmax.pack(side='left')
+#        self.bjournuit.pack(side='left')
 
     def mini_maxi(self):
         if self.bminmax['text'] == 'Minimise':
