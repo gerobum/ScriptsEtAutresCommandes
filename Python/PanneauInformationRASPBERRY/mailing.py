@@ -15,7 +15,6 @@ import sys
 import os
 import datetime
 import smtplib
-from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
 class ReceiveMail(Thread):
@@ -25,7 +24,7 @@ class ReceiveMail(Thread):
         
     def send(self, subject, body):
         user = self.parent.thename
-        password = self.parent.thename
+        password = self.parent.thepasswd
         try:
             s = smtplib.SMTP("smtp.gmail.com", 587)
             s.ehlo()
@@ -41,6 +40,36 @@ class ReceiveMail(Thread):
         except:
             print "Could not send mail"
             pass
+        
+    
+#    def sendMail(self, subject, body=None, files=None):
+#        user = self.parent.thename
+#        password = 'ton_mot_de_passe'
+#        try:
+#            s = smtplib.SMTP("smtp.gmail.com", 587)
+#            s.ehlo()
+#            s.starttls()
+#            s.ehlo
+#            s.login(user, password)
+#            msg = MIMEMultipart()
+#            msg['From'] = 'domesange@gmail.com'
+#            msg['To'] = 'domesange@gmail.com'
+#            msg['Subject'] = subject
+#            if body is not None:
+#                msg.attach(MIMEText(body.encode('utf-8'), 'plain', 'utf-8'))
+#            for img in files or []:
+#                if os.path.isfile(img):
+#                    with open(img, "rb") as fil:
+#                        part = MIMEApplication(
+#                            fil.read(),
+#                            Name=basename(img)
+#                        )
+#                    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(img)
+#                    msg.attach(part)
+#            s.sendmail('domesange@gmail.com', 'domesange@gmail.com', msg.as_string())
+#            s.quit()
+#        except Exception:
+#            sys.stderr.write(traceback.format_exc())    
             
 
     def run(self):     
