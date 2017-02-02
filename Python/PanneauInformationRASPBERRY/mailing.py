@@ -23,20 +23,25 @@ class ReceiveMail(Thread):
         Thread.__init__(self)
         self.parent = parent
         
-    def send(self,cmd,txt):
-        msg = MIMEMultipart()
-        msg['From'] = self.parent.thename
-        msg['To'] = self.parent.thename
-        msg['Subject'] = 'Réponde de la commande ' + cmd
-        message = txt
-        msg.attach(MIMEText(message))
-        mailserver = smtplib.SMTP('smtp.gmail.com', 587)
-        mailserver.ehlo()
-        mailserver.starttls()
-        mailserver.ehlo()
-        mailserver.login(self.parent.thename, self.parent.thename)
-        mailserver.sendmail(self.parent.thename, self.parent.thename, msg.as_string())
-        mailserver.quit()
+    def send(self, subject, body):
+        user = self.parent.thename
+        password = self.parent.thename
+        try:
+            s = smtplib.SMTP("smtp.gmail.com", 587)
+            s.ehlo()
+            s.starttls()
+            s.ehlo
+            s.login(user, password)
+            msg = MIMEText(body,'plain')
+            msg['Subject'] = subject
+            msg['From'] = user
+            msg['To'] = user
+            s.sendmail(user, user, msg.as_string())
+            s.quit()
+        except:
+            print "Could not send mail"
+            pass
+            
 
     def run(self):     
         box = imapy.connect(
@@ -72,8 +77,11 @@ class ReceiveMail(Thread):
                     self.parent.ldate.config(font=thefont)
                 elif mail['subject'] == 'MSG':                        
                     self.parent.push(mail['text'][0]['text_normalized'])
-                elif mail['subject'] == 'CMD':  
-                    self.send (mail['text'][0]['text_normalized'], commands.getoutput(mail['text'][0]['text_normalized']))
+                elif mail['subject'] == 'COMMANDE':  
+                    cmd = mail['text'][0]['text_normalized']
+                    txt = commands.getoutput(cmd)
+                    print cmd, '\n', txt
+                    self.send (cmd, txt)
                 elif mail['subject'] == 'MINMAX':                        
                     self.parent.parent.mini_maxi()
 
