@@ -11,7 +11,13 @@ from Tkinter import Label, Button, Tk
 import tkFont
 import datetime
 import locale
-import sys
+import sys, os, traceback, commands
+import smtplib
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
+import signal
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -57,9 +63,11 @@ class MainFrame(Tk):
 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
+        self.copie_ecran = CopieEcran()
         
         self.dh.start()
         self.mail.start()
+        self.copie_ecran.start()
         self.mainloop()              
                 
     def init_labels(self):  
@@ -160,12 +168,17 @@ class MainFrame(Tk):
     
     def the_end(self):
         print 'fin générale'
+        #signal.signal(signal.SIGINT, handler)
         self.dh.the_end()
         self.dh.join()
         self.mail.the_end()
         self.mail.join()
+        self.copie_ecran.the_end()
+        #self.copie_ecran.join()
         self.destroy()
-    
+
+def handler(signum, frame):
+    print "do whatever, like call thread.interrupt_main()"
 
 class DateHeure(Thread):
     """Thread chargé simplement d'afficher une lettre dans la console."""
@@ -193,5 +206,57 @@ class DateHeure(Thread):
     def the_time(self):
         return datetime.datetime.now().strftime('Il est %H:%M:%S')
         #return datetime.datetime.now().strftime('                  Il est %H:%M:%S')
+        
+class CopieEcran(Thread):
+    """Thread chargé simplement d'afficher une lettre dans la console."""
+    def __init__(self):
+        Thread.__init__(self)       
+        with open('fp') as fp:
+            self.thename = fp.readline().rstrip()
+            self.thepasswd = fp.readline().rstrip()
+            self.ok = True
+    
+    def the_end(self):
+        print 'fin de copie écran demandée'
+        self.ok = False 
+        
+    def send(self, subject, body=None, files=None):
+        user = self.thename
+        password = self.thepasswd
+        
+        try:
+            s = smtplib.SMTP("smtp.gmail.com", 587)
+            s.ehlo()
+            s.starttls()
+            s.ehlo
+            s.login(user, password)
+            msg = MIMEMultipart()
+            msg['From'] = user
+            msg['To'] = user
+            msg['Subject'] = subject
+            if body is not None:  
+                msg.attach(MIMEText(body, 'plain'))     
+            for img in files or []:
+                if os.path.isfile(img):
+                    with open(img, "rb") as fil:
+                        part = MIMEApplication(
+                            fil.read(),
+                            Name=os.path.basename(img)
+                        )
+                    part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(img)
+                    msg.attach(part)
+            s.sendmail(user, user, msg.as_string())
+            s.quit()
+        except Exception:
+            sys.stderr.write(traceback.format_exc())    
+            pass
+
+    def run(self):
+        while self.ok:
+            commands.getoutput('scrot screen.png')
+            self.send('Copie d\'écran', None, ['screen.png'])
+            time.sleep(60*60)
+        print 'fin de la mise à jour de la date'
+
 
 MainFrame()

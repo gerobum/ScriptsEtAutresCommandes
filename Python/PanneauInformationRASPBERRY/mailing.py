@@ -11,34 +11,68 @@ import time
 import tkFont
 import commands
 import re
-import sys
+import sys, traceback
 import os
 import datetime
 import smtplib
-from email.MIMEText import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 
 class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
         self.parent = parent
         
-    def send(self, subject, body):
+#    def send(self, subject, body):
+#        user = self.parent.thename
+#        password = self.parent.thepasswd
+#        try:
+#            s = smtplib.SMTP("smtp.gmail.com", 587)
+#            s.ehlo()
+#            s.starttls()
+#            s.ehlo
+#            s.login(user, password)
+#            msg = MIMEText(body,'plain')
+#            msg['Subject'] = subject
+#            msg['From'] = user
+#            msg['To'] = user
+#            s.sendmail(user, user, msg.as_string())
+#            s.quit()
+#        except Exception:
+#            sys.stderr.write(traceback.format_exc())    
+#            pass
+        
+    def send(self, subject, body=None, files=None):
         user = self.parent.thename
         password = self.parent.thepasswd
+        
         try:
             s = smtplib.SMTP("smtp.gmail.com", 587)
             s.ehlo()
             s.starttls()
             s.ehlo
             s.login(user, password)
-            msg = MIMEText(body,'plain')
-            msg['Subject'] = subject
+            msg = MIMEMultipart()
             msg['From'] = user
             msg['To'] = user
+            msg['Subject'] = subject
+            if body is not None:  
+                msg.attach(MIMEText(body, 'plain'))     
+            for img in files or []:
+                if os.path.isfile(img):
+                    with open(img, "rb") as fil:
+                        part = MIMEApplication(
+                            fil.read(),
+                            Name=os.path.basename(img)
+                        )
+                    part['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(img)
+                    msg.attach(part)
             s.sendmail(user, user, msg.as_string())
             s.quit()
-        except:
-            print "Could not send mail"
+        except Exception:
+            sys.stderr.write(traceback.format_exc())    
             pass
         
     
