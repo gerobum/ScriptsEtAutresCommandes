@@ -1,0 +1,33 @@
+Liste des commandes
+----------------------------------------------
+    COMMANDE
+        Lance la commande linux qui se trouve dans le corps du message. Le retour de la commande est envoyé par mail.
+----------------------------------------------
+    FONT
+        Change la taille de la fonte de la date. La taille est dans le corps du message.
+----------------------------------------------
+    GIT PULL REBOOT
+        Met à jour l'application et rebooter le raspberry.
+----------------------------------------------
+    HELP
+        Envoie par courrier la liste des commandes possibles.
+----------------------------------------------
+    MINMAX
+        Minimise ou maximase l'écran selon son état.
+----------------------------------------------
+    MSG
+        Ajoute le corps du message à la fin de la liste. 
+        Un décalage est effectué en cas de manque de place.
+----------------------------------------------
+    REP <i> (où i est un entier)
+        Remplace la ième ligne le corps du message.
+----------------------------------------------
+    SCREEN ON|OFF
+        Allume ou éteind l'écran
+----------------------------------------------
+    SCROT
+        Envoie par mail une copie d'écran.
+----------------------------------------------
+    STOP
+        Arrête l'application.
+----------------------------------------------

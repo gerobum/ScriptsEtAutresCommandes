@@ -11,13 +11,7 @@ from Tkinter import Label, Button, Tk
 import tkFont
 import datetime
 import locale
-import sys, os, traceback, commands
-import smtplib
-from email.mime.image import MIMEImage
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-from email.mime.multipart import MIMEMultipart
-import signal
+import sys, commands
 from mailing import Mailing
 from mailing import send
 
@@ -200,7 +194,6 @@ class DateHeure(Thread):
             self.lheure.config(text=self.the_time())
             time.sleep(1)
         print 'fin de la mise à jour de la date'
-
 
     def the_date(self):
         return datetime.date.today().strftime('Aujourd\'hui, nous sommes %A %d %B %Y')

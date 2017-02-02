@@ -152,6 +152,25 @@ class ReceiveMail(Thread):
                     send(self.parent.thename, self.parent.thepasswd, 'Copie d\'écran', None, ['screen.png'])
                 elif mail['subject'] == 'MINMAX':                        
                     self.parent.parent.mini_maxi()
+                elif mail['subject'] == 'HELP':     
+                    try:
+                        with open('help.txt') as fp:
+                            message = []
+                            for line in fp:
+                                #line = line.decode('utf-8').encode('utf-8')
+                                message.append(line)
+                            print ''.join(message)
+                            send(self.parent.thename, self.parent.thepasswd, 'HELP', ''.join(message))
+                                
+                    except TypeError as e:
+                        print "Type error({0})".format(e.message)   
+                        pass
+                    except IOError as e:
+                        print "I/O error({0}): {1}".format(e.errno, e.strerror) 
+                        pass                 
+                    except:
+                        print "Unexpected error:", sys.exc_info()[0]
+                        pass
 
         box.logout()
 
