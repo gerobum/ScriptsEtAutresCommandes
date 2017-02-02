@@ -167,7 +167,7 @@ class Mailing(Thread):
                 
         
     def __switchscreen(self):        
-        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 21:
+        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 24:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):

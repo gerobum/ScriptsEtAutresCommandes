@@ -93,9 +93,10 @@ class MainFrame(Tk):
         
         self.chronolist = get_liste(self.chronolist)
 #        #list(filter(lambda a: a != 2, x))
-#        for s in self.chronolist:
-#            self.labels[i]['text'] = s.text()
-#            i+=1
+        for s in self.chronolist:
+            if s.text().strip() != '':
+                self.labels[i]['text'] = s.text().strip()
+                i+=1
                 
 
     def mini_maxi(self):

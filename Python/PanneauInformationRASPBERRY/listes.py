@@ -117,11 +117,11 @@ def get_begin_end_day_text(line):
     elif l == 2:
         if t[0] >= '0' and t[0] <= '6':
             day = t[0]
+        begin, end = get_begin_end(t[1])
         text = t[1]
-        begin, end = get_begin_end(text)
     elif l == 1:
+        begin, end = get_begin_end(t[0])
         text = t[0]
-        begin, end = get_begin_end(text)
                                 
     return ChronologicText(day, begin, end, text)
         
@@ -136,7 +136,7 @@ def get_liste(liste = []):
                 # Une ligne comprend l'heure de début, de fin et un texte
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
-                line = line.decode('utf-8').strip().encode('utf-8')    
+                line = line.decode('utf-8').strip().encode('utf-8').strip()   
                 if not line.startswith('#', 0):
                     chronotext = get_begin_end_day_text(line)                 
                     if chronotext.day() == '*' or int(chronotext.day()) == now.weekday():
@@ -156,7 +156,7 @@ def get_liste(liste = []):
     try:
         with open('lmes') as fp:
             for line in fp:
-                liste.append(get_begin_end_day_text(line))
+                liste.append(get_begin_end_day_text(line.strip()))
     
     except TypeError as e:
         print "Type error({0})".format(e.message)   

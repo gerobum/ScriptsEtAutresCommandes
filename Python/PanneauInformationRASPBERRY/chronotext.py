@@ -25,14 +25,19 @@ class ChronologicText:
     def day(self):
         return self.__day
         
+    def __str__(self):
+        return ''.join([self.__day,'§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),self.__text])
+        
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            #return self.__dict__ == other.__dict__
+            if other == None:
+                return False
+        #if isinstance(other, self.__class__):
+#            return self.__dict__ == other.__dict__
             return self.__begin == other.__begin and \
                    self.__end == other.__end and \
                    self.__text == other.__text
-        else:
-            return False
+#        else:
+#            return False
 
     def __ne__(self, other):
         return not self.__eq__(other)
