@@ -5,22 +5,23 @@ Created on Sat Feb  4 16:43:23 2017
 @author: yvan
 """
 
-from datetime import datetime, date, time
+from datetime import datetime
+from datetime import time
 import sys
 import re
 from chronotext import ChronologicText
 
 # Retourne une liste de messages sans doublon et ordonnée
 # 
-def get_liste_from(labels, message):
-    liste = [message]
-    for label in labels:
-        liste.append(label['text'])
-    liste = list(set(liste))
-    #liste.sort(key=lambda s : critere(s))
-    liste.sort()
-    
-    return liste[-len(labels):]
+#def get_liste_from(labels, message):
+#    liste = [message]
+#    for label in labels:
+#        liste.append(label['text'])
+#    liste = list(set(liste))
+#    #liste.sort(key=lambda s : critere(s))
+#    liste.sort()
+#    
+#    return liste[-len(labels):]
     
 # Une heure s'écrit sous les formes suivantes
 #    10
@@ -34,11 +35,13 @@ def get_heure(s, default=time()):
     mn = 0
     hr = 0
     
-    if re.match('([0-9]+)$', s) or re.match('([0-9]+)[h:]$', s):
-        m = re.search('([0-9]+)', s)
+    if re.match('[0-9]+$', s):
+        m = re.search('([0-9]+)$', s)
         hr = int(m.group(1))
-    elif re.match('([0-9]+)[h:]([0-9]+)$', s):
-    #if re.match('-(?)-', s):
+    elif re.match('[0-9]+[h:]$', s):
+        m = re.search('([0-9]+)[h:]$', s)
+        hr = int(m.group(1))
+    elif re.match('[0-9]+[h:][0-9]+$', s):
         m = re.search('([0-9]+)[h:]([0-9]+)$', s)
         hr = int(m.group(1))
         mn = int(m.group(2))
@@ -143,7 +146,9 @@ def get_liste(liste = []):
         pass
     except IOError as e:
         print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-        pass                 
+        pass    
+    except ValueError as e:
+        print "Erreur lors de la lecture de lperm ", e               
     except:
         print "Unexpected error:", sys.exc_info()[0]
         pass
@@ -158,12 +163,19 @@ def get_liste(liste = []):
         pass
     except IOError as e:
         print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-        pass                 
+        pass   
+    except ValueError as e:
+        print "Erreur lors de la lecture de lmes ", e
+        pass               
     except:
         print "Unexpected error:", sys.exc_info()[0]
         pass
     
     liste = list(set(liste))
+    nowplus1 = time(now.hour+1, now.minute)
+    
+    
+    liste = list(filter(lambda s : s.end()>nowplus1, liste))
 #    liste.sort(key=lambda s : critere(s.begin()))
     liste.sort(key=lambda s : s.begin())
 #    print 'Sort'

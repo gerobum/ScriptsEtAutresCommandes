@@ -30,7 +30,6 @@ class ChronologicText:
             #return self.__dict__ == other.__dict__
             return self.__begin == other.__begin and \
                    self.__end == other.__end and \
-                   self.__day == other.__day and \
                    self.__text == other.__text
         else:
             return False
@@ -41,5 +40,4 @@ class ChronologicText:
     def __hash__(self):
         return hash(self.__begin) ^ \
                hash(self.__end) ^ \
-               hash(self.__day) ^ \
                hash(self.__text)

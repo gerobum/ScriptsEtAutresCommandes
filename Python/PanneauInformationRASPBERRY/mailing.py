@@ -49,6 +49,7 @@ def send(user, password, subject, body=None, files=None):
         s.sendmail(user, user, msg.as_string())
         s.quit()
     except Exception:
+        print 'mailing.py ', 'send'
         sys.stderr.write(traceback.format_exc())    
         pass
 
@@ -80,7 +81,10 @@ class ReceiveMail(Thread):
                         m = re.search('REP ([0-9]+)', mail['subject'])
                         p = int(m.group(1))                      
                         self.parent.replace(p, mail['text'][0]['text_normalized'])
-                    except ValueError:
+                    except ValueError as v:  
+                        print 'mailing.py ReceiveMail run'
+                        print v
+                        sys.stderr.write(traceback.format_exc())   
                         pass
                 elif mail['subject'] == 'GIT PULL REBOOT':
                     commands.getoutput('git-pull-reboot')
@@ -92,6 +96,17 @@ class ReceiveMail(Thread):
                     thesize = mail['text'][0]['text_normalized']
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
                     self.parent.ldate.config(font=thefont)
+                elif mail['subject'] == 'ALL FONT':
+                    thesize = int(mail['text'][0]['text_normalized'])
+                    thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
+                    self.parent.parent.theBigfont = thefont
+                    self.parent.parent.theMiddlefont = thefont
+                    self.parent.parent.thefont = thefont
+                    self.parent.parent.lintro.config(font=thefont)             
+                    self.parent.parent.ldate.config(font=thefont)             
+                    self.parent.parent.lheure.config(font=thefont)
+                    for label in self.parent.parent.labels:
+                        label.config(font=thefont)
                 elif mail['subject'] == 'MSG':                        
                     self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n'))
                 elif mail['subject'] == 'COMMANDE':  
@@ -174,7 +189,7 @@ class Mailing(Thread):
                 with open('lmes', 'w') as fp:
                     for label in self.parent.labels:
                         if label['text'].strip() != '':
-                            fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
+                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
 
         except TypeError as e:
             print "Type error({0})".format(e.message)   
@@ -188,7 +203,6 @@ class Mailing(Thread):
                
     def push(self, message):
         now = datetime.datetime.now()
-        message = now.weekday()+'§'+message
         begin, end = listes.get_begin_end(message)
         
         self.parent.fill_labels(ChronologicText(now.weekday(), begin, end, message))
