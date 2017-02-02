@@ -22,7 +22,7 @@ def get_liste():
                 if not line.startswith('#', 0):
                     t = line.split(',')
                     if int(t[0]) == now.weekday():
-                        liste.append(t[1])
+                        liste.append(t[1].decode('utf-8'))
     except TypeError as e:
         print "Type error({0})".format(e.message)   
         pass
