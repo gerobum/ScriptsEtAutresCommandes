@@ -14,6 +14,7 @@ import locale
 import sys, commands
 from mailing import Mailing
 from mailing import send
+import re
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -222,5 +223,13 @@ class CopieEcran(Thread):
             time.sleep(60*60)
         print 'fin de la mise à jour de la date'
 
+# Critère de tri pour la liste
+def f(s):
+    if re.match('.*([0-9]+[h:][0-9]*).*', s):
+    #if re.match('-(?)-', s):
+        m = re.search('[^0-9]*([0-9]+[h:][0-9]*).*', s)
+        return m.group(1)
+    else:
+        return 'zzzz'
 
 MainFrame()

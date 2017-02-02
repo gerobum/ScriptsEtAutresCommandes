@@ -55,59 +55,7 @@ class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
         self.parent = parent
-        
-#    def send(self, subject, body):
-#        user = self.parent.thename
-#        password = self.parent.thepasswd
-#        try:
-#            s = smtplib.SMTP("smtp.gmail.com", 587)
-#            s.ehlo()
-#            s.starttls()
-#            s.ehlo
-#            s.login(user, password)
-#            msg = MIMEText(body,'plain')
-#            msg['Subject'] = subject
-#            msg['From'] = user
-#            msg['To'] = user
-#            s.sendmail(user, user, msg.as_string())
-#            s.quit()
-#        except Exception:
-#            sys.stderr.write(traceback.format_exc())    
-#            pass
-        
-
-        
-    
-#    def sendMail(self, subject, body=None, files=None):
-#        user = self.parent.thename
-#        password = 'ton_mot_de_passe'
-#        try:
-#            s = smtplib.SMTP("smtp.gmail.com", 587)
-#            s.ehlo()
-#            s.starttls()
-#            s.ehlo
-#            s.login(user, password)
-#            msg = MIMEMultipart()
-#            msg['From'] = 'domesange@gmail.com'
-#            msg['To'] = 'domesange@gmail.com'
-#            msg['Subject'] = subject
-#            if body is not None:
-#                msg.attach(MIMEText(body.encode('utf-8'), 'plain', 'utf-8'))
-#            for img in files or []:
-#                if os.path.isfile(img):
-#                    with open(img, "rb") as fil:
-#                        part = MIMEApplication(
-#                            fil.read(),
-#                            Name=basename(img)
-#                        )
-#                    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(img)
-#                    msg.attach(part)
-#            s.sendmail('domesange@gmail.com', 'domesange@gmail.com', msg.as_string())
-#            s.quit()
-#        except Exception:
-#            sys.stderr.write(traceback.format_exc())    
-            
-
+                      
     def run(self):     
         box = imapy.connect(
             host='imap.gmail.com',
@@ -159,7 +107,6 @@ class ReceiveMail(Thread):
                             for line in fp:
                                 #line = line.decode('utf-8').encode('utf-8')
                                 message.append(line)
-                            print ''.join(message)
                             send(self.parent.thename, self.parent.thepasswd, 'HELP', ''.join(message))
                                 
                     except TypeError as e:
