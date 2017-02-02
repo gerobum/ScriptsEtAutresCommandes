@@ -91,7 +91,7 @@ class ReceiveMail(Thread):
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
                     self.parent.ldate.config(font=thefont)
                 elif mail['subject'] == 'MSG':                        
-                    self.parent.push(mail['text'][0]['text_normalized'])
+                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n'))
                 elif mail['subject'] == 'COMMANDE':  
                     cmd = mail['text'][0]['text_normalized']
                     txt = commands.getoutput(cmd)

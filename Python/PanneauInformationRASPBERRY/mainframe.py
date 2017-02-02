@@ -121,24 +121,25 @@ class MainFrame(Tk):
         print "1"
         time.sleep(1)
         # Violence (C'est tout ce que j'ai trouvé pour l'instant)
-        os.kill(os.getpid(), 9)
+        commands.getoutput('rm lmes')
+        #os.kill(os.getpid(), 9)
         
-#        self.dh.the_end()
+        self.dh.the_end()
 #        self.dh.join()
-#        print "FIN de l'horloge"
-#        self.mail.the_end()
+        print "FIN de l'horloge"
+        self.mail.the_end()
 #        self.mail.join()
-#        print 'FIN de la relève du courrier'
-#
-#        self.copie_ecran.the_end()
+        print 'FIN de la relève du courrier'
+
+        self.copie_ecran.the_end()
 #        self.copie_ecran.join()
-#        print "FIN de mise à jour de l'écran"
-#
-#        self.nettoyage.the_end()
+        print "FIN de mise à jour de l'écran"
+
+        self.nettoyage.the_end()
 #        self.nettoyage.join()
-#        print 'FIN du thread horaire'
-#        self.destroy()
-#        print "C'est totalement fini"
+        print 'FIN du thread horaire'
+        self.destroy()
+        print "C'est totalement fini"
 
 
 class DateHeure(Thread):
