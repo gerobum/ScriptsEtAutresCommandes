@@ -75,9 +75,13 @@ class ReceiveMail(Thread):
                 if mail['subject'] == 'STOP':
                     self.parent.parent.the_end()
                 elif re.match('REP ([0-9]+)', mail['subject']):
-                    m = re.search('REP ([0-9]+)', mail['subject'])
-                    p = int(m.group(1))
-                    self.parent.replace(p, mail['text'][0]['text_normalized'])
+                    try:
+                        m = re.search('REP ([0-9]+)', mail['subject'])
+                        p = int(m.group(1))
+                        if p >= 0 and p < 9:
+                            self.parent.replace(p, mail['text'][0]['text_normalized'])
+                    except ValueError:
+                        pass
                 elif mail['subject'] == 'GIT PULL REBOOT':
                     commands.getoutput('git-pull-reboot')
                 elif mail['subject'] == 'SCREEN ON':
@@ -118,6 +122,15 @@ class ReceiveMail(Thread):
                     except:
                         print "Unexpected error:", sys.exc_info()[0]
                         pass
+                elif re.match('DELAY ([0-9]+)', mail['subject']):
+                    try:
+                        m = re.search('DELAY ([0-9]+)', mail['subject'])
+                        p = int(m.group(1))
+                        if p >= 10:
+                            self.parent.delay = p
+                    except ValueError:
+                        pass
+                   
 
         box.logout()
 
@@ -223,5 +236,5 @@ class Mailing(Thread):
             #time.sleep(300)
             self.__switchscreen()
             self.__writelabels()
-            time.sleep(15)
+            time.sleep(self.parent.delay)
         print 'fin de la collecte du courrier'

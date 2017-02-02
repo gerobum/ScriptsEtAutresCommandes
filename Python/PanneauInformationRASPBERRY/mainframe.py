@@ -46,6 +46,7 @@ class MainFrame(Tk):
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
+        self.delay = 300 # Délai de 5 minutes entre chaque collecte de courrier.
         #self.jour = True
 
         self.lintro.pack(fill='both')

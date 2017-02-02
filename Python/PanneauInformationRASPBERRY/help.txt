@@ -3,6 +3,10 @@ Liste des commandes
     COMMANDE
         Lance la commande linux qui se trouve dans le corps du message. Le retour de la commande est envoyé par mail.
 ----------------------------------------------
+    DELAY <d> où d est un entier supérieur à 10.
+        Change le délai entre chaque relève du courrier 
+        Remarque : il ne passe rien si d n'est pas un entier ou si d est inférieur à 10.
+----------------------------------------------
     FONT
         Change la taille de la fonte de la date. La taille est dans le corps du message.
 ----------------------------------------------
@@ -21,6 +25,7 @@ Liste des commandes
 ----------------------------------------------
     REP <i> (où i est un entier)
         Remplace la ième ligne le corps du message.
+	Remarque : il ne se passe rien si i n'est pas un entier où s'il n'est pas dans [0,9].
 ----------------------------------------------
     SCREEN ON|OFF
         Allume ou éteind l'écran
