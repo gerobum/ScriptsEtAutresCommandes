@@ -50,18 +50,18 @@ def get_heure(s, default=time()):
     else:
         return default
         
-def get_start_end(text):
-    start = time(0,0)
+def get_begin_end(text):
+    begin = time(0,0)
     end = time(23,59)
     if re.match('.*[^0-9][0-9]+[h:][0-9]*.*[^0-9][0-9]+[h:][0-9]*.*', text):
         m = re.search('.*[^0-9]([0-9]+[h:][0-9]*).*[^0-9]([0-9]+[h:][0-9]*).*', text)
-        start = get_heure(m.group(1))
+        begin = get_heure(m.group(1))
         end = get_heure(m.group(2))
     elif re.match('.*[^0-9][0-9]+[h:][0-9]*.*', text):
         m = re.search('.*[^0-9]([0-9]+[h:][0-9]*).*', text)
-        start = get_heure(m.group(1))
+        begin = get_heure(m.group(1))
             
-    return start, end
+    return begin, end
   
 # Une ligne contient toujours un texte et des informations chronologiques
 # en début. Chaque partie est séparée de ses voisines par le caractère §
@@ -89,8 +89,8 @@ def get_start_end(text):
 # Dans le cas 1, l'heure de début est 00:00
 #                l'heure de fin   est 23:59
 #                le jour est '*' (tous les jours)
-def get_start_end_day_text(line):
-    start = time(0,0)
+def get_begin_end_day_text(line):
+    begin = time(0,0)
     end = time(23,59)
     day = '*'
     text = ''
@@ -99,13 +99,13 @@ def get_start_end_day_text(line):
     l = len(t)
     hrf = time(23,59)
     if l == 4:
-        start = get_heure(t[0])
+        begin = get_heure(t[0])
         end = get_heure(t[1], hrf)
         if t[2] >= '0' and t[2] <= '6':
             day = t[2]
         text = t[3]
     elif l == 3:
-        start = get_heure(t[0])
+        begin = get_heure(t[0])
         if t[1] >= '0' and t[1] <= '6':
             day = t[1]
         text = t[2]
@@ -114,22 +114,19 @@ def get_start_end_day_text(line):
         if t[0] >= '0' and t[0] <= '6':
             day = t[0]
         text = t[1]
-        start, end = get_start_end(text)
-        print start
+        begin, end = get_begin_end(text)
+        print begin
         print end
     elif l == 1:
         print 'l == 1'
         text = t[0]
-        start, end = get_start_end(text)
-        print start
+        begin, end = get_begin_end(text)
+        print begin
         print end
                                 
-    return start, end, day, text
+    return begin, end, day, text
         
         
-                            
-
-
 # Construit une liste de messages chronologiques à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est triée chronologiquement.
 def get_liste():
