@@ -41,9 +41,9 @@ class MainFrame(Tk):
         self.theBigfont = tkFont.Font(family='Purisa',size=40, weight='bold', slant='italic')
 
     
-        self.lintro = Label(self, text='Bonjour Maman', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
-        self.ldate = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
-        self.lheure = Label(self, text='', bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
+        self.lintro = Label(self, text='Bonjour Maman', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
+        self.ldate = Label(self, text='', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
+        self.lheure = Label(self, text='', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
         
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
@@ -81,7 +81,7 @@ class MainFrame(Tk):
         self.labels = []        
         
         for i in range(10):
-            label = Label(self, text='', bg=colors[i%nbcolors], fg='black', font=self.thefont)
+            label = Label(self, text='', wraplength=1300, bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
             
