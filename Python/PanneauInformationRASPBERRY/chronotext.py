@@ -4,6 +4,14 @@ Created on Thu Feb  9 21:02:41 2017
 
 @author: yvan
 """
+
+    
+def getDelay(key, default):
+    try:
+        with open('delays') as fp:
+            return eval(fp.read())[key]
+    except:
+        return default
         
 
 class ChronologicText:

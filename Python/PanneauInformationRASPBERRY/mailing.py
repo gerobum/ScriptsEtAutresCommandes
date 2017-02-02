@@ -20,7 +20,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import listes
-from chronotext import ChronologicText
+from chronotext import ChronologicText, getDelay
 
 
 
@@ -141,7 +141,7 @@ class ReceiveMail(Thread):
                         m = re.search('DELAY ([0-9]+)', mail['subject'])
                         p = int(m.group(1))
                         if p >= 10:
-                            self.parent.delay = p
+                            self.parent.mailing_delay = p
                     except ValueError:
                         pass
                    
@@ -219,5 +219,5 @@ class Mailing(Thread):
             #time.sleep(300)
             self.__switchscreen()
             self.__writelabels()
-            time.sleep(self.parent.delay)
+            time.sleep(self.parent.mailing_delay)
         print 'fin de la collecte du courrier'

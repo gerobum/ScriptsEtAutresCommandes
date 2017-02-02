@@ -15,6 +15,7 @@ import commands
 from mailing import Mailing
 from mailing import send
 from listes import get_liste
+from chronotext import getDelay
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -45,8 +46,8 @@ class MainFrame(Tk):
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
-        self.delay = 900 # Délai entre chaque collecte de courrier.
-        #self.jour = True
+        
+        self.mailing_delay = getDelay('mailing_delay', 900)
 
         self.lintro.pack(fill='both')
         self.ldate.pack(fill='both')
@@ -181,6 +182,7 @@ class CopieEcran(Thread):
             self.thename = fp.readline().rstrip()
             self.thepasswd = fp.readline().rstrip()
             self.ok = True
+            self.screencopy_delay = getDelay('screencopy_delay', 3600)
     
     def the_end(self):
         print 'fin de copie écran demandée'
@@ -190,7 +192,7 @@ class CopieEcran(Thread):
         while self.ok:
             commands.getoutput('scrot screen.png')
             send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])
-            time.sleep(3600)
+            time.sleep(self.screencopy_delay)
         print 'fin de la mise à jour de la date'
 
 
@@ -200,6 +202,7 @@ class Nettoyage(Thread):
         Thread.__init__(self)     
         self.frame = frame
         self.ok = True
+        self.cleaning_delay = getDelay('cleaning_delay', 1200)
     
     def the_end(self):
         print 'fin du thread de nettoyage'
@@ -208,7 +211,7 @@ class Nettoyage(Thread):
     def run(self):
         while self.ok:
             self.frame.fill_labels()
-            time.sleep(900)
+            time.sleep(self.cleaning_delay)
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
