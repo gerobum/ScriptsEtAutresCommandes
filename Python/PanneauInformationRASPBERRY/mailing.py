@@ -171,7 +171,8 @@ class Mailing(Thread):
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
                     for label in self.parent.labels:
-                        fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
+                        if label['text'].strip() != '':
+                            fp.write(''.join([label['text'],'\n']).encode('utf-8')) 
 
         except TypeError as e:
             print "Type error({0})".format(e.message)   

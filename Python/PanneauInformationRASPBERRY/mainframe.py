@@ -11,10 +11,11 @@ from Tkinter import Label, Button, Tk
 import tkFont
 import datetime
 import locale
-import sys, commands
+import commands
 from mailing import Mailing
 from mailing import send
 from listes import get_liste
+import re
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -22,8 +23,6 @@ locale.setlocale(locale.LC_TIME,'')
 from threading import Thread
 
 import time
-
-
 
 class MainFrame(Tk):
     def __init__(self):
@@ -64,10 +63,12 @@ class MainFrame(Tk):
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
         self.copie_ecran = CopieEcran()
+        self.nettoyage = Nettoyage(self)
         
         self.dh.start()
         self.mail.start()
         self.copie_ecran.start()
+        self.nettoyage.start()
         self.mainloop()    
 
     def init_labels(self):
@@ -115,6 +116,8 @@ class MainFrame(Tk):
         self.mail.join()
         self.copie_ecran.the_end()
         #self.copie_ecran.join()
+        self.nettoyage.the_end()
+        #self.nettoyage.join()
         self.destroy()
 
 def handler(signum, frame):
@@ -147,7 +150,7 @@ class DateHeure(Thread):
         #return datetime.datetime.now().strftime('                  Il est %H:%M:%S')
         
 class CopieEcran(Thread):
-    """Thread chargé simplement d'afficher une lettre dans la console."""
+    """Thread chargé d'envoyer une image écran toutes les heures."""
     def __init__(self):
         Thread.__init__(self)       
         with open('fp') as fp:
@@ -163,9 +166,53 @@ class CopieEcran(Thread):
         while self.ok:
             commands.getoutput('scrot screen.png')
             send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])
-            time.sleep(60*60)
+            time.sleep(3600)
         print 'fin de la mise à jour de la date'
 
 
+class Nettoyage(Thread):
+    """Thread chargé de supprimer les messages dépassés toutes les heures."""
+    def __init__(self, frame):
+        Thread.__init__(self)     
+        print 'Lancement du thread de nettoyage'
+        self.frame = frame
+        self.ok = True
+    
+    def the_end(self):
+        print 'fin du thread de nettoyage'
+        self.ok = False 
+
+    def run(self):
+        while self.ok:
+            now = datetime.datetime.now()
+            liste = []
+            for label in self.frame.labels:
+                texte = label['text'].strip()
+                if texte != '':
+                    if re.match('[^0-9]*([0-9]+)[h:][0-9]*[^0-9]*([0-9]+)[h:][0-9]*[^0-9]*', texte):
+                        m = re.search('[^0-9]*([0-9]+)[h:][0-9]*[^0-9]*([0-9]+)[h:][0-9]*[^0-9]*', texte)
+                        heure = int(m.group(2))
+                    elif re.match('[^0-9]*([0-9]+)[h:][0-9]*.*', texte):
+                        m = re.search('[^0-9]*([0-9]+)[h:][0-9]*.*', texte)
+                        heure = int(m.group(1))
+                    else:
+                        heure = 24 # Pour être sur
+                    
+                    if now.hour - 2 <= heure:
+                        liste.append(texte)
+                        
+            i = 0
+            for s in liste:
+                self.frame.labels[i]['text']=s
+                i += 1
+                
+            for i in range(i, len(self.frame.labels)):
+                self.frame.labels[i]['text']=''
+                
+            
+            time.sleep(900)
+        print 'fin de la mise à jour de la date'
+        
+            
 
 MainFrame()
