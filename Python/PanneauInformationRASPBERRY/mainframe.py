@@ -47,26 +47,20 @@ class MainFrame(Tk):
 
         self.lintro.pack(fill='both')
         self.ldate.pack(fill='both')
-        self.lheure.pack(fill='both')
-        
+        self.lheure.pack(fill='both')        
         
         self.init_labels()
-
        
         self.bexit.pack(side='left')  
         self.bminmax.pack(side='left')
-        self.bjournuit.pack(side='left')
-                
-        
+        self.bjournuit.pack(side='left')                        
 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
         
         self.dh.start()
         self.mail.start()
-        self.mainloop()
-                
-
+        self.mainloop()              
                 
     def init_labels(self):  
         

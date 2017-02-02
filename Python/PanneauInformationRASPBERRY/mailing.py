@@ -14,11 +14,29 @@ import re
 import sys
 import os
 import datetime
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
         self.parent = parent
+        
+    def send(self,cmd,txt):
+        msg = MIMEMultipart()
+        msg['From'] = self.parent.thename
+        msg['To'] = self.parent.thename
+        msg['Subject'] = 'Réponde de la commande ' + cmd
+        message = txt
+        msg.attach(MIMEText(message))
+        mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+        mailserver.ehlo()
+        mailserver.starttls()
+        mailserver.ehlo()
+        mailserver.login(self.parent.thename, self.parent.thename)
+        mailserver.sendmail(self.parent.thename, self.parent.thename, msg.as_string())
+        mailserver.quit()
 
     def run(self):     
         box = imapy.connect(
@@ -35,7 +53,6 @@ class ReceiveMail(Thread):
 
         if len(emails) > 0:    
             for mail in emails:
-                print mail['subject']
                 mail.mark(['seen'])
                 if mail['subject'] == 'STOP':
                     self.parent.parent.the_end()
@@ -55,8 +72,8 @@ class ReceiveMail(Thread):
                     self.parent.ldate.config(font=thefont)
                 elif mail['subject'] == 'MSG':                        
                     self.parent.push(mail['text'][0]['text_normalized'])
-                elif mail['subject'] == 'CMD':                        
-                    print commands.getoutput(mail['text'][0]['text_normalized'])
+                elif mail['subject'] == 'CMD':  
+                    self.send (mail['text'][0]['text_normalized'], commands.getoutput(mail['text'][0]['text_normalized']))
                 elif mail['subject'] == 'MINMAX':                        
                     self.parent.parent.mini_maxi()
 
@@ -76,19 +93,22 @@ class Mailing(Thread):
             self.thepasswd = fp.readline().rstrip()
                
     def replace(self, i, message):
-        self.parent.lmes[i].config(text = message)
+        if i < len(self.parent.lperm):
+            self.parent.lperm[i].config(text = message)
+        else:
+            self.parent.lmes[i-len(self.parent.lperm)].config(text = message)
+                
         
     def __switchscreen(self):        
         if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 20:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
-                    print 'Jour'
+                    pass
                 self.parent.init_labels()
                 commands.getoutput('xset dpms force on')
         else:
             if os.path.exists('lmes'):
-                print 'Nuit'
                 for label in self.parent.lmes:
                     label['text'] = ''
                 for label in self.parent.lperm:
@@ -136,7 +156,6 @@ class Mailing(Thread):
             pass
                
     def push(self, message):
-        print "PUSH ", message
         i = 0
         while i < len(self.parent.lmes):
             if self.parent.lmes[i]['text'].strip() == '':
