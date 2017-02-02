@@ -34,16 +34,21 @@ class MainFrame(Tk):
         self.config(bg='black')
         self.title('Bonjour Maman')
         self.attributes('-fullscreen', True)
-
+        
+        self.width = int(self.winfo_screenwidth()*0.995)
+        
+        print "La LARGEUR de la fenetre ", self.width
+       
+        
 
         self.thefont = tkFont.Font(family='Purisa',size=20, weight='bold')
         self.theMiddlefont = tkFont.Font(family='Purisa',size=30, weight='bold', slant='italic')
         self.theBigfont = tkFont.Font(family='Purisa',size=40, weight='bold', slant='italic')
 
     
-        self.lintro = Label(self, text='Bonjour Maman', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
-        self.ldate = Label(self, text='', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
-        self.lheure = Label(self, text='', wraplength=1300, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
+        self.lintro = Label(self, text='Bonjour Maman', wraplength=self.width, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w')
+        self.ldate = Label(self, text='', wraplength=self.width, bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
+        self.lheure = Label(self, text='', wraplength=self.width, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
         
         self.bexit = Button(self, text='Quitter', command = self.the_end)         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
@@ -72,7 +77,7 @@ class MainFrame(Tk):
         self.mail.start()
         self.copie_ecran.start()
         self.nettoyage.start()
-        self.mainloop()    
+        self.mainloop()  
 
     def init_labels(self):
         colors = ['#BAFFA8', '#FFFFD0']
@@ -81,7 +86,7 @@ class MainFrame(Tk):
         self.labels = []        
         
         for i in range(10):
-            label = Label(self, text='', wraplength=1300, bg=colors[i%nbcolors], fg='black', font=self.thefont)
+            label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
             
@@ -217,7 +222,7 @@ class Nettoyage(Thread):
                     else:
                         heure = 24 # Pour être sur
                     
-                    if now.hour - 2 <= heure:
+                    if now.hour - 1 <= heure:
                         liste.append(texte)
                         
             i = 0
@@ -232,4 +237,4 @@ class Nettoyage(Thread):
             time.sleep(900)
         print 'fin de la mise à jour de la date'
 
-MainFrame()
+frame = MainFrame()
