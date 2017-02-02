@@ -20,6 +20,8 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import listes
+from chronotext import ChronologicText
+
 
 
 def send(user, password, subject, body=None, files=None):       
@@ -185,14 +187,11 @@ class Mailing(Thread):
             pass
                
     def push(self, message):
-        liste = listes.get_liste_from(self.parent.labels, message)
-        i = 0
-        for s in liste:
-            self.parent.labels[i]['text'] = s
-            i+=1
-            
-        for i in range(i,len(self.parent.labels)):
-            self.parent.labels[i]['text'] = ''
+        now = datetime.datetime.now()
+        message = now.weekday()+'§'+message
+        begin, end = listes.get_begin_end(message)
+        
+        self.parent.fill_labels(ChronologicText(now.weekday(), begin, end, message))
 
     
     def the_end(self):

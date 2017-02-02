@@ -4,18 +4,42 @@ Created on Thu Feb  9 21:02:41 2017
 
 @author: yvan
 """
+        
 
 class ChronologicText:
-    def __init__(self, begin, end, text):
-        self.begin = begin
-        self.end = end
-        self.text = text
+    def __init__(self, day, begin, end, text):
+        self.__day = day
+        self.__begin = begin
+        self.__end = end
+        self.__text = text
         
     def begin(self):
-        return self.begin
+        return self.__begin
         
     def end(self):
-        return self.end
+        return self.__end
         
     def text(self):
-        return self.text
+        return self.__text
+        
+    def day(self):
+        return self.__day
+        
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            #return self.__dict__ == other.__dict__
+            return self.__begin == other.__begin and \
+                   self.__end == other.__end and \
+                   self.__day == other.__day and \
+                   self.__text == other.__text
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+        
+    def __hash__(self):
+        return hash(self.__begin) ^ \
+               hash(self.__end) ^ \
+               hash(self.__day) ^ \
+               hash(self.__text)

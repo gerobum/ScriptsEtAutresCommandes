@@ -8,6 +8,7 @@ Created on Sat Feb  4 16:43:23 2017
 from datetime import datetime, date, time
 import sys
 import re
+from chronotext import ChronologicText
 
 # Retourne une liste de messages sans doublon et ordonnée
 # 
@@ -16,7 +17,8 @@ def get_liste_from(labels, message):
     for label in labels:
         liste.append(label['text'])
     liste = list(set(liste))
-    liste.sort(key=lambda s : critere(s))
+    #liste.sort(key=lambda s : critere(s))
+    liste.sort()
     
     return liste[-len(labels):]
     
@@ -110,39 +112,32 @@ def get_begin_end_day_text(line):
             day = t[1]
         text = t[2]
     elif l == 2:
-        print 'l == 2'
         if t[0] >= '0' and t[0] <= '6':
             day = t[0]
         text = t[1]
         begin, end = get_begin_end(text)
-        print begin
-        print end
     elif l == 1:
-        print 'l == 1'
         text = t[0]
         begin, end = get_begin_end(text)
-        print begin
-        print end
                                 
-    return begin, end, day, text
+    return ChronologicText(day, begin, end, text)
         
         
 # Construit une liste de messages chronologiques à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est triée chronologiquement.
-def get_liste():
+def get_liste(liste = []):
     now = datetime.now()
-    liste = []  
-    try:          
-        with open('lperm') as fp:
+    try:           
+        with open('lperm') as fp:         
             for line in fp:
                 # Une ligne comprend l'heure de début, de fin et un texte
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
-                # séparés par une virgule. L'absence d'heure est remplacé par 23:59
-                line = line.decode('utf-8').strip().encode('utf-8')
+                # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
+                line = line.decode('utf-8').strip().encode('utf-8')    
                 if not line.startswith('#', 0):
-                    t = line.split(',')
-                    if int(t[0]) == now.weekday():
-                        liste.append(t[1].decode('utf-8'))
+                    chronotext = get_begin_end_day_text(line)                 
+                    if chronotext.day() == '*' or int(chronotext.day()) == now.weekday():
+                        liste.append(chronotext)
     except TypeError as e:
         print "Type error({0})".format(e.message)   
         pass
@@ -156,7 +151,7 @@ def get_liste():
     try:
         with open('lmes') as fp:
             for line in fp:
-                liste.append(line.rstrip().decode('utf-8'))
+                liste.append(get_begin_end_day_text(line))
     
     except TypeError as e:
         print "Type error({0})".format(e.message)   
@@ -169,7 +164,8 @@ def get_liste():
         pass
     
     liste = list(set(liste))
-    liste.sort(key=lambda s : critere(s))
+#    liste.sort(key=lambda s : critere(s.begin()))
+    liste.sort(key=lambda s : s.begin())
 #    print 'Sort'
     return liste
     

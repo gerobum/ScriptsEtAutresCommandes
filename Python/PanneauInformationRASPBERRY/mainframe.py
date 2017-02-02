@@ -16,6 +16,7 @@ from mailing import Mailing
 from mailing import send
 from listes import get_liste
 import re
+from chronotext import ChronologicText
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -33,10 +34,6 @@ class MainFrame(Tk):
         self.attributes('-fullscreen', True)
         
         self.width = int(self.winfo_screenwidth()*0.995)
-        
-        print "La LARGEUR de la fenetre ", self.width
-       
-        
 
         self.thefont = tkFont.Font(family='Purisa',size=20, weight='bold')
         self.theMiddlefont = tkFont.Font(family='Purisa',size=30, weight='bold', slant='italic')
@@ -55,7 +52,8 @@ class MainFrame(Tk):
 
         self.lintro.pack(fill='both')
         self.ldate.pack(fill='both')
-        self.lheure.pack(fill='both')        
+        self.lheure.pack(fill='both')     
+        self.chronolist = []
         
         self.init_labels()
         self.fill_labels()
@@ -82,18 +80,24 @@ class MainFrame(Tk):
                 
         self.labels = []  
         
+        
         for i in range(10):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
             
-    def fill_labels(self):
+    def fill_labels(self, ctext=None):
+         
         for label in self.labels:
             label['text'] = ''
             
         i = 0
-        for s in get_liste():
-            self.labels[i]['text'] = s
+        if ctext != None:
+            self.chronolist.append(ctext)
+            
+        self.chronolist = get_liste(self.chronolist)
+        for s in self.chronolist:
+            self.labels[i]['text'] = s.text()
             i+=1
 
     def mini_maxi(self):
@@ -195,7 +199,6 @@ class Nettoyage(Thread):
     """Thread chargé de supprimer les messages dépassés toutes les heures."""
     def __init__(self, frame):
         Thread.__init__(self)     
-        print 'Lancement du thread de nettoyage'
         self.frame = frame
         self.ok = True
     
