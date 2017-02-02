@@ -16,6 +16,9 @@ from mailing import Mailing
 from mailing import send
 from listes import get_liste
 import re
+import thread
+import os
+import signal
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -108,20 +111,35 @@ class MainFrame(Tk):
             #self.jour = True
     
     def the_end(self):
-        print 'fin générale'
+        print 'TERMINAISON demandée'
         #signal.signal(signal.SIGINT, handler)
-        self.dh.the_end()
-        self.dh.join()
-        self.mail.the_end()
-        self.mail.join()
-        self.copie_ecran.the_end()
-        #self.copie_ecran.join()
-        self.nettoyage.the_end()
-        #self.nettoyage.join()
-        self.destroy()
+        print "Attention fermeture dans "
+        print "3"
+        time.sleep(1)
+        print "2"
+        time.sleep(1)
+        print "1"
+        time.sleep(1)
+        # Violence (C'est tout ce que j'ai trouvé pour l'instant)
+        os.kill(os.getpid(), 9)
+        
+#        self.dh.the_end()
+#        self.dh.join()
+#        print "FIN de l'horloge"
+#        self.mail.the_end()
+#        self.mail.join()
+#        print 'FIN de la relève du courrier'
+#
+#        self.copie_ecran.the_end()
+#        self.copie_ecran.join()
+#        print "FIN de mise à jour de l'écran"
+#
+#        self.nettoyage.the_end()
+#        self.nettoyage.join()
+#        print 'FIN du thread horaire'
+#        self.destroy()
+#        print "C'est totalement fini"
 
-def handler(signum, frame):
-    print "do whatever, like call thread.interrupt_main()"
 
 class DateHeure(Thread):
     """Thread chargé simplement d'afficher une lettre dans la console."""
@@ -133,7 +151,7 @@ class DateHeure(Thread):
     
     def the_end(self):
         print 'fin de date demandée'
-        self.ok = False    
+        self.ok = False 
 
     def run(self):
         while self.ok:
@@ -212,7 +230,5 @@ class Nettoyage(Thread):
             
             time.sleep(900)
         print 'fin de la mise à jour de la date'
-        
-            
 
 MainFrame()
