@@ -18,6 +18,7 @@ from listes import get_liste
 from chronotext import getDelay
 import os
 from threading import Lock
+import sys
 
 
 
@@ -102,7 +103,9 @@ class MainFrame(Tk):
                 i+=1
             for label in self.labels[i:]:
                 label['text'] = ''
-            
+        except IndexError as ie:            
+            sys.stderr.write(ie.__str__()+'\n')  
+            pass
         finally:
             self.lock.release()
                 
@@ -232,7 +235,5 @@ if not os.path.exists('.lock-panel'):
         commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"
-    
-
-#frame = MainFrame()
+   
 

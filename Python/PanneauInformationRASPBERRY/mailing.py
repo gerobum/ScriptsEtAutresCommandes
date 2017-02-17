@@ -155,6 +155,17 @@ class ReceiveMail(Thread):
 # ------------------------------------------------  
                 elif mail['subject'] == 'STOP':
                     self.parent.parent.the_end()
+# ------------------------------------------------  
+                elif re.match('SUP ([0-9]+)', mail['subject']):
+                    try:
+                        m = re.search('SUP ([0-9]+)', mail['subject'])
+                        p = int(m.group(1))                      
+                        self.parent.sup(p)
+                    except ValueError as v:  
+                        sys.stderr.write('mailing.py ReceiveMail run')
+                        sys.stderr.write(v)
+                        sys.stderr.write(traceback.format_exc())   
+                        pass
                    
 
         box.logout()
@@ -217,7 +228,13 @@ class Mailing(Thread):
                
     def push(self, message):  
         self.parent.fill_labels(listes.get_begin_end_day_text(message))
-
+        
+    def sup(self, p):
+        commands.getoutput('rm lmes')
+        if p >= 0 and p < len(self.parent.chronolist):
+            del self.parent.chronolist[p]
+        self.parent.fill_labels()
+        
     
     def the_end(self):
         print 'fin de courrier'
