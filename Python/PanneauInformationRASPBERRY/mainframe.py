@@ -225,6 +225,7 @@ class Nettoyage(Thread):
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
+
 if not os.path.exists('.lock-panel'):  
     with open('.lock-panel', 'w'):
         pass

@@ -15,7 +15,8 @@ def getDelay(key, default):
         
 
 class ChronologicText:
-    def __init__(self, day, begin, end, text):
+    def __init__(self, date, day, begin, end, text):
+        self.__date = date
         self.__day = day
         self.__begin = begin
         self.__end = end
@@ -33,8 +34,11 @@ class ChronologicText:
     def day(self):
         return self.__day
         
+    def date(self):
+        return self.__date
+        
     def __str__(self):
-        return ''.join([str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
+        return ''.join([self.date.__str__(),'§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
         
     def __eq__(self, other):
             if other == None:
