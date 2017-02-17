@@ -62,7 +62,7 @@ class MainFrame(Tk):
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
         
-        self.mailing_delay = getDelay('mailing_delay', 900)
+        self.mailing_delay = getDelay('mailing_delay', 71)
 
         self.lintro.pack(fill='both')
         self.ldate.pack(fill='both')
