@@ -65,13 +65,16 @@ class ReceiveMail(Thread):
                 # you may also specify custom port:
                 # port=993
                 ssl=True,
-            )                 
+            )  
+            
+            emails = box.folder('INBOX').emails(self.parent.q.unseen())
+               
         except:
             print "Unexpected error in gmail connect:", sys.exc_info()[0]
             return  
         
         
-        emails = box.folder('INBOX').emails(self.parent.q.unseen())
+        
 
         if len(emails) > 0:    
             for mail in emails:
