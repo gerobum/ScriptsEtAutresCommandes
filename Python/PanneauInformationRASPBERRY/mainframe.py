@@ -19,6 +19,7 @@ from chronotext import getDelay
 import os
 from threading import Lock
 import sys
+import traceback
 
 
 
@@ -51,8 +52,8 @@ class MainFrame(Tk):
         
         
         self.images = []
-        for i in range(6):
-            photo = PhotoImage(file="image"+str(i)+".png")
+        for i in range(3):
+            photo = PhotoImage(file="images/image"+str(i)+".png")
             self.images.append(Label(self, image=photo))
             self.images[i].photo = photo 
 
@@ -96,7 +97,7 @@ class MainFrame(Tk):
                 image.pack_forget()
             
             for i in range(len(self.images)):
-                photo = PhotoImage(file="image"+str(i)+".png")
+                photo = PhotoImage(file="images/image"+str(i)+".png")
                 self.images[i].pack_forget()
                 self.images[i] = Label(self, image=photo)
                 self.images[i].photo = photo 
@@ -251,6 +252,7 @@ class Nettoyage(Thread):
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
+
 if not os.path.exists('.lock-panel'): 
     try: 
         with open('.lock-panel', 'w'):
@@ -259,9 +261,10 @@ if not os.path.exists('.lock-panel'):
             print 'fin de la fenêtre principale'
     except:
         sys.stderr.write('Problème au lancement\n') 
+        sys.stderr.write(traceback.format_exc()) 
     finally:
         commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"
-   
+                           
 

@@ -153,7 +153,7 @@ class ReceiveMail(Thread):
                             if re.match('image[0-9]\.png', file_name) and len(data) < 500000 and content_type == 'image/png': 
                                 m = re.search('image([0-9])\.png', file_name)
                                 n = int(m.group(1))
-                                with open(file_name, 'w') as f:
+                                with open('images/'+file_name, 'w') as f:
                                     f.write(data)
                                 self.parent.parent.maj_photo(n)
                     except:                        
