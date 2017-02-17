@@ -56,15 +56,19 @@ class ReceiveMail(Thread):
         Thread.__init__(self)
         self.parent = parent
                       
-    def run(self):     
-        box = imapy.connect(
-            host='imap.gmail.com',
-            username=self.parent.thename,
-            password=self.parent.thepasswd,
-            # you may also specify custom port:
-            # port=993
-            ssl=True,
-        )
+    def run(self):    
+        try:
+            box = imapy.connect(
+                host='imap.gmail.com',
+                username=self.parent.thename,
+                password=self.parent.thepasswd,
+                # you may also specify custom port:
+                # port=993
+                ssl=True,
+            )                 
+        except:
+            print "Unexpected error in gmail connect:", sys.exc_info()[0]
+            return  
         
         
         emails = box.folder('INBOX').emails(self.parent.q.unseen())
