@@ -7,7 +7,7 @@ Created on Sat Jan 21 17:28:43 2017
 @author: yvan
 """
 
-from Tkinter import Label, Button, Tk
+from Tkinter import Label, Button, Tk, PhotoImage
 import tkFont
 import datetime
 import locale
@@ -88,6 +88,11 @@ class MainFrame(Tk):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
+        
+        photo = PhotoImage(file="image.png")
+        self.image = Label(self, image=photo)
+        self.image.photo = photo
+        self.image.pack(fill='left', pady=1)
             
     def fill_labels(self, ctext=None):
         self.lock.acquire()
