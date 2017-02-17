@@ -253,13 +253,13 @@ class Nettoyage(Thread):
 
 
 if re.search('python mainframe.py', commands.getoutput('ps -ef | grep mainframe')):
+    print "L'application semble déjà lancée"
+else:
     try: 
         frame = MainFrame()  
         print 'fin de la fenêtre principale'
     except:
         sys.stderr.write('Problème au lancement\n') 
         sys.stderr.write(traceback.format_exc()) 
-else:
-    print "L'application semble déjà lancée"
                            
 
