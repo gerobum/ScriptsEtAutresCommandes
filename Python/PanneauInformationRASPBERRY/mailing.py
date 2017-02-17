@@ -182,10 +182,6 @@ class Mailing(Thread):
         with open('fp') as fp:
             self.thename = fp.readline().rstrip()
             self.thepasswd = fp.readline().rstrip()
-               
-    def replace(self, i, message):
-        if i >= 0 and i < len(self.parent.labels):
-            self.parent.labels[i].config(text = message)
                 
         
     def __switchscreen(self):        
@@ -230,10 +226,15 @@ class Mailing(Thread):
         self.parent.fill_labels(listes.get_begin_end_day_text(message))
         
     def sup(self, p):
-        commands.getoutput('rm lmes')
         if p >= 0 and p < len(self.parent.chronolist):
+            commands.getoutput('rm lmes')
             del self.parent.chronolist[p]
-        self.parent.fill_labels()
+            self.parent.fill_labels()
+               
+    def replace(self, p, message):
+        if p >= 0 and p < len(self.parent.chronolist):
+            self.sup(p)
+            self.push(message)
         
     
     def the_end(self):
