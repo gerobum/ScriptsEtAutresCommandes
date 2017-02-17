@@ -19,6 +19,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import listes
+import jvcframe
 
 
 
@@ -65,10 +66,18 @@ class ReceiveMail(Thread):
                 # you may also specify custom port:
                 # port=993
                 ssl=True,
-            )    
-      
-            emails = box.folder('INBOX').emails(self.parent.q.unseen())             
+            )            
+        except:
+            print "Unexpected error in ReceiveMail: box = imapy.connect(...)", sys.exc_info()[0]
+            return
+         
+        try:
+            emails = box.folder('INBOX').emails(self.parent.q.unseen())            
+        except:
+            print "Unexpected error in ReceiveMail: box = box.folder('INBOX')...", sys.exc_info()[0]
+            return           
 
+        try:
             if len(emails) > 0:    
                 for mail in emails:
                     mail.mark(['seen'])
@@ -159,6 +168,18 @@ class ReceiveMail(Thread):
                         except:                        
                             sys.stderr.write(traceback.format_exc()) 
     # ------------------------------------------------  
+                    elif mail['subject'] == 'JVC ON':  
+                        try:                      
+                            self.jvc = jvcframe.JVCFrame()
+                        except:                        
+                            sys.stderr.write(traceback.format_exc()) 
+    # ------------------------------------------------  
+                    elif mail['subject'] == 'JVC OFF':  
+                        try:                      
+                            self.jvc.the_end()
+                        except:                        
+                            sys.stderr.write(traceback.format_exc()) 
+    # ------------------------------------------------  
                     elif mail['subject'] == 'PHOTO':  
                         try:                      
                             for attachment in mail['attachments']:
@@ -217,10 +238,15 @@ class ReceiveMail(Thread):
                         except:  
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(traceback.format_exc())   
-                            pass
+                            pass           
+        except:
+            print "Unexpected error in ReceiveMail: dans la suite de if", sys.exc_info()[0]
+            return
+            
+        try:
             box.logout()             
         except:
-            print "Unexpected error in ReceiveMail:", sys.exc_info()[0]
+            print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
 
 
 class Mailing(Thread):
