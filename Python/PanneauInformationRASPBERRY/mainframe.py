@@ -120,21 +120,33 @@ class MainFrame(Tk):
             
     def fill_labels(self, ctext=None):
         self.lock.acquire()
-        try:              
+        try:      
+            for label in self.labels:
+                label.pack_forget()
+                
+            self.labels = []    
+                
             if ctext != None:
                 self.chronolist.append(ctext)
             
             self.chronolist = get_liste(self.chronolist)
 
+          
+            colors = ['#BAFFA8', '#FFFFD0']
+            nbcolors = len(colors) # Nécessaire
+                          
+            
             i = 0
             for s in self.chronolist:
-                self.labels[i]['text'] = s.text().strip()
+                label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
+                label.pack(fill='both', pady=1)
+                label['text'] = s.text().strip()
+                self.labels.append(label)
                 i+=1
-            for label in self.labels[i:]:
-                label['text'] = ''
         except IndexError as ie:            
             sys.stderr.write(ie.__str__()+'\n')  
             pass
+            
         finally:
             self.lock.release()
                 
