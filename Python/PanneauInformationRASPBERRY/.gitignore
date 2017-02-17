@@ -1,6 +1,6 @@
 images/
 .lock-panel
-panneau.log
+panneau*.log
 delays
 fp
 lmes
