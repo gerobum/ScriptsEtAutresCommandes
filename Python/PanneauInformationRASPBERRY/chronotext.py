@@ -52,6 +52,4 @@ class ChronologicText:
         return not self.__eq__(other)
         
     def __hash__(self):
-        return hash(self.__begin) ^ \
-               hash(self.__end) ^ \
-               hash(self.__text)
+        return hash(self.__text)

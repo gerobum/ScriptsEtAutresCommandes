@@ -13,26 +13,42 @@ def test1():
     t2=time(10,5)
     t3=time(11,15)
     midi=time(12)
+    lc = [
+         ChronologicText('0',t1,t2,'Bonjour'),
+         ChronologicText('0',t1,t2,'Bonjour'),
+         ChronologicText('0',t1,t1,'Bonjour'),
+         ChronologicText('0',t2,t2,'Bonjour'),
+         ChronologicText('0',t1,t2,'Au revoir'),
+         ChronologicText('0',t2,t3,'Bonjour')
+         ]
+   
+ 
+    assert lc[0]==lc[1], 'a <> aa'
+    assert lc[0]==lc[3], 'a == b'
+    assert lc[0]!=lc[4], 'a == d'
+  
     
-    a=ChronologicText('0',t1,t2,'Bonjour')
-    aa=ChronologicText('0',t1,t2,'Bonjour')
-    b=ChronologicText('0',t1,t1,'Bonjour')
-    c=ChronologicText('0',t2,t2,'Bonjour')
-    d=ChronologicText('0',t1,t2,'Au revoir')
-    e=ChronologicText('0',t2,t3,'Bonjour')
-    f=ChronologicText('0',t3,midi,'Bonjour')
+    print '----------'
     
-    print a
-    print aa
-    print b
-    print c
-    print d
-    print e
-    print f
     
-    assert a==aa, 'a <> aa'
-    assert a!=b, 'a == b'
-    assert a!=d, 'a == d'
+    for i in range(len(lc)):
+        for j in range(len(lc)):
+            if lc[i] == lc[j]:
+                print lc[i], " == ", lc[j]
+            else:
+                print lc[i], " <> ", lc[j]
+
+    for c in lc:
+        print c
+
+        
+    lc = list(set(lc))
+    print '----------'
+    for c in lc:
+        print c
+ 
+    
+    
     
 def getDelay(key, default):
     try:
@@ -41,5 +57,7 @@ def getDelay(key, default):
     except:
         return default
         
-print getDelay('mailing_delay', 100)
+#print getDelay('mailing_delay', 100)
+        
+test1()        
 
