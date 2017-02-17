@@ -231,6 +231,7 @@ class Mailing(Thread):
         else:
             if os.path.exists('lmes'):
                 os.remove('lmes') 
+            self.parent.chronolist = []
             for label in self.parent.labels:
                 label['text'] = ''
             commands.getoutput('xset dpms force off')
