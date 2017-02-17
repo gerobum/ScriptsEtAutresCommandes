@@ -305,11 +305,16 @@ class Mailing(Thread):
         self.ok = False  
 
     def run(self):
-        while self.ok:            
-            som = ReceiveMail(self)
-            som.start()
-            #time.sleep(300)
-            self.__switchscreen()
-            self.__writelabels()
+        while self.ok: 
+            try:
+                som = ReceiveMail(self)
+                som.start()
+                #time.sleep(300)
+                self.__switchscreen()
+                self.__writelabels()
+                   
+            except:
+                sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
+
             time.sleep(self.parent.mailing_delay)
         print 'fin de la collecte du courrier'
