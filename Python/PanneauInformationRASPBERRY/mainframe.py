@@ -7,7 +7,7 @@ Created on Sat Jan 21 17:28:43 2017
 @author: yvan
 """
 
-from Tkinter import Label, Button, Tk
+from Tkinter import Label, Button, Tk, PhotoImage
 import tkFont
 import datetime
 import locale
@@ -49,7 +49,16 @@ class MainFrame(Tk):
         self.ldate = Label(self, text='', wraplength=self.width, bg='#3209FF', fg='#FFFFDA', font=self.theMiddlefont, anchor='w')
         self.lheure = Label(self, text='', wraplength=self.width, bg='#3209FF', fg='#FFFFDA', font=self.theBigfont, anchor='w') 
         
-        self.bexit = Button(self, text='Quitter', command = self.the_end)         
+        
+        self.images = []
+        for i in range(6):
+            photo = PhotoImage(file="image"+str(i)+".png")
+            self.images.append(Label(self, image=photo))
+            self.images[i].photo = photo 
+
+        
+        self.bexit = Button(self, text='Quitter', image=photo, command = self.the_end) 
+        
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
         
@@ -61,7 +70,10 @@ class MainFrame(Tk):
         self.chronolist = []
         
         self.init_labels()
-        self.fill_labels()        
+        self.fill_labels()   
+        
+        for image in self.images:
+            image.pack(side='left')  
        
 #        self.bexit.pack(side='left')  
 #        self.bminmax.pack(side='left')
@@ -88,6 +100,11 @@ class MainFrame(Tk):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
+        
+#        photo = PhotoImage(file="image.gif")
+#        self.image = Label(self, image=photo)
+#        self.image.photo = photo
+#        self.image.pack()
             
     def fill_labels(self, ctext=None):
         self.lock.acquire()
@@ -224,6 +241,8 @@ class Nettoyage(Thread):
             time.sleep(self.cleaning_delay)
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
+
+MainFrame()
 
 if not os.path.exists('.lock-panel'):  
     with open('.lock-panel', 'w'):
