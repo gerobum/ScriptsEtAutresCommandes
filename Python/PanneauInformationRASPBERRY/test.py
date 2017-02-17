@@ -6,13 +6,15 @@ Created on Mon Feb 13 22:26:54 2017
 """
 
 from chronotext import ChronologicText
-from datetime import time, datetime
+import datetime
+import listes
+import re
 
 def test1():
-    t1=time(18)
-    t2=time(18,5)
-    t3=time(17,15)
-    t4=time(17,5)
+    t1=datetime.time(18)
+    t2=datetime.time(18,5)
+    t3=datetime.time(17,15)
+    t4=datetime.time(17,5)
     lc = [
          ChronologicText('*',t1,t1,'Bonjour'),
          ChronologicText('*',t1,t2,'Hello'),
@@ -50,10 +52,10 @@ def test1():
  
 def test2():
     t=18
-    t1=time(t)
-    t2=time(t+1)
-    t3=time(t+2,15)
-    t4=time(t+2,30)
+    t1=datetime.time(t)
+    t2=datetime.time(t+1)
+    t3=datetime.time(t+2,15)
+    t4=datetime.time(t+2,30)
     lc = [
          ChronologicText('*',t1,t1,t1.__str__()+' -> '+t1.__str__()),
          ChronologicText('*',t1,t2,t1.__str__()+' -> '+t2.__str__()),
@@ -66,7 +68,7 @@ def test2():
     h = now.hour-1
     if h < 0:
         h = 23
-    nowmoins1 = time(h, now.minute)
+    nowmoins1 = datetime.time(h, now.minute)
     print now
     print nowmoins1
  
@@ -74,6 +76,15 @@ def test2():
     
     for c in lc:
         print c
+    
+def test3():
+    print listes.get_date('09/03/1965')        
+    datetime.date.today()
+    
+def test4(text):
+    m = re.search('([0-9]+)/([0-9]+)/([0-9]+)', text)
+    print 'Les groupes trouvés -> ', m.group(3), '#', m.group(2),'#',m.group(1)
+    print datetime.date(int(m.group(3)),int(m.group(2)),int(m.group(1)))
     
     
     
@@ -86,5 +97,7 @@ def getDelay(key, default):
         
 #print getDelay('mailing_delay', 100)
         
-test2()        
+print 'Hello'
+test4('24/02/2017')      
+
 

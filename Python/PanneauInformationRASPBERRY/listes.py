@@ -5,8 +5,7 @@ Created on Sat Feb  4 16:43:23 2017
 @author: yvan
 """
 
-from datetime import datetime
-from datetime import time
+from datetime import datetime, time, date
 import sys
 import re
 from chronotext import ChronologicText
@@ -56,6 +55,14 @@ def get_heure(s, default=time()):
     else:
         return default
         
+def get_date(text):
+    try:
+        m = re.search('([0-9]+)/([0-9]+)/([0-9]+)', text)
+        return date(int(m.group(3)),int(m.group(2)),int(m.group(1)))
+    except:
+        return None
+    
+        
 def get_begin_end(text):
     begin = time(0,0)
     end = time(23,59)
@@ -71,28 +78,39 @@ def get_begin_end(text):
   
 # Une ligne contient toujours un texte et des informations chronologiques
 # en début. Chaque partie est séparée de ses voisines par le caractère §
-# Elle peut s'écrit de 4 façons :
-# 4. <h>§<h>§<j>§<t>
-# 3.     <h>§<j>§<t>
-# 2.         <j>§<t>
-# 1.             <t>
-# où <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
+# Elle peut s'écrit de 5 façons :
+# 5. <d>§<h>§<h>§<j>§<t>
+# 4.     <h>§<h>§<j>§<t>
+# 3.         <h>§<j>§<t>
+# 2.             <j>§<t>
+# 1.                 <t>
+# où <d> est une date (par exemple 02/03/2017 ou 2/03/2017 ou 2/3/2017) 
+#    <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
 #    <j> est le jour (0 => lundi, 1 => mardi, ...)
 #    <t> un texte sans §
 #
-# Dans le cas 4, l'heure de début est le premier <h>
+# Dans le cas 5, la date est <d>
+#                l'heure de début est le premier <h>
 #                l'heure de fin   est le second  <h>
 #                le jour est <j>
 #
-# Dans le cas 3, l'heure de début est <h> 
+# Dans le cas 4, la date est aujourd'hui
+#                l'heure de début est le premier <h>
+#                l'heure de fin   est le second  <h>
+#                le jour est <j>
+#
+# Dans le cas 3, la date est aujourd'hui
+#                l'heure de début est <h> 
 #                l'heure de fin est 23:59
 #                le jour est <j>
 #
-# Dans le cas 2, l'heure de début est 00:00
+# Dans le cas 2, la date est aujourd'hui
+#                l'heure de début est 00:00
 #                l'heure de fin   est 23:59
 #                le jour est <j>
 #
-# Dans le cas 1, l'heure de début est 00:00
+# Dans le cas 1, la date est aujourd'hui
+#                l'heure de début est 00:00
 #                l'heure de fin   est 23:59
 #                le jour est '*' (tous les jours)
 def get_begin_end_day_text(line):
@@ -100,11 +118,20 @@ def get_begin_end_day_text(line):
     end = time(23,59)
     day = '*'
     text = ''
+    ddate = None
+    
     
     t = line.split('§')
     l = len(t)
     hrf = time(23,59)
-    if l == 4:
+    if l == 5:
+        ddate = get_date(t[0])
+        begin = get_heure(t[1])
+        end = get_heure(t[2], hrf)
+        if t[3] >= '0' and t[3] <= '6':
+            day = t[3]
+        text = t[4]
+    elif l == 4:
         begin = get_heure(t[0])
         end = get_heure(t[1], hrf)
         if t[2] >= '0' and t[2] <= '6':
@@ -124,24 +151,26 @@ def get_begin_end_day_text(line):
         begin, end = get_begin_end(t[0])
         text = t[0]
                                 
-    return ChronologicText(day, begin, end, text)
+    return ChronologicText(ddate, day, begin, end, text)
         
         
 # Construit une liste de messages chronologiques à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est triée chronologiquement.
 def get_liste(liste = []):
     now = datetime.now()
+    today = date.today()
     try:           
-        with open('lperm') as fp:         
+        with open('lperm') as fp:      
             for line in fp:
                 # Une ligne comprend l'heure de début, de fin et un texte
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
-                line = line.decode('utf-8').strip().encode('utf-8').strip()   
+                line = line.decode('utf-8').strip().encode('utf-8').strip() 
                 if not line.startswith('#', 0) and line.strip()!='': 
                     chronotext = get_begin_end_day_text(line)  
-                    if chronotext.day() == '*' or int(chronotext.day()) == now.weekday():
-                        liste.append(chronotext)
+                    if chronotext.date() == None or chronotext.date() == today:
+                        if chronotext.day() == '*' or int(chronotext.day()) == now.weekday(): 
+                            liste.append(chronotext)
     except TypeError as e:
         print "Type error({0})".format(e.message)   
         pass
@@ -150,9 +179,13 @@ def get_liste(liste = []):
         print "I/O error({0}): {1}".format(e.errno, e.strerror) 
         pass    
     except ValueError as e:
-        print "Erreur lors de la lecture de lperm ", e               
+        print "Erreur lors de la lecture de lperm ", e    
+        pass
+    except AttributeError as e:
+        sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
+        pass        
     except:
-        print "Unexpected error:", sys.exc_info()[0]
+        sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
         pass
     
     try:
@@ -172,9 +205,12 @@ def get_liste(liste = []):
         pass   
     except ValueError as e:
         print "Erreur lors de la lecture de lmes ", e
-        pass               
+        pass  
+    except AttributeError as e:
+        sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
+        pass                
     except:
-        print "Unexpected error:", sys.exc_info()[0]
+        sys.stderr.write("Erreur innatendue "+ sys.exc_info()[0] + '\n') 
         pass
     
     liste = list(set(liste))

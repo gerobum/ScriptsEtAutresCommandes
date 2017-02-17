@@ -7,7 +7,7 @@ Created on Sat Jan 21 17:28:43 2017
 @author: yvan
 """
 
-from Tkinter import Label, Button, Tk, PhotoImage
+from Tkinter import Label, Button, Tk
 import tkFont
 import datetime
 import locale
@@ -88,11 +88,6 @@ class MainFrame(Tk):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
             label.pack(fill='both', pady=1)
             self.labels.append(label)
-        
-        photo = PhotoImage(file="image.png")
-        self.image = Label(self, image=photo)
-        self.image.photo = photo
-        self.image.pack(fill='left', pady=1)
             
     def fill_labels(self, ctext=None):
         self.lock.acquire()
@@ -234,9 +229,9 @@ if not os.path.exists('.lock-panel'):
     with open('.lock-panel', 'w'):
         pass
     try:
-        frame = MainFrame()
+        frame = MainFrame()       
     except:
-        print "Problème au lancement"
+        sys.stderr.write('Problème au lancement\n') 
         commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"
