@@ -72,29 +72,8 @@ class ReceiveMail(Thread):
         if len(emails) > 0:    
             for mail in emails:
                 mail.mark(['seen'])
-                if mail['subject'] == 'STOP':
-                    self.parent.parent.the_end()
-                elif re.match('REP ([0-9]+)', mail['subject']):
-                    try:
-                        m = re.search('REP ([0-9]+)', mail['subject'])
-                        p = int(m.group(1))                      
-                        self.parent.replace(p, mail['text'][0]['text_normalized'])
-                    except ValueError as v:  
-                        print 'mailing.py ReceiveMail run'
-                        print v
-                        sys.stderr.write(traceback.format_exc())   
-                        pass
-                elif mail['subject'] == 'GIT PULL REBOOT':
-                    commands.getoutput('git-pull-reboot')
-                elif mail['subject'] == 'SCREEN ON':
-                    commands.getoutput('xset dpms force on')
-                elif mail['subject'] == 'SCREEN OFF':
-                    commands.getoutput('xset dpms force off')
-                elif mail['subject'] == 'FONT':
-                    thesize = mail['text'][0]['text_normalized']
-                    thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
-                    self.parent.ldate.config(font=thefont)
-                elif mail['subject'] == 'ALL FONT':
+# ------------------------------------------------                
+                if mail['subject'] == 'ALL FONT':
                     thesize = int(mail['text'][0]['text_normalized'])
                     thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
                     self.parent.parent.theBigfont = thefont
@@ -105,17 +84,29 @@ class ReceiveMail(Thread):
                     self.parent.parent.lheure.config(font=thefont)
                     for label in self.parent.parent.labels:
                         label.config(font=thefont)
-                elif mail['subject'] == 'MSG':                        
-                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n'))
+# ------------------------------------------------  
                 elif mail['subject'] == 'COMMANDE':  
                     cmd = mail['text'][0]['text_normalized']
                     txt = commands.getoutput(cmd)
                     send (self.parent.thename, self.parent.thepasswd, cmd, txt)
-                elif mail['subject'] == 'SCROT':  
-                    commands.getoutput('scrot screen.png')
-                    send(self.parent.thename, self.parent.thepasswd, 'Copie d\'écran', None, ['screen.png'])
-                elif mail['subject'] == 'MINMAX':                        
-                    self.parent.parent.mini_maxi()
+# ------------------------------------------------  
+                elif re.match('DELAY ([0-9]+)', mail['subject']):
+                    try:
+                        m = re.search('DELAY ([0-9]+)', mail['subject'])
+                        p = int(m.group(1))
+                        if p >= 10:
+                            self.parent.mailing_delay = p
+                    except ValueError:
+                        pass
+# ------------------------------------------------  
+                elif mail['subject'] == 'FONT':
+                    thesize = mail['text'][0]['text_normalized']
+                    thefont = tkFont.Font(family='Helvetica',size=thesize, weight='bold')
+                    self.parent.ldate.config(font=thefont)
+# ------------------------------------------------  
+                elif mail['subject'] == 'GIT PULL REBOOT':
+                    commands.getoutput('git-pull-reboot')
+# ------------------------------------------------  
                 elif mail['subject'] == 'HELP':     
                     try:
                         with open('help.txt') as fp:
@@ -133,15 +124,37 @@ class ReceiveMail(Thread):
                         pass                 
                     except:
                         print "Unexpected error:", sys.exc_info()[0]
-                        pass
-                elif re.match('DELAY ([0-9]+)', mail['subject']):
+                        pass   
+# ------------------------------------------------  
+                elif mail['subject'] == 'MINMAX':                        
+                    self.parent.parent.mini_maxi()
+# ------------------------------------------------  
+                elif mail['subject'] == 'MSG':                        
+                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n'))    
+# ------------------------------------------------       
+                elif re.match('REP ([0-9]+)', mail['subject']):
                     try:
-                        m = re.search('DELAY ([0-9]+)', mail['subject'])
-                        p = int(m.group(1))
-                        if p >= 10:
-                            self.parent.mailing_delay = p
-                    except ValueError:
+                        m = re.search('REP ([0-9]+)', mail['subject'])
+                        p = int(m.group(1))                      
+                        self.parent.replace(p, mail['text'][0]['text_normalized'])
+                    except ValueError as v:  
+                        print 'mailing.py ReceiveMail run'
+                        print v
+                        sys.stderr.write(traceback.format_exc())   
                         pass
+# ------------------------------------------------  
+                elif mail['subject'] == 'SCREEN OFF':
+                    commands.getoutput('xset dpms force off')  
+# ------------------------------------------------    
+                elif mail['subject'] == 'SCREEN ON':
+                    commands.getoutput('xset dpms force on')  
+# ------------------------------------------------  
+                elif mail['subject'] == 'SCROT':  
+                    commands.getoutput('scrot screen.png')
+                    send(self.parent.thename, self.parent.thepasswd, 'Copie d\'écran', None, ['screen.png'])  
+# ------------------------------------------------  
+                elif mail['subject'] == 'STOP':
+                    self.parent.parent.the_end()
                    
 
         box.logout()
