@@ -17,6 +17,8 @@ from mailing import send
 from listes import get_liste
 from chronotext import getDelay
 import os
+from threading import Lock
+
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -28,6 +30,8 @@ import time
 class MainFrame(Tk):
     def __init__(self):
         Tk.__init__(self) 
+        
+        self.lock = Lock()
         
         self.config(bg='black')
         self.title('Bonjour Maman')
@@ -86,19 +90,23 @@ class MainFrame(Tk):
             self.labels.append(label)
             
     def fill_labels(self, ctext=None):
-        for label in self.labels:
-            label['text'] = ''
+        self.lock.acquire()
+        try:              
+            if ctext != None:
+                self.chronolist.append(ctext)
             
-        i = 0
-        if ctext != None:
-            self.chronolist.append(ctext)
-        
-        self.chronolist = get_liste(self.chronolist)
-#        #list(filter(lambda a: a != 2, x))
-        for s in self.chronolist:
-            if s.text().strip() != '':
+            self.chronolist = get_liste(self.chronolist)
+
+            i = 0
+            for s in self.chronolist:
+                print s
                 self.labels[i]['text'] = s.text().strip()
                 i+=1
+            for label in self.labels[i:]:
+                label['text'] = ''
+            
+        finally:
+            self.lock.release()
                 
 
     def mini_maxi(self):

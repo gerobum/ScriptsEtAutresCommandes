@@ -15,12 +15,10 @@ import sys, traceback
 import os
 import datetime
 import smtplib
-from email.mime.image import MIMEImage
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import listes
-from chronotext import ChronologicText, getDelay
 
 
 
@@ -188,7 +186,8 @@ class Mailing(Thread):
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
                     for chrono in self.parent.chronolist:
-                        fp.write(''.join([chrono.__str__().strip(),'\n'])) 
+                        if chrono.__str__().strip() != '':
+                            fp.write(''.join([chrono.__str__().strip(),'\n'])) 
 #                    for label in self.parent.labels:
 #                        if label['text'].strip() != '':
 #                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
@@ -203,11 +202,9 @@ class Mailing(Thread):
             print "Unexpected error:", sys.exc_info()[0]
             pass
                
-    def push(self, message):
-        now = datetime.datetime.now()
-        begin, end = listes.get_begin_end(message)
-        
-        self.parent.fill_labels(ChronologicText(now.weekday(), begin, end, message))
+    def push(self, message):  
+        print message
+        self.parent.fill_labels(listes.get_begin_end_day_text(message))
 
     
     def the_end(self):

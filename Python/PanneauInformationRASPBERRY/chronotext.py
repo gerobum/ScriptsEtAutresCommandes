@@ -19,7 +19,7 @@ class ChronologicText:
         self.__day = day
         self.__begin = begin
         self.__end = end
-        self.__text = text
+        self.__text = text.strip()
         
     def begin(self):
         return self.__begin

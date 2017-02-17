@@ -159,7 +159,9 @@ def get_liste(liste = []):
         if os.path.exists('lmes'): 
             with open('lmes') as fp:
                 for line in fp:
-                    liste.append(get_begin_end_day_text(line.strip()))
+                    line = line.strip()
+                    if line != '':
+                        liste.append(get_begin_end_day_text(line.strip()))
     
     except TypeError as e:
         print "Type error({0})".format(e.message)   
@@ -176,8 +178,8 @@ def get_liste(liste = []):
         pass
     
     liste = list(set(liste))
-    nowplus1 = time((now.hour+1)%24, now.minute)
     
+    nowplus1 = time((now.hour+1)%24, now.minute)
     
     liste = list(filter(lambda s : s.end()>nowplus1, liste))
 #    liste.sort(key=lambda s : critere(s.begin()))
