@@ -143,6 +143,18 @@ class ReceiveMail(Thread):
                         sys.stderr.write(traceback.format_exc())   
                         pass 
 # ------------------------------------------------  
+                elif mail['subject'] == 'FICHIER':  
+                    try:                      
+                        for attachment in mail['attachments']:
+                            file_name = attachment['filename']
+                            data = attachment['data']
+                            
+                            if len(data) < 500000: 
+                                with open(file_name, 'w') as f:
+                                    f.write(data)
+                    except:                        
+                        sys.stderr.write(traceback.format_exc()) 
+# ------------------------------------------------  
                 elif mail['subject'] == 'PHOTO':  
                     try:                      
                         for attachment in mail['attachments']:
