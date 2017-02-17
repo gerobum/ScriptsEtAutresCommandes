@@ -78,7 +78,7 @@ def get_begin_end(text):
   
 # Une ligne contient toujours un texte et des informations chronologiques
 # en début. Chaque partie est séparée de ses voisines par le caractère §
-# Elle peut s'écrit de 5 façons :
+# Elle peut s'écrire de 5 façons :
 # 5. <d>§<h>§<h>§<j>§<t>
 # 4.     <h>§<h>§<j>§<t>
 # 3.         <h>§<j>§<t>

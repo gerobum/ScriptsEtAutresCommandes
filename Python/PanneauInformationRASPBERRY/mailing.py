@@ -172,14 +172,34 @@ class ReceiveMail(Thread):
                 elif mail['subject'] == 'STOP':
                     self.parent.parent.the_end()
 # ------------------------------------------------  
-                elif re.match('SUP ([0-9]+)', mail['subject']):
+                elif re.match('SUP ([0-9]+)$', mail['subject']):
                     try:
-                        m = re.search('SUP ([0-9]+)', mail['subject'])
+                        m = re.search('SUP ([0-9]+$)', mail['subject'])
                         p = int(m.group(1))                      
                         self.parent.sup(p)
                     except ValueError as v:  
                         sys.stderr.write('mailing.py ReceiveMail run')
                         sys.stderr.write(v)
+                        sys.stderr.write(traceback.format_exc())   
+                        pass
+                    except:  
+                        sys.stderr.write('mailing.py ReceiveMail run')
+                        sys.stderr.write(traceback.format_exc())   
+                        pass
+# ------------------------------------------------  
+                elif re.match('SUP ([0-9]+)-([0-9]+)', mail['subject']):
+                    try:
+                        m = re.search('SUP ([0-9]+)-([0-9]+)', mail['subject'])
+                        p = int(m.group(1))  
+                        q = int(m.group(2))                    
+                        self.parent.sup(p, q+1)
+                    except ValueError as v:  
+                        sys.stderr.write('mailing.py ReceiveMail run')
+                        sys.stderr.write(v)
+                        sys.stderr.write(traceback.format_exc())   
+                        pass
+                    except:  
+                        sys.stderr.write('mailing.py ReceiveMail run')
                         sys.stderr.write(traceback.format_exc())   
                         pass
                    
@@ -244,12 +264,15 @@ class Mailing(Thread):
     def push(self, message):  
         self.parent.fill_labels(listes.get_begin_end_day_text(message))
         
-    def sup(self, p):
-        if p >= 0 and p < len(self.parent.chronolist):
-            commands.getoutput('rm lmes')
-            del self.parent.chronolist[p]
-            self.parent.fill_labels()
-               
+    def sup(self, p, q = None):        
+        if q == None:
+            q = p+1
+            
+        print 'sup(',p,',',q,')'
+        commands.getoutput('rm lmes')
+        del self.parent.chronolist[p:q]
+        self.parent.fill_labels()
+           
     def replace(self, p, message):
         if p >= 0 and p < len(self.parent.chronolist):
             self.sup(p)

@@ -22,35 +22,46 @@ Liste des commandes
     MSG
         Ajoute le corps du message chronologique dans la liste. 
         Le message peut avoir différentes formes :
-        # Une ligne contient toujours un texte et des informations chronologiques
-        # en début. Chaque partie est séparée de ses voisines par le caractère §
-        # Elle peut s'écrit de 4 façons :
-        # 4. <h>§<h>§<j>§<t>
-        # 3.     <h>§<j>§<t>
-        # 2.         <j>§<t>
-        # 1.             <t>
-        # où <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
-        #    <j> est le jour (0 => lundi, 1 => mardi, ...)
-        #    <t> un texte sans §
-        #
-        # Dans le cas 4, l'heure de début est le premier <h>
-        #                l'heure de fin   est le second  <h>
-        #                le jour est <j>
-        #
-        # Dans le cas 3, l'heure de début est <h> 
-        #                l'heure de fin est 23:59
-        #                le jour est <j>
-        #
-        # Dans le cas 2, l'heure de début est 00:00
-        #                l'heure de fin   est 23:59
-        #                le jour est <j>
-        #
-        # Dans le cas 1, l'heure de début est 00:00
-        #                l'heure de fin   est 23:59
-        #                le jour est '*' (tous les jours)
+        Une ligne contient toujours un texte et des éventuelles informations chronologiques en début. Une ligne est séparée en partie par le caractère §
+
+        Elle peut s'écrire de 5 façons :
+            - 5. <d>§<h>§<h>§<j>§<t>
+            - 4.     <h>§<h>§<j>§<t>
+            - 3.         <h>§<j>§<t>
+            - 2.             <j>§<t>
+            - 1.                 <t>
+        où <d> est une date (par exemple 02/03/2017 ou 2/03/2017 ou 2/3/2017) 
+           <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
+           <j> est le jour (0 => lundi, 1 => mardi, ...)
+           <t> un texte sans §
+                    
+            Dans le cas 5, la date est <d>
+                            l'heure de début est le premier <h>
+                            l'heure de fin   est le second  <h>
+                            le jour est <j>
+
+            Dans le cas 4, la date est aujourd'hui
+                            l'heure de début est le premier <h>
+                            l'heure de fin   est le second  <h>
+                            le jour est <j>
+
+            Dans le cas 3, la date est aujourd'hui
+                            l'heure de début est <h> 
+                            l'heure de fin est 23:59
+                            le jour est <j>
+
+            Dans le cas 2, la date est aujourd'hui
+                            l'heure de début est 00:00
+                            l'heure de fin   est 23:59
+                            le jour est <j>
+
+            Dans le cas 1, la date est aujourd'hui
+                            l'heure de début est 00:00
+                            l'heure de fin   est 23:59
+                            le jour est '*' (tous les jours)
 ----------------------------------------------
     REP <i> (où i est un entier)
-        Remplace la ième ligne le corps du message.
+        Remplace la ième ligne par le corps du message.
 	Remarque : il ne se passe rien si i n'est pas un entier où s'il n'est pas dans [0,9].
 ----------------------------------------------
     SCREEN ON|OFF
@@ -64,4 +75,7 @@ Liste des commandes
 ----------------------------------------------
     SUP <i> (où i est un entier)
         Retire le ième message
+----------------------------------------------
+    SUP <i>-<j> (où i et j sont des entiers)
+        Retire les messages de i à j
 ----------------------------------------------
