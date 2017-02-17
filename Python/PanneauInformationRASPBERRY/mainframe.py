@@ -55,9 +55,12 @@ class MainFrame(Tk):
         
         self.images = []
         for i in range(3):
-            photo = PhotoImage(file="images/image"+str(i)+".png")
-            self.images.append(Label(self, image=photo))
-            self.images[i].photo = photo 
+            try:
+                photo = PhotoImage(file="images/image"+str(i)+".png")
+                self.images.append(Label(self, image=photo))
+                self.images[i].photo = photo 
+            except:
+                pass
 
         
         self.bexit = Button(self, text='Quitter', image=photo, command = self.the_end) 
