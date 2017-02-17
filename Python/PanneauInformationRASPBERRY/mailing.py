@@ -187,9 +187,12 @@ class Mailing(Thread):
             # Si le fichier n'existe pas, c'est la nuit
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
-                    for label in self.parent.labels:
-                        if label['text'].strip() != '':
-                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
+                    for chrono in self.parent.chronolist:
+                        print chrono.__str__().strip()
+                        fp.write(''.join([chrono.__str__().strip(),'\n'])) 
+#                    for label in self.parent.labels:
+#                        if label['text'].strip() != '':
+#                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
 
         except TypeError as e:
             print "Type error({0})".format(e.message)   

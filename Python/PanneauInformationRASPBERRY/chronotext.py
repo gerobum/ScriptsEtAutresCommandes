@@ -34,7 +34,7 @@ class ChronologicText:
         return self.__day
         
     def __str__(self):
-        return ''.join([self.__day,'§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__text,'§'])
+        return ''.join([str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
         
     def __eq__(self, other):
             if other == None:
