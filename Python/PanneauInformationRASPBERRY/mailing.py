@@ -218,12 +218,9 @@ class ReceiveMail(Thread):
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(traceback.format_exc())   
                             pass
-                          
+            box.logout()             
         except:
             print "Unexpected error in ReceiveMail:", sys.exc_info()[0]
-            
-        finally:                  
-            box.logout()
 
 
 class Mailing(Thread):
