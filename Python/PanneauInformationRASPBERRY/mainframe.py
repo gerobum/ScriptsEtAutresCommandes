@@ -225,14 +225,13 @@ class Nettoyage(Thread):
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
-
 if not os.path.exists('.lock-panel'):  
     with open('.lock-panel', 'w'):
         pass
     try:
-        frame = MainFrame()
+        frame = MainFrame()       
     except:
-        print "Problème au lancement"
+        sys.stderr.write('Problème au lancement\n') 
         commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"

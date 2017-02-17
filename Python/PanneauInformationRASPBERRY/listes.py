@@ -57,8 +57,8 @@ def get_heure(s, default=time()):
         
 def get_date(text):
     try:
-        m = re.search('(.*)-(.*)-(.*)', text)
-        return datetime.date(m.groupe(1),m.groupe(2),m.groupe(3))
+        m = re.search('([0-9]+)/([0-9]+)/([0-9]+)', text)
+        return date(int(m.group(3)),int(m.group(2)),int(m.group(1)))
     except:
         return None
     
@@ -84,7 +84,7 @@ def get_begin_end(text):
 # 3.         <h>§<j>§<t>
 # 2.             <j>§<t>
 # 1.                 <t>
-# où <d> est une date (par exemple 2017-03-02) 
+# où <d> est une date (par exemple 02/03/2017 ou 2/03/2017 ou 2/3/2017) 
 #    <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
 #    <j> est le jour (0 => lundi, 1 => mardi, ...)
 #    <t> un texte sans §
@@ -118,7 +118,7 @@ def get_begin_end_day_text(line):
     end = time(23,59)
     day = '*'
     text = ''
-    ddate = datetime.now()
+    ddate = None
     
     
     t = line.split('§')
@@ -160,16 +160,16 @@ def get_liste(liste = []):
     now = datetime.now()
     today = date.today()
     try:           
-        with open('lperm') as fp:         
+        with open('lperm') as fp:      
             for line in fp:
                 # Une ligne comprend l'heure de début, de fin et un texte
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
-                line = line.decode('utf-8').strip().encode('utf-8').strip()   
+                line = line.decode('utf-8').strip().encode('utf-8').strip() 
                 if not line.startswith('#', 0) and line.strip()!='': 
                     chronotext = get_begin_end_day_text(line)  
                     if chronotext.date() == None or chronotext.date() == today:
-                        if chronotext.day() == '*' or int(chronotext.day()) == now.weekday():
+                        if chronotext.day() == '*' or int(chronotext.day()) == now.weekday(): 
                             liste.append(chronotext)
     except TypeError as e:
         print "Type error({0})".format(e.message)   
@@ -205,9 +205,12 @@ def get_liste(liste = []):
         pass   
     except ValueError as e:
         print "Erreur lors de la lecture de lmes ", e
-        pass               
+        pass  
+    except AttributeError as e:
+        sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
+        pass                
     except:
-        print "Unexpected error:", sys.exc_info()[0]
+        sys.stderr.write("Erreur innatendue "+ sys.exc_info()[0] + '\n') 
         pass
     
     liste = list(set(liste))

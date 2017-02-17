@@ -217,9 +217,12 @@ class Mailing(Thread):
             pass
         except IOError as e:
             print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-            pass                 
+            pass  
+        except AttributeError as e:
+            sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
+            pass        
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
             pass
                
     def push(self, message):  

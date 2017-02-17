@@ -8,6 +8,7 @@ Created on Mon Feb 13 22:26:54 2017
 from chronotext import ChronologicText
 import datetime
 import listes
+import re
 
 def test1():
     t1=datetime.time(18)
@@ -80,6 +81,13 @@ def test3():
     print listes.get_date('09/03/1965')        
     datetime.date.today()
     
+def test4(text):
+    m = re.search('([0-9]+)/([0-9]+)/([0-9]+)', text)
+    print 'Les groupes trouvés -> ', m.group(3), '#', m.group(2),'#',m.group(1)
+    print datetime.date(int(m.group(3)),int(m.group(2)),int(m.group(1)))
+    
+    
+    
 def getDelay(key, default):
     try:
         with open('delays') as fp:
@@ -89,6 +97,7 @@ def getDelay(key, default):
         
 #print getDelay('mailing_delay', 100)
         
-print datetime.date.today()       
+print 'Hello'
+test4('24/02/2017')      
 
 
