@@ -129,8 +129,12 @@ class ReceiveMail(Thread):
                 elif mail['subject'] == 'MINMAX':                        
                     self.parent.parent.mini_maxi()
 # ------------------------------------------------  
+                elif mail['subject'] == 'MSGS':  
+                    for line in mail['text'][0]['text_normalized'].replace('\\t', '\n').splitlines():                      
+                        self.parent.push(line.replace('\\n', '\n')) 
+# ------------------------------------------------  
                 elif mail['subject'] == 'MSG':                        
-                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n'))    
+                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n')) 
 # ------------------------------------------------       
                 elif re.match('REP ([0-9]+)', mail['subject']):
                     try:
@@ -274,8 +278,9 @@ class Mailing(Thread):
             sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
             pass
                
-    def push(self, message):  
-        self.parent.fill_labels(listes.get_begin_end_day_text(message))
+    def push(self, message): 
+        if message.strip() != '':
+            self.parent.fill_labels(listes.get_begin_end_day_text(message))
         
     def sup(self, p, q = None):        
         if q == None:

@@ -7,6 +7,9 @@ Liste des commandes
         Change le délai entre chaque relève du courrier 
         Remarque : il ne passe rien si d n'est pas un entier ou si d est inférieur à 10.
 ----------------------------------------------
+    FICHIER
+        Copie dans le répertoire courant les fichiers attachés
+----------------------------------------------
     FONT
         Change la taille de la fonte de la date. La taille est dans le corps du message.
 ----------------------------------------------
@@ -22,7 +25,9 @@ Liste des commandes
     MSG
         Ajoute le corps du message chronologique dans la liste. 
         Le message peut avoir différentes formes :
-        Une ligne contient toujours un texte et des éventuelles informations chronologiques en début. Une ligne est séparée en partie par le caractère §
+        Une ligne contient toujours un texte et des éventuelles informations chronologiques en début. 
+        Une ligne est séparée en partie par le caractère §
+        Le message (<t>) peut contenir des \n qui sont interprétés comme des sauts de lignes.
 
         Elle peut s'écrire de 5 façons :
             - 5. <d>§<h>§<h>§<j>§<t>
@@ -59,6 +64,9 @@ Liste des commandes
                             l'heure de début est 00:00
                             l'heure de fin   est 23:59
                             le jour est '*' (tous les jours)
+----------------------------------------------
+    MSGS
+        Fonctionne comme plusiers MSG. Dans ce cas deux lignes sont séparées par \t
 ----------------------------------------------
     REP <i> (où i est un entier)
         Remplace la ième ligne par le corps du message.
