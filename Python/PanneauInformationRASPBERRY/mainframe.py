@@ -19,7 +19,6 @@ from chronotext import getDelay
 from threading import Lock
 import sys
 import traceback
-import re
 import os
 
 
