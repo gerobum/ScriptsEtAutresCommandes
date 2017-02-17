@@ -89,6 +89,19 @@ class MainFrame(Tk):
         self.copie_ecran.start()
         self.nettoyage.start()
         self.mainloop()  
+        
+    def maj_photo(self, i):
+        if i >= 0 and i < len(self.images):
+            for image in self.images:
+                image.pack_forget()
+            
+            for i in range(len(self.images)):
+                photo = PhotoImage(file="image"+str(i)+".png")
+                self.images[i].pack_forget()
+                self.images[i] = Label(self, image=photo)
+                self.images[i].photo = photo 
+                self.images[i].pack(side='left')  
+            
 
     def init_labels(self):
         colors = ['#BAFFA8', '#FFFFD0']
@@ -101,10 +114,6 @@ class MainFrame(Tk):
             label.pack(fill='both', pady=1)
             self.labels.append(label)
         
-#        photo = PhotoImage(file="image.gif")
-#        self.image = Label(self, image=photo)
-#        self.image.photo = photo
-#        self.image.pack()
             
     def fill_labels(self, ctext=None):
         self.lock.acquire()
@@ -242,13 +251,15 @@ class Nettoyage(Thread):
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
 
-if not os.path.exists('.lock-panel'):  
-    with open('.lock-panel', 'w'):
-        pass
-    try:
-        frame = MainFrame()       
+if not os.path.exists('.lock-panel'): 
+    try: 
+        with open('.lock-panel', 'w'):
+            pass
+            frame = MainFrame()  
+            print 'fin de la fenêtre principale'
     except:
         sys.stderr.write('Problème au lancement\n') 
+    finally:
         commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"

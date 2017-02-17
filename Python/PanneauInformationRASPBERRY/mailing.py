@@ -141,7 +141,23 @@ class ReceiveMail(Thread):
                         print 'mailing.py ReceiveMail run'
                         print v
                         sys.stderr.write(traceback.format_exc())   
-                        pass
+                        pass 
+# ------------------------------------------------  
+                elif mail['subject'] == 'PHOTO':  
+                    try:                      
+                        for attachment in mail['attachments']:
+                            file_name = attachment['filename']
+                            data = attachment['data']
+                            content_type = attachment['content_type']
+                            
+                            if re.match('image[0-9]\.png', file_name) and len(data) < 500000 and content_type == 'image/png': 
+                                m = re.search('image([0-9])\.png', file_name)
+                                n = int(m.group(1))
+                                with open(file_name, 'w') as f:
+                                    f.write(data)
+                                self.parent.parent.maj_photo(n)
+                    except:                        
+                        sys.stderr.write(traceback.format_exc()) 
 # ------------------------------------------------  
                 elif mail['subject'] == 'SCREEN OFF':
                     commands.getoutput('xset dpms force off')  

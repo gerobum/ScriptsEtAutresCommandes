@@ -9,6 +9,8 @@ from chronotext import ChronologicText
 import datetime
 import listes
 import re
+import imapy
+from imapy.query_builder import Q
 
 def test1():
     t1=datetime.time(18)
@@ -86,6 +88,27 @@ def test4(text):
     print 'Les groupes trouvés -> ', m.group(3), '#', m.group(2),'#',m.group(1)
     print datetime.date(int(m.group(3)),int(m.group(2)),int(m.group(1)))
     
+def test5():
+    with open('fp') as fp:
+        thename = fp.readline().rstrip()
+        thepasswd = fp.readline().rstrip()
+    box = imapy.connect(
+                host='imap.gmail.com',
+                username=thename,
+                password=thepasswd,
+                # you may also specify custom port:
+                # port=993
+                ssl=True,
+            )
+    q = Q()
+    emails = box.folder('INBOX').emails(q.unseen())
+    for email in emails:
+        for attachment in email['attachments']:
+            print 'Nom : ',attachment['filename']
+            print 'Taille : ',len(attachment['data'])
+            print 'Type : ',attachment['content_type']
+        
+    box.logout()
     
     
 def getDelay(key, default):
@@ -97,7 +120,6 @@ def getDelay(key, default):
         
 #print getDelay('mailing_delay', 100)
         
-print 'Hello'
-test4('24/02/2017')      
+test5()     
 
 
