@@ -59,7 +59,8 @@ class ReceiveMail(Thread):
         self.parent = parent
                       
     def run(self):    
-        print self.parent.mailing_delay
+        print self.parent.parent.mailing_delay
+        
         try:
             box = imapy.connect(
                 host='imap.gmail.com',
@@ -70,7 +71,7 @@ class ReceiveMail(Thread):
                 ssl=True,
             )            
         except:
-            self.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = 1800
             print "Unexpected error in ReceiveMail: box = imapy.connect(...)", sys.exc_info()[0]
             try:
                 box.logout()             
@@ -81,7 +82,7 @@ class ReceiveMail(Thread):
         try:
             emails = box.folder('INBOX').emails(self.parent.q.unseen())            
         except:
-            self.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = 1800
             print "Unexpected error in ReceiveMail: box = box.folder('INBOX')...", sys.exc_info()[0]
             return           
 
@@ -248,18 +249,18 @@ class ReceiveMail(Thread):
                             sys.stderr.write(traceback.format_exc())   
                             pass           
         except:
-            self.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = 1800
             print "Unexpected error in ReceiveMail: dans la suite de if", sys.exc_info()[0]
             return
             
         try:
             box.logout()             
         except:
-            self.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = 1800
             print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
             return
             
-        self.mailing_delay = getDelay('mailing_delay', 71)
+        self.parent.parent.mailing_delay = getDelay('mailing_delay', 71)
 
 
 class Mailing(Thread):
