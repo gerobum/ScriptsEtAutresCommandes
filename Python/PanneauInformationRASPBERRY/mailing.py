@@ -130,11 +130,11 @@ class ReceiveMail(Thread):
                     self.parent.parent.mini_maxi()
 # ------------------------------------------------  
                 elif mail['subject'] == 'MSGS':  
-                    for line in mail['text'][0]['text_normalized'].replace('\\t', '\n').splitlines():                      
+                    for line in mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\t', '\n').splitlines():                      
                         self.parent.push(line.replace('\\n', '\n')) 
 # ------------------------------------------------  
-                elif mail['subject'] == 'MSG':                        
-                    self.parent.push(mail['text'][0]['text_normalized'].replace('\\n', '\n')) 
+                elif mail['subject'] == 'MSG':              
+                    self.parent.push(mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\n', '\n')) 
 # ------------------------------------------------       
                 elif re.match('REP ([0-9]+)', mail['subject']):
                     try:
@@ -260,7 +260,7 @@ class Mailing(Thread):
                 with open('lmes', 'w') as fp:
                     for chrono in self.parent.chronolist:
                         if chrono.__str__().strip() != '':
-                            fp.write(''.join([chrono.__str__().strip(),'\n'])) 
+                            fp.write(''.join([chrono.__str__().strip().replace('\n', '\\n'),'\n'])) 
 #                    for label in self.parent.labels:
 #                        if label['text'].strip() != '':
 #                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 

@@ -129,10 +129,20 @@ def getDelay(key, default):
     except:
         return default
         
+def test8():
+    try:
+        with open('lmes') as fp:
+            x = fp.read()
+            for c in x:
+                print c
+    except:
+        print 'erreur'
+    
+        
 
         
 #print getDelay('mailing_delay', 100)
         
-test7('bash')     
+test8()  
 
 

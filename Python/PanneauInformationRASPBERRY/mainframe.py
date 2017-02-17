@@ -40,7 +40,8 @@ class MainFrame(Tk):
         self.title('Bonjour Maman')
         self.attributes('-fullscreen', True)
         
-        self.width = int(self.winfo_screenwidth()*0.995)
+        #self.width = int(self.winfo_screenwidth()*0.995)
+        self.width = int(self.winfo_screenwidth()*0.7)
 
         self.thefont = tkFont.Font(family='Purisa',size=20, weight='bold')
         self.theMiddlefont = tkFont.Font(family='Purisa',size=30, weight='bold', slant='italic')
@@ -265,5 +266,4 @@ else:
     except:
         sys.stderr.write('Problème au lancement\n') 
         sys.stderr.write(traceback.format_exc()) 
-                           
-
+  
