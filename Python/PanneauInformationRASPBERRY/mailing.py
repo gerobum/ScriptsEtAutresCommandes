@@ -76,10 +76,13 @@ class ReceiveMail(Thread):
         except:
             self.parent.parent.mailing_delay = self.error_delay
             nbmailingerror+=1
+            print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: box = imapy.connect(...)", sys.exc_info()[0]
             try:
                 box.logout()             
             except:
+                nbmailingerror+=1
+                print "Nb erreurs ", nbmailingerror
                 print "Unexpected error in ReceiveMail: dans le box.logout() du box = imapy.connect(...)", sys.exc_info()[0]
             return
          
@@ -88,10 +91,13 @@ class ReceiveMail(Thread):
         except:
             self.parent.parent.mailing_delay = self.error_delay
             nbmailingerror+=1
+            print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: emails = box.folder('INBOX')...", sys.exc_info()[0]
             try:
                 box.logout()             
             except:
+                nbmailingerror+=1
+                print "Nb erreurs ", nbmailingerror
                 print "Unexpected error in ReceiveMail: dans le box.logout() du emails = box.folder('INBOX')...", sys.exc_info()[0]
             return           
 
@@ -260,6 +266,7 @@ class ReceiveMail(Thread):
         except:
             self.parent.parent.mailing_delay = self.error_delay
             nbmailingerror+=1
+            print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: dans la suite de if", sys.exc_info()[0]
             try:
                 box.logout()             
@@ -273,6 +280,7 @@ class ReceiveMail(Thread):
         except:
             self.parent.parent.mailing_delay = self.error_delay
             nbmailingerror+=1
+            print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
             return
             
