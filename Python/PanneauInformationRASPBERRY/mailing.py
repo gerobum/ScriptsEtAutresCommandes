@@ -22,7 +22,7 @@ import listes
 import jvcframe
 from chronotext import getDelay
 
-
+nbmailingerror = 0
 
 def send(user, password, subject, body=None, files=None):       
     try:
@@ -57,9 +57,12 @@ class ReceiveMail(Thread):
     def __init__(self, parent):
         Thread.__init__(self)
         self.parent = parent
+        self.error_delay = 900
                       
     def run(self):    
-        print self.parent.parent.mailing_delay
+        global nbmailingerror
+        if nbmailingerror > 3:
+            commands.getoutput('shutdown -r now')
         
         try:
             box = imapy.connect(
@@ -71,19 +74,25 @@ class ReceiveMail(Thread):
                 ssl=True,
             )            
         except:
-            self.parent.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = self.error_delay
+            nbmailingerror+=1
             print "Unexpected error in ReceiveMail: box = imapy.connect(...)", sys.exc_info()[0]
             try:
                 box.logout()             
             except:
-                print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
+                print "Unexpected error in ReceiveMail: dans le box.logout() du box = imapy.connect(...)", sys.exc_info()[0]
             return
          
         try:
             emails = box.folder('INBOX').emails(self.parent.q.unseen())            
         except:
-            self.parent.parent.mailing_delay = 1800
-            print "Unexpected error in ReceiveMail: box = box.folder('INBOX')...", sys.exc_info()[0]
+            self.parent.parent.mailing_delay = self.error_delay
+            nbmailingerror+=1
+            print "Unexpected error in ReceiveMail: emails = box.folder('INBOX')...", sys.exc_info()[0]
+            try:
+                box.logout()             
+            except:
+                print "Unexpected error in ReceiveMail: dans le box.logout() du emails = box.folder('INBOX')...", sys.exc_info()[0]
             return           
 
         try:
@@ -249,18 +258,26 @@ class ReceiveMail(Thread):
                             sys.stderr.write(traceback.format_exc())   
                             pass           
         except:
-            self.parent.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = self.error_delay
+            nbmailingerror+=1
             print "Unexpected error in ReceiveMail: dans la suite de if", sys.exc_info()[0]
+            try:
+                box.logout()             
+            except:
+                print "Unexpected error in ReceiveMail: dans le box.logout() de la suite de if", sys.exc_info()[0]
+           
             return
             
         try:
             box.logout()             
         except:
-            self.parent.parent.mailing_delay = 1800
+            self.parent.parent.mailing_delay = self.error_delay
+            nbmailingerror+=1
             print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
             return
             
         self.parent.parent.mailing_delay = getDelay('mailing_delay', 71)
+        nbmailingerror = 0
 
 
 class Mailing(Thread):
