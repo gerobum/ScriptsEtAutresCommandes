@@ -70,7 +70,7 @@ class ReceiveMail(Thread):
             emails = box.folder('INBOX').emails(self.parent.q.unseen())
                
         except:
-            print "Unexpected error in gmail connect:", sys.exc_info()[0]
+            # print "Unexpected error in gmail connect:", sys.exc_info()[0]
             return  
         
         
