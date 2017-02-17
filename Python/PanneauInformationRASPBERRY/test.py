@@ -11,6 +11,8 @@ import listes
 import re
 import imapy
 from imapy.query_builder import Q
+import commands
+import re
 
 def test1():
     t1=datetime.time(18)
@@ -110,6 +112,15 @@ def test5():
         
     box.logout()
     
+def test6():
+    if re.search('python mainframe\.py.*python mainframe\.py', commands.getoutput('ps -ef | grep mainframe')):
+        print "L'application est déjà lancée"
+    else:
+        print "L'application n'est pas lancée"
+        
+def test7(s):
+    print len(commands.getoutput('ps -ef | grep '+s).split('\n')) - 1
+    
     
 def getDelay(key, default):
     try:
@@ -118,8 +129,10 @@ def getDelay(key, default):
     except:
         return default
         
+
+        
 #print getDelay('mailing_delay', 100)
         
-test5()     
+test7('bash')     
 
 

@@ -20,6 +20,7 @@ from threading import Lock
 import sys
 import traceback
 import re
+import os
 
 
 
@@ -164,7 +165,7 @@ class MainFrame(Tk):
         print "1"
         time.sleep(1)
         commands.getoutput('rm lmes')
-        #os.kill(os.getpid(), 9)
+        os.kill(os.getpid(), 9) # VIOLENT
         
         self.dh.the_end()
 #        self.dh.join()
@@ -250,9 +251,12 @@ class Nettoyage(Thread):
             time.sleep(self.cleaning_delay)
             #time.sleep(10)
         print 'fin de la mise à jour de la date'
+        
+def nbapp():
+    return len(commands.getoutput('ps -ef | grep mainframe.py').split('\n')) - 2
 
-
-if re.search('python mainframe.py', commands.getoutput('ps -ef | grep mainframe')):
+# Au moment du test, l'application est déjà lancée. Il faut donc la chercher deux fois
+if nbapp() > 1:
     print "L'application semble déjà lancée"
 else:
     try: 
