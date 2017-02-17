@@ -139,7 +139,7 @@ class MainFrame(Tk):
             i = 0
             for s in self.chronolist:
                 label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
-                label.pack(fill='both', pady=1)
+                label.pack(fill='both', pady=1)         
                 label['text'] = s.text().strip()
                 self.labels.append(label)
                 i+=1
