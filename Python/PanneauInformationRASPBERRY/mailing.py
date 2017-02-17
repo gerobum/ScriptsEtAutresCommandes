@@ -59,6 +59,7 @@ class ReceiveMail(Thread):
         self.parent = parent
                       
     def run(self):    
+        print self.parent.mailing_delay
         try:
             box = imapy.connect(
                 host='imap.gmail.com',
