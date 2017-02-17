@@ -16,10 +16,10 @@ from mailing import Mailing
 from mailing import send
 from listes import get_liste
 from chronotext import getDelay
-import os
 from threading import Lock
 import sys
 import traceback
+import re
 
 
 
@@ -164,7 +164,6 @@ class MainFrame(Tk):
         print "1"
         time.sleep(1)
         commands.getoutput('rm lmes')
-        commands.getoutput('rm .lock-panel')
         #os.kill(os.getpid(), 9)
         
         self.dh.the_end()
@@ -253,17 +252,13 @@ class Nettoyage(Thread):
         print 'fin de la mise à jour de la date'
 
 
-if not os.path.exists('.lock-panel'): 
+if re.search('python mainframe.py', commands.getoutput('ps -ef | grep mainframe')):
     try: 
-        with open('.lock-panel', 'w'):
-            pass
-            frame = MainFrame()  
-            print 'fin de la fenêtre principale'
+        frame = MainFrame()  
+        print 'fin de la fenêtre principale'
     except:
         sys.stderr.write('Problème au lancement\n') 
         sys.stderr.write(traceback.format_exc()) 
-    finally:
-        commands.getoutput('rm .lock-panel')
 else:
     print "L'application semble déjà lancée"
                            
