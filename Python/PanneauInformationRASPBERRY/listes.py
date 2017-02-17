@@ -179,9 +179,13 @@ def get_liste(liste = []):
     
     liste = list(set(liste))
     
-    nowplus1 = time((now.hour+1)%24, now.minute)
     
-    liste = list(filter(lambda s : s.end()>nowplus1, liste))
+    h = now.hour-1
+    if h < 0:
+        h = 23
+    nowmoins1 = time(h, now.minute)
+    
+    liste = list(filter(lambda s : s.end()>nowmoins1, liste))
 #    liste.sort(key=lambda s : critere(s.begin()))
     liste.sort(key=lambda s : s.begin())
 #    print 'Sort'

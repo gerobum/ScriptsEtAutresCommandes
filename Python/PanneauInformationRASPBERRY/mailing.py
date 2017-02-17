@@ -203,7 +203,6 @@ class Mailing(Thread):
             pass
                
     def push(self, message):  
-        print message
         self.parent.fill_labels(listes.get_begin_end_day_text(message))
 
     

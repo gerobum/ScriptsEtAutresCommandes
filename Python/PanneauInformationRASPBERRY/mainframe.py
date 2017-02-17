@@ -81,8 +81,7 @@ class MainFrame(Tk):
         colors = ['#BAFFA8', '#FFFFD0']
         nbcolors = len(colors) # Nécessaire
                 
-        self.labels = []  
-        
+        self.labels = []          
         
         for i in range(10):
             label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
@@ -99,7 +98,6 @@ class MainFrame(Tk):
 
             i = 0
             for s in self.chronolist:
-                print s
                 self.labels[i]['text'] = s.text().strip()
                 i+=1
             for label in self.labels[i:]:
