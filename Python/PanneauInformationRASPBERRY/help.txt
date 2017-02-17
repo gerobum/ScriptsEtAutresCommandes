@@ -11,7 +11,7 @@ Liste des commandes
         Change la taille de la fonte de la date. La taille est dans le corps du message.
 ----------------------------------------------
     GIT PULL REBOOT
-        Met à jour l'application et rebooter le raspberry.
+        Met à jour l'application, supprime .lock-panel et reboote le raspberry.
 ----------------------------------------------
     HELP
         Envoie par courrier la liste des commandes possibles.
@@ -20,8 +20,34 @@ Liste des commandes
         Minimise ou maximase l'écran selon son état.
 ----------------------------------------------
     MSG
-        Ajoute le corps du message à la fin de la liste. 
-        Un décalage est effectué en cas de manque de place.
+        Ajoute le corps du message chronologique dans la liste. 
+        Le message peut avoir différentes formes :
+        # Une ligne contient toujours un texte et des informations chronologiques
+        # en début. Chaque partie est séparée de ses voisines par le caractère §
+        # Elle peut s'écrit de 4 façons :
+        # 4. <h>§<h>§<j>§<t>
+        # 3.     <h>§<j>§<t>
+        # 2.         <j>§<t>
+        # 1.             <t>
+        # où <h> est une heure (par exemple 10, 10h, 10h15, 10:15)
+        #    <j> est le jour (0 => lundi, 1 => mardi, ...)
+        #    <t> un texte sans §
+        #
+        # Dans le cas 4, l'heure de début est le premier <h>
+        #                l'heure de fin   est le second  <h>
+        #                le jour est <j>
+        #
+        # Dans le cas 3, l'heure de début est <h> 
+        #                l'heure de fin est 23:59
+        #                le jour est <j>
+        #
+        # Dans le cas 2, l'heure de début est 00:00
+        #                l'heure de fin   est 23:59
+        #                le jour est <j>
+        #
+        # Dans le cas 1, l'heure de début est 00:00
+        #                l'heure de fin   est 23:59
+        #                le jour est '*' (tous les jours)
 ----------------------------------------------
     REP <i> (où i est un entier)
         Remplace la ième ligne le corps du message.
@@ -35,4 +61,7 @@ Liste des commandes
 ----------------------------------------------
     STOP
         Arrête l'application.
+----------------------------------------------
+    SUP <i> (où i est un entier)
+        Retire le ième message
 ----------------------------------------------
