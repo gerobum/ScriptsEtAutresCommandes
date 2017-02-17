@@ -41,7 +41,7 @@ class MainFrame(Tk):
         self.attributes('-fullscreen', True)
         
         #self.width = int(self.winfo_screenwidth()*0.995)
-        self.width = int(self.winfo_screenwidth()*0.7)
+        self.width = int(self.winfo_screenwidth()*0.8)
 
         self.thefont = tkFont.Font(family='Purisa',size=20, weight='bold')
         self.theMiddlefont = tkFont.Font(family='Purisa',size=30, weight='bold', slant='italic')
