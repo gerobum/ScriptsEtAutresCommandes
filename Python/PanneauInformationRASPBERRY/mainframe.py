@@ -63,7 +63,7 @@ class MainFrame(Tk):
                 pass
 
         
-        self.bexit = Button(self, text='Quitter', image=photo, command = self.the_end) 
+        self.bexit = Button(self, text='Quitter', command = self.the_end) 
         
         self.bminmax = Button(self, text='Minimise', command = self.mini_maxi)        
         self.bjournuit = Button(self, text='Jour', command = self.jour_nuit)
@@ -78,8 +78,8 @@ class MainFrame(Tk):
         self.init_labels()
         self.fill_labels()   
         
-        for image in self.images:
-            image.pack(side='left')  
+#        for image in self.images:
+#            image.pack(side='left')  
        
 #        self.bexit.pack(side='left')  
 #        self.bminmax.pack(side='left')
@@ -127,6 +127,9 @@ class MainFrame(Tk):
             for label in self.labels:
                 label.pack_forget()
                 
+            for image in self.images:
+                image.pack_forget()
+                
             self.labels = []    
                 
             if ctext != None:
@@ -145,7 +148,10 @@ class MainFrame(Tk):
                 label.pack(fill='both', pady=1)         
                 label['text'] = s.text().strip()
                 self.labels.append(label)
-                i+=1
+                i+=1                           
+        
+            for image in self.images:
+                image.pack(side='left')  
         except IndexError as ie:            
             sys.stderr.write(ie.__str__()+'\n')  
             pass
