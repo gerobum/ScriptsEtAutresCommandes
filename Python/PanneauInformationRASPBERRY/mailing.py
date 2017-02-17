@@ -188,7 +188,6 @@ class Mailing(Thread):
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
                     for chrono in self.parent.chronolist:
-                        print chrono.__str__().strip()
                         fp.write(''.join([chrono.__str__().strip(),'\n'])) 
 #                    for label in self.parent.labels:
 #                        if label['text'].strip() != '':

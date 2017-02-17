@@ -41,9 +41,10 @@ class ChronologicText:
                 return False
         #if isinstance(other, self.__class__):
 #            return self.__dict__ == other.__dict__
-            return self.__begin == other.__begin and \
-                   self.__end == other.__end and \
-                   self.__text == other.__text
+#            return self.__begin == other.__begin and \
+#                   self.__end == other.__end and \
+#                   self.__text == other.__text
+            return self.__text == other.__text
 #        else:
 #            return False
 
