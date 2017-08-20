@@ -150,8 +150,7 @@ class MainFrame(Tk):
                     
             print "Effacement des images"
             for image in self.images:
-#                image.pack_forget()  
-                image.destroy()
+                image.pack_forget()  
             print "images effacées"
                 
             self.labels = []    
@@ -172,20 +171,7 @@ class MainFrame(Tk):
                 label.pack(fill='both', pady=1)         
                 label['text'] = s.text().strip()
                 self.labels.append(label)
-                i+=1      
-                
-            for i in range(3):
-                try:
-                    photo = PhotoImage(file="images/image"+str(i)+".png")
-                    self.images.append(Label(self, image=photo))
-                    self.images[i].photo = photo 
-                except:
-                    try:
-                        photo = PhotoImage(file="images/image"+str(i)+".gif")
-                        self.images.append(Label(self, image=photo))
-                        self.images[i].photo = photo                      
-                    except Exception as e:
-                        print "mainframe.py, ligne 67 : ", e
+                i+=1     
         
             for image in self.images:
                 image.pack(side='left')  
