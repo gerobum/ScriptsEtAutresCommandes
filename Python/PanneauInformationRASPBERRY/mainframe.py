@@ -41,7 +41,7 @@ class MainFrame(Tk):
         with open('fp') as fp:
             thename = fp.readline().rstrip()
             
-        if thename != None and thename != "gerobum@gmail.com":
+        if thename == "mamie.rasp@gmail.com":
             self.attributes('-fullscreen', True)
         
         #self.width = int(self.winfo_screenwidth()*0.995)
@@ -102,7 +102,7 @@ class MainFrame(Tk):
         self.dh.start()
         self.mail.start()
         self.copie_ecran.start()
-#        self.nettoyage.start()
+        self.nettoyage.start()
         self.purge.start()
 ############################################################
         self.mainloop()  
@@ -138,20 +138,26 @@ class MainFrame(Tk):
     def fill_labels(self, ctext=None):
         self.lock.acquire()
         try:      
+            sys.stderr.write("Entre dans fill_labels \n")
+            sys.stderr.write("Effacement des labels\n")
             for label in self.labels:
-#                label.pack_forget() 
+                sys.stderr.write("Effacement de " + label['text'] + "\n")                    
                 label.destroy()
-
+                sys.stderr.write("Effacé\n") 
             for image in self.images:
                 image.pack_forget()  
                 
             self.labels = []    
                 
+            sys.stderr.write("Labels et images effacés\n")    
             if ctext != None:
                 self.chronolist.append(ctext)
             
             self.chronolist = get_liste(self.chronolist)
-
+            
+            
+            sys.stderr.write("Liste de CTs récupérées\n")  
+          
           
             colors = ['#BAFFA8', '#FFFFD0']
             nbcolors = len(colors) # Nécessaire
@@ -159,9 +165,9 @@ class MainFrame(Tk):
             
             i = 0
             for s in self.chronolist:
-                label = Label(self, text='', wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
+                label = Label(self, text=s.text().strip(), wraplength=self.width, justify='left', bg=colors[i%nbcolors], fg='black', font=self.thefont)
                 label.pack(fill='both', pady=1)         
-                label['text'] = s.text().strip()
+#                label['text'] = s.text().strip()
                 self.labels.append(label)
                 i+=1     
         

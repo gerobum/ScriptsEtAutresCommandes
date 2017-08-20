@@ -181,6 +181,9 @@ class ReceiveMail(Thread):
                             self.parent.push(line.replace('\\n', '\n')) 
     # ------------------------------------------------  
                     elif mail['subject'] == 'MSG':  
+                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['subject'] + "\n")
+                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['text'][0]['text_normalized'] + "\n")                        
+                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + str(type(mail['text'][0]['text_normalized'])) + "\n")
                         self.parent.push(mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\n', '\n')) 
     # ------------------------------------------------       
                     elif re.match('REP ([0-9]+)', mail['subject']):
@@ -343,8 +346,8 @@ class Mailing(Thread):
             if os.path.exists('lmes'):
                 with open('lmes', 'w') as fp:
                     for chrono in self.parent.chronolist:
-                        if chrono.__str__().strip() != '':
-                            fp.write(''.join([chrono.__str__().strip().replace('\n', '\\n'),'\n'])) 
+                        if str(chrono).strip() != '':
+                            fp.write(''.join([str(chrono).strip().replace('\n', '\\n'),'\n'])) 
 #                    for label in self.parent.labels:
 #                        if label['text'].strip() != '':
 #                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
@@ -363,16 +366,20 @@ class Mailing(Thread):
             pass
                
     def push(self, message): 
+        sys.stderr.write("> MAILING.PY -> PUSH " + str(message) + "\n")
         today = datetime.date.today()
         if message.strip() != '':
+            sys.stderr.write("- MAILING.PY -> PUSH : avant CT\n")
             ct = listes.get_begin_end_day_text(message)
+            sys.stderr.write("- MAILING.PY -> PUSH : après CT\n")
 ######################################################            
 #            self.parent.fill_labels(ct)
             if ct.date() == None or ct.date() == today:
                 self.parent.fill_labels(ct)
             elif ct.date() > today:
                 appendToLperm(ct)
-#######################################################            
+#######################################################          
+        sys.stderr.write("< MAILING.PY -> PUSH " + str(message) + "\n")
         
     def sup(self, p, q = None):        
         if q == None:

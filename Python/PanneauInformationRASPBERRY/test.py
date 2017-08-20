@@ -13,6 +13,7 @@ import imapy
 from imapy.query_builder import Q
 import commands
 import re
+from sys import stderr
 
 def test1():
     t1=datetime.time(18)
@@ -197,7 +198,24 @@ def cat(fileName):
     except Exception as e:
         return 'no file : ' + fileName 
 
-print cat('xxx')
+def catUnicode(fileIn):
+    try:
+        with open("tmp", "w") as fout:
+            with open(fileIn) as fin:
+                for line in fin:
+                    line = line.strip().decode("utf8").encode("utf8")
+                    print line
+                    ct = listes.get_begin_end_day_text(line)
+                    print "Le chrono"
+                    print str(ct)
+                    print "Son type", type(str(ct))
+                    line = str(ct)+"\n"
+                    fout.write(line)
+                    
+    except Exception as e:
+        stderr.write(str(e))
+        
+catUnicode('lperm')
 print 'done'
 
 

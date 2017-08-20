@@ -191,6 +191,7 @@ def get_begin_end_day_text(line):
 # Construit une liste de messages chronologiques à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est triée chronologiquement.
 def get_liste(liste = []):
+    sys.stderr.write("Entre dans get_liste()\n")
     now = datetime.now()
     today = date.today()
     try:           
@@ -199,8 +200,9 @@ def get_liste(liste = []):
                 # Une ligne comprend l'heure de début, de fin et un texte
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
-                line = line.decode('utf-8').strip().encode('utf-8').strip() 
-                if not line.startswith('#', 0) and line.strip()!='': 
+                line = line.decode('utf-8').encode('utf-8').strip() 
+                sys.stderr.write("GET_LISTE : LECTURE de " + line + "\n")
+                if not line.startswith('#', 0) and line!='': 
                     chronotext = get_begin_end_day_text(line)  
                     if chronotext.date() == None or chronotext.date() == today:
                         if chronotext.day() == '*' or int(chronotext.day()) == now.weekday(): 
@@ -226,9 +228,9 @@ def get_liste(liste = []):
         if os.path.exists('lmes'): 
             with open('lmes') as fp:
                 for line in fp:
-                    line = line.strip()
+                    line = line.decode('utf-8').encode('utf-8').strip()
                     if line != '':
-                        liste.append(get_begin_end_day_text(line.strip()))
+                        liste.append(get_begin_end_day_text(line))
     
     except TypeError as e:
         print "Type error({0})".format(e.message)   

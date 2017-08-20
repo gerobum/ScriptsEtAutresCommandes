@@ -5,6 +5,8 @@ Created on Thu Feb  9 21:02:41 2017
 @author: yvan
 """
 
+import sys
+
     
 def getDelay(key, default):
     try:
@@ -21,6 +23,8 @@ class ChronologicText:
         self.__begin = begin
         self.__end = end
         self.__text = text.strip()
+        sys.stderr.write("ChronologicText : " + str(self.__text) + " \n")
+        sys.stderr.write("ChronologicText : " + str(type(self.__text)) + " \n")
         
     def begin(self):
         return self.__begin
