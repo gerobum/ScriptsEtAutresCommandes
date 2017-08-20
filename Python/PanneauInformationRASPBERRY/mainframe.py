@@ -148,10 +148,10 @@ class MainFrame(Tk):
                 print "Effacé"
             print "Labels effacés"
                     
-#            print "Effacement des images"
-#            for image in self.images:
-#                image.pack_forget()  
-#            print "images effacées"
+            print "Effacement des images"
+            for image in self.images:
+                image.pack_forget()  
+            print "images effacées"
                 
             self.labels = []    
                 
@@ -173,8 +173,8 @@ class MainFrame(Tk):
                 self.labels.append(label)
                 i+=1     
         
-#            for image in self.images:
-#                image.pack(side='left')  
+            for image in self.images:
+                image.pack(side='left')  
         except IndexError as ie:            
             sys.stderr.write(ie.__str__()+'\n') 
         except Exception as e:           
