@@ -95,15 +95,15 @@ class MainFrame(Tk):
 #        self.bjournuit.pack(side='left') 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
-#        self.copie_ecran = CopieEcran()
-#        self.nettoyage = Nettoyage(self)
-#        self.purge = PurgeLperm()                          
+        self.copie_ecran = CopieEcran()
+        self.nettoyage = Nettoyage(self)
+        self.purge = PurgeLperm()                          
 ############################################################     
         self.dh.start()
         self.mail.start()
-#        self.copie_ecran.start()
-#        self.nettoyage.start()
-#        self.purge.start()
+        self.copie_ecran.start()
+        self.nettoyage.start()
+        self.purge.start()
 ############################################################
         self.mainloop()  
         
