@@ -12,11 +12,18 @@ from chronotext import ChronologicText
 import os
 
 def appendToLperm(ct):
+    sys.stderr.write("> LISTE.PY -> appendToLperm("+str(ct)+")\n")
     try:
+        sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de tmp en w\n")
         with open('tmp', 'w') as fout:
+            sys.stderr.write("- LISTE.PY -> appendToLperm : tmp ouvert en w\n")
+            sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de lperm en r\n")
             with open('lperm') as fin:
+                sys.stderr.write("- LISTE.PY -> appendToLperm : lperm ouvert en r\n")
                 for c in fin:
-                    act = get_begin_end_day_text(c)
+                    sys.stderr.write("- LISTE.PY -> appendToLperm : lecture de "+c+"\n")
+                    act = get_begin_end_day_text(c)                
+                    sys.stderr.write("- LISTE.PY -> appendToLperm : écriture de "+str(ct)+"\n")
                     fout.write(str(act) + "\n")
                 fout.write(str(ct) + "\n")
 
@@ -26,6 +33,7 @@ def appendToLperm(ct):
                     fout.write(c)
     except Exception as e:
         print 'erreur --', e 
+    sys.stderr.write("< LISTE.PY -> appendToLperm("+str(ct)+")\n")
 
 def purge_lperm():
     today = date.today()
@@ -259,6 +267,8 @@ def get_liste(liste = []):
     
     liste = list(filter(lambda s : s.end()>nowmoins1, liste))
     liste.sort(key=lambda s : s.begin())
+    
+    sys.stderr.write("Sort de get_liste()\n")
     return liste
     
 # Critère de tri pour la liste
