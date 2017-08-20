@@ -131,18 +131,73 @@ def getDelay(key, default):
         
 def test8():
     try:
-        with open('lmes') as fp:
+        with open('lperm') as fp:
             x = fp.read()
-            for c in x:
+            for c in fp:
                 print c
     except:
         print 'erreur'
     
-        
+            
+def test9():
+    today = datetime.date.today()
 
-        
+    try:
+        with open('tmp', 'w') as fout:
+            with open('lperm') as fin:
+                for c in fin:
+                    ct = listes.get_begin_end_day_text(c)
+                    if ct.date() == None or ct.date() >= today: 
+                        fout.write(ct.__str__() + "\n")
+
+        with open('lperm', 'w') as fout:
+            with open('tmp') as fin:
+                for c in fin:
+                    fout.write(c)
+    except Exception as e:
+        print 'erreur ', e   
+                
+    print "done"
 #print getDelay('mailing_delay', 100)
+
+def appendToLperm(ct):
+    try:
+        with open('tmp', 'w') as fout:
+            with open('lperm') as fin:
+                for c in fin:
+                    act = listes.get_begin_end_day_text(c)
+                    fout.write(str(act) + "\n")
+                fout.write(str(ct) + "\n")
+
+        with open('lperm', 'w') as fout:
+            with open('tmp') as fin:
+                for c in fin:
+                    fout.write(c)
+    except Exception as e:
+        print 'erreur ', e 
+    
+def push(message): 
+      today = datetime.date.today()
+      if message.strip() != '':
+          ct = listes.get_begin_end_day_text(message)
+          if ct.date() == None or ct.date() == today:
+              print "Aujoud'hui -->", ct
+          elif ct.date() < today:
+              print "avant -->", ct   
+          else:
+              print "après -->", ct
         
-test8()  
+def cat(fileName):
+    try:
+        list = []
+        with open(fileName) as fin:
+            for c in fin:
+                list.append(c)
+        return ''.join(list)
+    except Exception as e:
+        return 'no file : ' + fileName 
+
+print cat('xxx')
+print 'done'
 
 

@@ -38,9 +38,9 @@ class ChronologicText:
         return self.__date
         
     def __str__(self):        
-        try:
-            return ''.join([self.date.day,'/',self.date.month,'/',self.date.year,'§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
-        except:
+        try:               
+            return ''.join([str(self.__date.day),'/',str(self.__date.month),'/',str(self.__date.year),'§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
+        except Exception as e:
             return ''.join(['nodate§',str(self.__begin.hour),':',str(self.__begin.minute),'§',str(self.__end.hour),':',str(self.__end.minute),'§',self.__day,'§',self.__text])
         
             

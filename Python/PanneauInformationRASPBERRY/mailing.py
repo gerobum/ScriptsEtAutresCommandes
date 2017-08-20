@@ -11,7 +11,8 @@ import time
 import tkFont
 import commands
 import re
-import sys, traceback
+import sys
+import traceback
 import os
 import datetime
 import smtplib
@@ -19,8 +20,10 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import listes
+from listes import appendToLperm
 import jvcframe
 from chronotext import getDelay
+from files import cat
 
 nbmailingerror = 0
 
@@ -118,6 +121,17 @@ class ReceiveMail(Thread):
                         for label in self.parent.parent.labels:
                             label.config(font=thefont)
     # ------------------------------------------------  
+                    elif mail['subject'] == 'CAT LMES':  
+                        txt = cat('lmes')
+                        send (self.parent.thename, self.parent.thepasswd, "Contenu de lmes", txt)
+
+
+    # ------------------------------------------------  
+                    elif mail['subject'] == 'CAT LPERM':  
+                        txt = cat('lperm')
+                        send (self.parent.thename, self.parent.thepasswd, "Contenu de lmes", txt)
+
+    # ------------------------------------------------  
                     elif mail['subject'] == 'COMMANDE':  
                         cmd = mail['text'][0]['text_normalized']
                         txt = commands.getoutput(cmd)
@@ -147,7 +161,7 @@ class ReceiveMail(Thread):
                                 for line in fp:
                                     #line = line.decode('utf-8').encode('utf-8')
                                     message.append(line)
-                                send(self.parent.thename, self.parent.thepasswd, 'HELP', ''.join(message))
+                                send(self.parent.thename, self.parent.thepasswd, 'HELP?', ''.join(message))
                                     
                         except TypeError as e:
                             print "Type error({0})".format(e.message)   
@@ -166,8 +180,10 @@ class ReceiveMail(Thread):
                         for line in mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\t', '\n').splitlines():                      
                             self.parent.push(line.replace('\\n', '\n')) 
     # ------------------------------------------------  
-                    elif mail['subject'] == 'MSG':              
+                    elif mail['subject'] == 'MSG':  
+                        print 'MSG reçu'
                         self.parent.push(mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\n', '\n')) 
+                        print 'MSG traité'
     # ------------------------------------------------       
                     elif re.match('REP ([0-9]+)', mail['subject']):
                         try:
@@ -344,8 +360,20 @@ class Mailing(Thread):
             pass
                
     def push(self, message): 
+        print 'Entre dans push'
+        today = datetime.date.today()
+        print "Aujourd'hui : ", today
         if message.strip() != '':
-            self.parent.fill_labels(listes.get_begin_end_day_text(message))
+            print "message non vide"
+            ct = listes.get_begin_end_day_text(message)
+            print "chrono dechiffre ", ct
+            if ct.date() == None or ct.date() == today:
+                print "Date : None ou aujourd'hui ", ct.date()
+                self.parent.fill_labels(ct)
+            elif ct.date() > today:
+                print "Futur"
+                appendToLperm(ct)
+            print "pushed"
         
     def sup(self, p, q = None):        
         if q == None:

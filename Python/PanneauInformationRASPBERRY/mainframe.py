@@ -14,7 +14,7 @@ import locale
 import commands
 from mailing import Mailing
 from mailing import send
-from listes import get_liste
+from listes import get_liste, purge_lperm
 from chronotext import getDelay
 from threading import Lock
 import sys
@@ -37,7 +37,7 @@ class MainFrame(Tk):
         
         self.config(bg='black')
         self.title('Bonjour Maman')
-        self.attributes('-fullscreen', True)
+        # self.attributes('-fullscreen', True)
         
         #self.width = int(self.winfo_screenwidth()*0.995)
         self.width = int(self.winfo_screenwidth()*0.995)
@@ -59,7 +59,12 @@ class MainFrame(Tk):
                 self.images.append(Label(self, image=photo))
                 self.images[i].photo = photo 
             except:
-                pass
+                try:
+                    photo = PhotoImage(file="images/image"+str(i)+".gif")
+                    self.images.append(Label(self, image=photo))
+                    self.images[i].photo = photo                      
+                except Exception as e:
+                    print "mainframe.py, ligne 67 : ", e
 
         
         self.bexit = Button(self, text='Quitter', command = self.the_end) 
@@ -82,30 +87,35 @@ class MainFrame(Tk):
        
 #        self.bexit.pack(side='left')  
 #        self.bminmax.pack(side='left')
-#        self.bjournuit.pack(side='left')                        
-
+#        self.bjournuit.pack(side='left') 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
-        self.copie_ecran = CopieEcran()
-        self.nettoyage = Nettoyage(self)
-        
+#        self.copie_ecran = CopieEcran()
+#        self.nettoyage = Nettoyage(self)
+#        self.purge = PurgeLperm()                          
+############################################################     
         self.dh.start()
         self.mail.start()
-        self.copie_ecran.start()
-        self.nettoyage.start()
+#        self.copie_ecran.start()
+#        self.nettoyage.start()
+#        self.purge.start()
+############################################################
         self.mainloop()  
         
     def maj_photo(self, i):
-        if i >= 0 and i < len(self.images):
-            for image in self.images:
-                image.pack_forget()
-            
-            for i in range(len(self.images)):
-                photo = PhotoImage(file="images/image"+str(i)+".png")
-                self.images[i].pack_forget()
-                self.images[i] = Label(self, image=photo)
-                self.images[i].photo = photo 
-                self.images[i].pack(side='left')  
+        try:
+            if i >= 0 and i < len(self.images):
+                for image in self.images:
+                    image.pack_forget()
+
+                for i in range(len(self.images)):
+                    photo = PhotoImage(file="images/image"+str(i)+".png")
+                    self.images[i].pack_forget()
+                    self.images[i] = Label(self, image=photo)
+                    self.images[i].photo = photo 
+                    self.images[i].pack(side='left')  
+        except Exception as e:
+            print "mainframe.py, maj_photo : ", e
             
 
     def init_labels(self):
@@ -121,13 +131,23 @@ class MainFrame(Tk):
         
             
     def fill_labels(self, ctext=None):
+        print "Verrouillage"
         self.lock.acquire()
+        print "Verrouillé"
         try:      
+            print "Effacement des labels"
             for label in self.labels:
-                label.pack_forget()
-                
+                print "Effacement de ", label['text']
+#                label.pack_forget() 
+                label.destroy()
+                print "Effacé"
+            print "Labels effacés"
+                    
+            print "Effacement des images"
             for image in self.images:
-                image.pack_forget()
+#                image.pack_forget()  
+                image.destroy()
+            print "images effacées"
                 
             self.labels = []    
                 
@@ -152,11 +172,14 @@ class MainFrame(Tk):
             for image in self.images:
                 image.pack(side='left')  
         except IndexError as ie:            
-            sys.stderr.write(ie.__str__()+'\n')  
-            pass
+            sys.stderr.write(ie.__str__()+'\n') 
+        except Exception as e:           
+            sys.stderr.write(e.__str__()+'\n') 
             
         finally:
+            print "Deverrouillage"
             self.lock.release()
+            print "Deverrouillé"
                 
 
     def mini_maxi(self):
@@ -200,6 +223,8 @@ class MainFrame(Tk):
         print "FIN de mise à jour de l'écran"
 
         self.nettoyage.the_end()
+        
+        self.purge.the_end()
 #        self.nettoyage.join()
         print 'FIN du thread horaire'
         self.destroy()
@@ -231,6 +256,7 @@ class DateHeure(Thread):
     def the_time(self):
         return datetime.datetime.now().strftime('Il est %H:%M:%S')
         #return datetime.datetime.now().strftime('                  Il est %H:%M:%S')
+
         
 class CopieEcran(Thread):
     """Thread chargé d'envoyer une image écran toutes les heures."""
@@ -248,12 +274,19 @@ class CopieEcran(Thread):
 
     def run(self):
         while self.ok:
-            commands.getoutput('scrot screen.png')
-            send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])
+            try:
+                print "Copie d'écran demandée"
+                commands.getoutput('scrot screen.png')
+                print "Copie d'écran faite"
+                send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])                
+                print "Copie d'écran envoyée"
+            except Exception as e:
+                print "mainframe.py, ligne 261 : ", e
             time.sleep(self.screencopy_delay)
+            
         print 'fin de la mise à jour de la date'
-
-
+     
+       
 class Nettoyage(Thread):
     """Thread chargé de supprimer les messages dépassés toutes les heures."""
     def __init__(self, frame):
@@ -271,7 +304,23 @@ class Nettoyage(Thread):
             self.frame.fill_labels()
             time.sleep(self.cleaning_delay)
             #time.sleep(10)
-        print 'fin de la mise à jour de la date'
+        print 'fin de la mise à jour de la date'     
+        
+class PurgeLperm(Thread):
+    """Thread chargé de supprimer une fois par jour les messages dépassés dans le fichier lperm."""
+    def __init__(self):
+        Thread.__init__(self)
+        self.ok = True 
+    
+    def the_end(self):
+        print 'fin du thread de purge'
+        self.ok = False 
+
+    def run(self):
+        while self.ok:
+            purge_lperm()
+            time.sleep(86400)
+        print 'fin de la purge'
         
 def nbapp():
     return len(commands.getoutput('ps -ef | grep mainframe.py').split('\n')) - 2
@@ -281,6 +330,7 @@ if nbapp() > 1:
     print "L'application semble déjà lancée"
 else:
     try: 
+        print "Lancement de l'application"
         frame = MainFrame()  
         print 'fin de la fenêtre principale'
     except:

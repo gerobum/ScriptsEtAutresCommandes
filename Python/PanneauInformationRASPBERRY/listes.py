@@ -11,6 +11,40 @@ import re
 from chronotext import ChronologicText
 import os
 
+def appendToLperm(ct):
+    try:
+        with open('tmp', 'w') as fout:
+            with open('lperm') as fin:
+                for c in fin:
+                    act = get_begin_end_day_text(c)
+                    fout.write(str(act) + "\n")
+                fout.write(str(ct) + "\n")
+
+        with open('lperm', 'w') as fout:
+            with open('tmp') as fin:
+                for c in fin:
+                    fout.write(c)
+    except Exception as e:
+        print 'erreur --', e 
+
+def purge_lperm():
+    today = date.today()
+
+    try:
+        with open('tmp', 'w') as fout:
+            with open('lperm') as fin:
+                for c in fin:
+                    ct = get_begin_end_day_text(c)
+                    if ct.date() == None or ct.date() >= today: 
+                        fout.write(str(ct) + "\n")
+
+        with open('lperm', 'w') as fout:
+            with open('tmp') as fin:
+                for c in fin:
+                    fout.write(c)
+    except Exception as e:
+        print 'erreur ', e   
+
 # Retourne une liste de messages sans doublon et ordonnée
 # 
 #def get_liste_from(labels, message):
