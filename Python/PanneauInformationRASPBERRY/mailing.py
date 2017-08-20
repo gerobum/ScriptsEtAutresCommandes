@@ -372,13 +372,16 @@ class Mailing(Thread):
             print "message non vide"
             ct = listes.get_begin_end_day_text(message)
             print "chrono dechiffre ", ct
-            if ct.date() == None or ct.date() == today:
-                print "Date : None ou aujourd'hui ", ct.date()
-                self.parent.fill_labels(ct)
-            elif ct.date() > today:
-                print "Futur"
-                appendToLperm(ct)
-            print "pushed"
+######################################################            
+            self.parent.fill_labels(ct)
+#            if ct.date() == None or ct.date() == today:
+#                print "Date : None ou aujourd'hui ", ct.date()
+#                self.parent.fill_labels(ct)
+#            elif ct.date() > today:
+#                print "Futur"
+#                appendToLperm(ct)
+#            print "pushed"
+#######################################################            
         
     def sup(self, p, q = None):        
         if q == None:
