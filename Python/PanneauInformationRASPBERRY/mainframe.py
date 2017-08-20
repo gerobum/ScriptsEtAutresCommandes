@@ -37,7 +37,12 @@ class MainFrame(Tk):
         
         self.config(bg='black')
         self.title('Bonjour Maman')
-        # self.attributes('-fullscreen', True)
+        thename = None
+        with open('fp') as fp:
+            thename = fp.readline().rstrip()
+            
+        if thename != None and thename != "gerobum@gmail.com":
+            self.attributes('-fullscreen', True)
         
         #self.width = int(self.winfo_screenwidth()*0.995)
         self.width = int(self.winfo_screenwidth()*0.995)
@@ -90,15 +95,15 @@ class MainFrame(Tk):
 #        self.bjournuit.pack(side='left') 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
-#        self.copie_ecran = CopieEcran()
-#        self.nettoyage = Nettoyage(self)
-#        self.purge = PurgeLperm()                          
+        self.copie_ecran = CopieEcran()
+        self.nettoyage = Nettoyage(self)
+        self.purge = PurgeLperm()                          
 ############################################################     
         self.dh.start()
         self.mail.start()
-#        self.copie_ecran.start()
-#        self.nettoyage.start()
-#        self.purge.start()
+        self.copie_ecran.start()
+        self.nettoyage.start()
+        self.purge.start()
 ############################################################
         self.mainloop()  
         
@@ -167,7 +172,20 @@ class MainFrame(Tk):
                 label.pack(fill='both', pady=1)         
                 label['text'] = s.text().strip()
                 self.labels.append(label)
-                i+=1                           
+                i+=1      
+                
+            for i in range(3):
+                try:
+                    photo = PhotoImage(file="images/image"+str(i)+".png")
+                    self.images.append(Label(self, image=photo))
+                    self.images[i].photo = photo 
+                except:
+                    try:
+                        photo = PhotoImage(file="images/image"+str(i)+".gif")
+                        self.images.append(Label(self, image=photo))
+                        self.images[i].photo = photo                      
+                    except Exception as e:
+                        print "mainframe.py, ligne 67 : ", e
         
             for image in self.images:
                 image.pack(side='left')  
@@ -255,8 +273,7 @@ class DateHeure(Thread):
 
     def the_time(self):
         return datetime.datetime.now().strftime('Il est %H:%M:%S')
-        #return datetime.datetime.now().strftime('                  Il est %H:%M:%S')
-
+    
         
 class CopieEcran(Thread):
     """Thread chargé d'envoyer une image écran toutes les heures."""
@@ -331,7 +348,7 @@ if nbapp() > 1:
 else:
     try: 
         print "Lancement de l'application"
-        frame = MainFrame()  
+        MainFrame()  
         print 'fin de la fenêtre principale'
     except:
         sys.stderr.write('Problème au lancement\n') 
