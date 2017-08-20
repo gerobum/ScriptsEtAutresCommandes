@@ -95,15 +95,15 @@ class MainFrame(Tk):
 #        self.bjournuit.pack(side='left') 
         self.dh = DateHeure(self.ldate, self.lheure)
         self.mail = Mailing(self)
-        self.copie_ecran = CopieEcran()
-        self.nettoyage = Nettoyage(self)
-        self.purge = PurgeLperm()                          
+#        self.copie_ecran = CopieEcran()
+#        self.nettoyage = Nettoyage(self)
+#        self.purge = PurgeLperm()                          
 ############################################################     
         self.dh.start()
         self.mail.start()
-        self.copie_ecran.start()
-        self.nettoyage.start()
-        self.purge.start()
+#        self.copie_ecran.start()
+#        self.nettoyage.start()
+#        self.purge.start()
 ############################################################
         self.mainloop()  
         
@@ -143,15 +143,15 @@ class MainFrame(Tk):
             print "Effacement des labels"
             for label in self.labels:
                 print "Effacement de ", label['text']
-                label.pack_forget() 
-#                label.destroy()
+#                label.pack_forget() 
+                label.destroy()
                 print "Effacé"
             print "Labels effacés"
                     
-            print "Effacement des images"
-            for image in self.images:
-                image.pack_forget()  
-            print "images effacées"
+#            print "Effacement des images"
+#            for image in self.images:
+#                image.pack_forget()  
+#            print "images effacées"
                 
             self.labels = []    
                 
@@ -173,8 +173,8 @@ class MainFrame(Tk):
                 self.labels.append(label)
                 i+=1     
         
-            for image in self.images:
-                image.pack(side='left')  
+#            for image in self.images:
+#                image.pack(side='left')  
         except IndexError as ie:            
             sys.stderr.write(ie.__str__()+'\n') 
         except Exception as e:           

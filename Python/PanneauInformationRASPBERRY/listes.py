@@ -159,7 +159,9 @@ def get_begin_end_day_text(line):
     l = len(t)
     hrf = time(23,59)
     if l == 5:
+        print "listes.py", t[0]
         ddate = get_date(t[0])
+        print "listes.py", ddate
         begin = get_heure(t[1])
         end = get_heure(t[2], hrf)
         if t[3] >= '0' and t[3] <= '6':

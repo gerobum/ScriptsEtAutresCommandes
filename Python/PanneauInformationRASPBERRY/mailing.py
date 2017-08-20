@@ -323,7 +323,7 @@ class Mailing(Thread):
                 
         
     def __switchscreen(self):        
-        if datetime.datetime.now().hour > self.beginhour and datetime.datetime.now().hour < self.endhour:
+        if int(datetime.datetime.now().hour) > int(self.beginhour) and int(datetime.datetime.now().hour) < int(self.endhour):
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
@@ -369,18 +369,20 @@ class Mailing(Thread):
         today = datetime.date.today()
         print "Aujourd'hui : ", today
         if message.strip() != '':
-            print "message non vide"
+            print "message non vide", message
             ct = listes.get_begin_end_day_text(message)
             print "chrono dechiffre ", ct
 ######################################################            
-            self.parent.fill_labels(ct)
-#            if ct.date() == None or ct.date() == today:
-#                print "Date : None ou aujourd'hui ", ct.date()
-#                self.parent.fill_labels(ct)
-#            elif ct.date() > today:
-#                print "Futur"
-#                appendToLperm(ct)
-#            print "pushed"
+#            self.parent.fill_labels(ct)
+            if ct.date() == None or ct.date() == today:
+                print "Date : None ou aujourd'hui ", ct.date()
+                self.parent.fill_labels(ct)
+            elif ct.date() > today:
+                print "Futur"
+                appendToLperm(ct)
+            else:
+                print "Passé"
+            print "pushed"
 #######################################################            
         
     def sup(self, p, q = None):        
