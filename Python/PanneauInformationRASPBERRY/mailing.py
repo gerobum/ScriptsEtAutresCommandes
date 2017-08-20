@@ -315,10 +315,15 @@ class Mailing(Thread):
         with open('fp') as fp:
             self.thename = fp.readline().rstrip()
             self.thepasswd = fp.readline().rstrip()
+            
+        
+        with open('jn') as jn:
+            self.beginhour = jn.readline().rstrip()
+            self.endhour = jn.readline().rstrip()
                 
         
     def __switchscreen(self):        
-        if datetime.datetime.now().hour > 8 and datetime.datetime.now().hour < 21:
+        if datetime.datetime.now().hour > self.beginhour and datetime.datetime.now().hour < self.endhour:
             if not os.path.exists('lmes'):   
                 # La création du fichier indique qu'il fait jour
                 with open('lmes', 'w'):
