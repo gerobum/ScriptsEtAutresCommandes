@@ -102,7 +102,7 @@ class MainFrame(Tk):
         self.dh.start()
         self.mail.start()
         self.copie_ecran.start()
-        self.nettoyage.start()
+#        self.nettoyage.start()
         self.purge.start()
 ############################################################
         self.mainloop()  
@@ -136,22 +136,14 @@ class MainFrame(Tk):
         
             
     def fill_labels(self, ctext=None):
-        print "Verrouillage"
         self.lock.acquire()
-        print "Verrouillé"
         try:      
-            print "Effacement des labels"
             for label in self.labels:
-                print "Effacement de ", label['text']
 #                label.pack_forget() 
                 label.destroy()
-                print "Effacé"
-            print "Labels effacés"
-                    
-            print "Effacement des images"
+
             for image in self.images:
                 image.pack_forget()  
-            print "images effacées"
                 
             self.labels = []    
                 
