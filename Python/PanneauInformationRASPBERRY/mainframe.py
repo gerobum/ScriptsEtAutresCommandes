@@ -143,8 +143,8 @@ class MainFrame(Tk):
             print "Effacement des labels"
             for label in self.labels:
                 print "Effacement de ", label['text']
-#                label.pack_forget() 
-                label.destroy()
+                label.pack_forget() 
+#                label.destroy()
                 print "Effacé"
             print "Labels effacés"
                     
