@@ -181,9 +181,7 @@ class MainFrame(Tk):
             sys.stderr.write(e.__str__()+'\n') 
             
         finally:
-            print "Deverrouillage"
             self.lock.release()
-            print "Deverrouillé"
                 
 
     def mini_maxi(self):

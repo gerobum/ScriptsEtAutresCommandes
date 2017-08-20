@@ -181,9 +181,7 @@ class ReceiveMail(Thread):
                             self.parent.push(line.replace('\\n', '\n')) 
     # ------------------------------------------------  
                     elif mail['subject'] == 'MSG':  
-                        print 'MSG reçu'
                         self.parent.push(mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\n', '\n')) 
-                        print 'MSG traité'
     # ------------------------------------------------       
                     elif re.match('REP ([0-9]+)', mail['subject']):
                         try:
@@ -365,31 +363,21 @@ class Mailing(Thread):
             pass
                
     def push(self, message): 
-        print 'Entre dans push'
         today = datetime.date.today()
-        print "Aujourd'hui : ", today
         if message.strip() != '':
-            print "message non vide", message
             ct = listes.get_begin_end_day_text(message)
-            print "chrono dechiffre ", ct
 ######################################################            
 #            self.parent.fill_labels(ct)
             if ct.date() == None or ct.date() == today:
-                print "Date : None ou aujourd'hui ", ct.date()
                 self.parent.fill_labels(ct)
             elif ct.date() > today:
-                print "Futur"
                 appendToLperm(ct)
-            else:
-                print "Passé"
-            print "pushed"
 #######################################################            
         
     def sup(self, p, q = None):        
         if q == None:
             q = p+1
-            
-        print 'sup(',p,',',q,')'
+
         commands.getoutput('rm lmes')
         del self.parent.chronolist[p:q]
         self.parent.fill_labels()
