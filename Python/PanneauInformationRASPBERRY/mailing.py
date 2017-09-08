@@ -63,8 +63,11 @@ class ReceiveMail(Thread):
                       
     def run(self):    
         global nbmailingerror
+        #if nbmailingerror > 10:
+        #    commands.getoutput('shutdown -r now')
+                             
         if nbmailingerror > 10:
-            commands.getoutput('shutdown -r now')
+            self.parent.parent.restart_mail()
         
         try:
             box = imapy.connect(
@@ -84,6 +87,10 @@ class ReceiveMail(Thread):
                 box.logout()             
             except:
                 nbmailingerror+=1
+                
+                if nbmailingerror > 10:
+                    self.parent.parent.restart_mail()
+                    
                 print "Nb erreurs ", nbmailingerror
                 print "Unexpected error in ReceiveMail: dans le box.logout() du box = imapy.connect(...)", sys.exc_info()[0]
             return
@@ -92,7 +99,10 @@ class ReceiveMail(Thread):
             emails = box.folder('INBOX').emails(self.parent.q.unseen())            
         except:
             self.parent.parent.mailing_delay = self.error_delay
-            nbmailingerror+=1
+            nbmailingerror+=1                
+            if nbmailingerror > 10:
+                self.parent.parent.restart_mail()
+                
             print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: emails = box.folder('INBOX')...", sys.exc_info()[0]
             try:
@@ -283,6 +293,10 @@ class ReceiveMail(Thread):
             nbmailingerror+=1
             print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: dans la suite de if", sys.exc_info()[0]
+                           
+            if nbmailingerror > 10:
+                self.parent.parent.restart_mail()
+                
             try:
                 box.logout()             
             except:
@@ -294,7 +308,11 @@ class ReceiveMail(Thread):
             box.logout()             
         except:
             self.parent.parent.mailing_delay = self.error_delay
-            nbmailingerror+=1
+            nbmailingerror+=1 
+                    
+            if nbmailingerror > 10:
+                self.parent.parent.restart_mail()
+                
             print "Nb erreurs ", nbmailingerror
             print "Unexpected error in ReceiveMail: dans le box.logout()", sys.exc_info()[0]
             return
