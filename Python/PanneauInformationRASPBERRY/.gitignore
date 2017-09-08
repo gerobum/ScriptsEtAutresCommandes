@@ -4,6 +4,7 @@ panneau*.log
 delays
 fp
 lmes
+lperm
 lperm-save
 tmp
 *.pyc
