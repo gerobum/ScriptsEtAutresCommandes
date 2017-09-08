@@ -406,7 +406,7 @@ class Mailing(Thread):
                 self.__writelabels()
                    
             except:
-                sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
+                sys.stderr.write('Erreur innatendu : ' + str(sys.exc_info()[0]) + '\n')  
 
             time.sleep(self.parent.mailing_delay)
         print 'fin de la collecte du courrier'
