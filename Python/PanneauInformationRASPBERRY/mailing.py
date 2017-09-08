@@ -164,13 +164,10 @@ class ReceiveMail(Thread):
                                     
                         except TypeError as e:
                             print "Type error({0})".format(e.message)   
-                            pass
                         except IOError as e:
-                            print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-                            pass                 
+                            print "I/O error({0}): {1}".format(e.errno, e.strerror)               
                         except:
                             print "Unexpected error:", sys.exc_info()[0]
-                            pass   
     # ------------------------------------------------  
                     elif mail['subject'] == 'MINMAX':                        
                         self.parent.parent.mini_maxi()
@@ -372,7 +369,9 @@ class Mailing(Thread):
             #sys.stderr.write("- MAILING.PY -> PUSH : après CT\n")
 ######################################################            
 #            self.parent.fill_labels(ct)
-            if ct.date() == None or ct.date() == today:
+            if ct.date() == None and ct.day != '*':
+                appendToLperm(ct)
+            elif ct.date() == None or ct.date() == today:
                 self.parent.fill_labels(ct)
             elif ct.date() > today:
                 appendToLperm(ct)
