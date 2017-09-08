@@ -52,9 +52,8 @@ def send(user, password, subject, body=None, files=None):
         s.sendmail(user, user, msg.as_string())
         s.quit()
     except Exception:
-        print 'mailing.py ', 'send'
+        sys.stderr.write('mailing.py send')
         sys.stderr.write(traceback.format_exc())    
-        pass
 
 class ReceiveMail(Thread):
     def __init__(self, parent):
@@ -64,7 +63,7 @@ class ReceiveMail(Thread):
                       
     def run(self):    
         global nbmailingerror
-        if nbmailingerror > 3:
+        if nbmailingerror > 10:
             commands.getoutput('shutdown -r now')
         
         try:
@@ -181,9 +180,9 @@ class ReceiveMail(Thread):
                             self.parent.push(line.replace('\\n', '\n')) 
     # ------------------------------------------------  
                     elif mail['subject'] == 'MSG':  
-                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['subject'] + "\n")
-                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['text'][0]['text_normalized'] + "\n")                        
-                        sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + str(type(mail['text'][0]['text_normalized'])) + "\n")
+                        #sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['subject'] + "\n")
+                        #sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + mail['text'][0]['text_normalized'] + "\n")                        
+                        #sys.stderr.write("MAILING.PY -> RECEIVEMAIL -> MSG : " + str(type(mail['text'][0]['text_normalized'])) + "\n")
                         self.parent.push(mail['text'][0]['text_normalized'].replace('\r\n', '').replace('\n', '').replace('\\n', '\n')) 
     # ------------------------------------------------       
                     elif re.match('REP ([0-9]+)', mail['subject']):
@@ -192,10 +191,9 @@ class ReceiveMail(Thread):
                             p = int(m.group(1))                      
                             self.parent.replace(p, mail['text'][0]['text_normalized'])
                         except ValueError as v:  
-                            print 'mailing.py ReceiveMail run'
-                            print v
-                            sys.stderr.write(traceback.format_exc())   
-                            pass 
+                            sys.stderr.write('mailing.py ReceiveMail run')
+                            sys.stderr.write(str(v))
+                            sys.stderr.write(traceback.format_exc())                
     # ------------------------------------------------  
                     elif mail['subject'] == 'FICHIER':  
                         try:                      
@@ -259,11 +257,11 @@ class ReceiveMail(Thread):
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(v)
                             sys.stderr.write(traceback.format_exc())   
-                            pass
+                            
                         except:  
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(traceback.format_exc())   
-                            pass
+                            
     # ------------------------------------------------  
                     elif re.match('SUP ([0-9]+)-([0-9]+)', mail['subject']):
                         try:
@@ -275,11 +273,11 @@ class ReceiveMail(Thread):
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(v)
                             sys.stderr.write(traceback.format_exc())   
-                            pass
+                            
                         except:  
                             sys.stderr.write('mailing.py ReceiveMail run')
                             sys.stderr.write(traceback.format_exc())   
-                            pass           
+                            
         except:
             self.parent.parent.mailing_delay = self.error_delay
             nbmailingerror+=1
@@ -353,25 +351,25 @@ class Mailing(Thread):
 #                            fp.write(''.join([label['text'].strip(),'\n']).encode('utf-8')) 
 
         except TypeError as e:
-            print "Type error({0})".format(e.message)   
-            pass
+            sys.stderr.write("Type error({0})".format(e.message))
+            
         except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-            pass  
+            sys.stderr.write("I/O error({0}): {1}".format(e.errno, e.strerror)) 
+            
         except AttributeError as e:
             sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
-            pass        
+            
         except:
             sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
-            pass
+            
                
     def push(self, message): 
-        sys.stderr.write("> MAILING.PY -> PUSH " + str(message) + "\n")
+        #sys.stderr.write("> MAILING.PY -> PUSH " + str(message) + "\n")
         today = datetime.date.today()
         if message.strip() != '':
-            sys.stderr.write("- MAILING.PY -> PUSH : avant CT\n")
+            #sys.stderr.write("- MAILING.PY -> PUSH : avant CT\n")
             ct = listes.get_begin_end_day_text(message)
-            sys.stderr.write("- MAILING.PY -> PUSH : après CT\n")
+            #sys.stderr.write("- MAILING.PY -> PUSH : après CT\n")
 ######################################################            
 #            self.parent.fill_labels(ct)
             if ct.date() == None or ct.date() == today:
@@ -379,7 +377,7 @@ class Mailing(Thread):
             elif ct.date() > today:
                 appendToLperm(ct)
 #######################################################          
-        sys.stderr.write("< MAILING.PY -> PUSH " + str(message) + "\n")
+        #sys.stderr.write("< MAILING.PY -> PUSH " + str(message) + "\n")
         
     def sup(self, p, q = None):        
         if q == None:

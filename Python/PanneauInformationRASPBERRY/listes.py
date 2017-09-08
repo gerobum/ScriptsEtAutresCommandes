@@ -12,18 +12,18 @@ from chronotext import ChronologicText
 import os
 
 def appendToLperm(ct):
-    sys.stderr.write("> LISTE.PY -> appendToLperm("+str(ct)+")\n")
+    #sys.stderr.write("> LISTE.PY -> appendToLperm("+str(ct)+")\n")
     try:
-        sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de tmp en w\n")
+        #sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de tmp en w\n")
         with open('tmp', 'w') as fout:
-            sys.stderr.write("- LISTE.PY -> appendToLperm : tmp ouvert en w\n")
-            sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de lperm en r\n")
+            #sys.stderr.write("- LISTE.PY -> appendToLperm : tmp ouvert en w\n")
+            #sys.stderr.write("- LISTE.PY -> appendToLperm : ouverture de lperm en r\n")
             with open('lperm') as fin:
-                sys.stderr.write("- LISTE.PY -> appendToLperm : lperm ouvert en r\n")
+                #sys.stderr.write("- LISTE.PY -> appendToLperm : lperm ouvert en r\n")
                 for c in fin:
-                    sys.stderr.write("- LISTE.PY -> appendToLperm : lecture de "+c+"\n")
+                    #sys.stderr.write("- LISTE.PY -> appendToLperm : lecture de "+c+"\n")
                     act = get_begin_end_day_text(c)                
-                    sys.stderr.write("- LISTE.PY -> appendToLperm : écriture de "+str(ct)+"\n")
+                    #sys.stderr.write("- LISTE.PY -> appendToLperm : écriture de "+str(ct)+"\n")
                     fout.write(str(act) + "\n")
                 fout.write(str(ct) + "\n")
 
@@ -33,7 +33,7 @@ def appendToLperm(ct):
                     fout.write(c)
     except Exception as e:
         print 'erreur --', e 
-    sys.stderr.write("< LISTE.PY -> appendToLperm("+str(ct)+")\n")
+    #sys.stderr.write("< LISTE.PY -> appendToLperm("+str(ct)+")\n")
 
 def purge_lperm():
     today = date.today()
@@ -199,7 +199,7 @@ def get_begin_end_day_text(line):
 # Construit une liste de messages chronologiques à partir des fichiers lperm et lmes
 # Les doublons de la liste sont enlevés et elle est triée chronologiquement.
 def get_liste(liste = []):
-    sys.stderr.write("Entre dans get_liste()\n")
+    #sys.stderr.write("Entre dans get_liste()\n")
     now = datetime.now()
     today = date.today()
     try:           
@@ -209,28 +209,24 @@ def get_liste(liste = []):
                 # Par exemple 10:00,12:00,Je passe à 14 heures.
                 # séparés par une virgule. L'absence d'heure est remplacé par 23:59        
                 line = line.decode('utf-8').encode('utf-8').strip() 
-                sys.stderr.write("GET_LISTE : LECTURE de " + line + "\n")
+                #sys.stderr.write("GET_LISTE : LECTURE de " + line + "\n")
                 if not line.startswith('#', 0) and line!='': 
                     chronotext = get_begin_end_day_text(line)  
                     if chronotext.date() == None or chronotext.date() == today:
                         if chronotext.day() == '*' or int(chronotext.day()) == now.weekday(): 
                             liste.append(chronotext)
     except TypeError as e:
-        print "Type error({0})".format(e.message)   
-        pass
+        sys.stderr.write( "Type error({0})".format(e.message) )  
     except IOError as e:
-        print "Erreur -> ",e.message()
-        print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-        pass    
+        sys.stderr.write( "Erreur -> ",e.message())
+        sys.stderr.write( "I/O error({0}): {1}".format(e.errno, e.strerror) )  
     except ValueError as e:
-        print "Erreur lors de la lecture de lperm ", e    
-        pass
+        sys.stderr.write( "Erreur lors de la lecture de lperm ".format(e.message) )   
     except AttributeError as e:
-        sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
-        pass        
+        sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')        
     except:
         sys.stderr.write('Erreur innatendu : ' + sys.exc_info()[0] + '\n')  
-        pass
+ 
     
     try:
         if os.path.exists('lmes'): 
@@ -241,21 +237,16 @@ def get_liste(liste = []):
                         liste.append(get_begin_end_day_text(line))
     
     except TypeError as e:
-        print "Type error({0})".format(e.message)   
-        pass
+        sys.stderr.write("Type error({0})".format(e.message)) 
     except IOError as e:
-        print "Error à l'ouverture de lmes"
-        print "I/O error({0}): {1}".format(e.errno, e.strerror) 
-        pass   
+        sys.stderr.write( "Error à l'ouverture de lmes")
+        sys.stderr.write( "I/O error({0}): {1}".format(e.errno, e.strerror) )           
     except ValueError as e:
-        print "Erreur lors de la lecture de lmes ", e
-        pass  
+        sys.stderr.write( "Erreur lors de la lecture de lmes " + str(e))        
     except AttributeError as e:
         sys.stderr.write("Erreur d'attribut "+ e.__str__() + '\n')    
-        pass                
     except:
         sys.stderr.write("Erreur innatendue "+ sys.exc_info()[0] + '\n') 
-        pass
     
     liste = list(set(liste))
     
@@ -268,7 +259,7 @@ def get_liste(liste = []):
     liste = list(filter(lambda s : s.end()>nowmoins1, liste))
     liste.sort(key=lambda s : s.begin())
     
-    sys.stderr.write("Sort de get_liste()\n")
+    #sys.stderr.write("Sort de get_liste()\n")
     return liste
     
 # Critère de tri pour la liste

@@ -138,25 +138,25 @@ class MainFrame(Tk):
     def fill_labels(self, ctext=None):
         self.lock.acquire()
         try:      
-            sys.stderr.write("Entre dans fill_labels \n")
-            sys.stderr.write("Effacement des labels\n")
+            #sys.stderr.write("Entre dans fill_labels \n")
+            #sys.stderr.write("Effacement des labels\n")
             for label in self.labels:
-                sys.stderr.write("Effacement de " + label['text'] + "\n")                    
+                #sys.stderr.write("Effacement de " + label['text'] + "\n")                    
                 label.destroy()
-                sys.stderr.write("Effacé\n") 
+                #sys.stderr.write("Effacé\n") 
             for image in self.images:
                 image.pack_forget()  
                 
             self.labels = []    
                 
-            sys.stderr.write("Labels et images effacés\n")    
+            #sys.stderr.write("Labels et images effacés\n")    
             if ctext != None:
                 self.chronolist.append(ctext)
             
             self.chronolist = get_liste(self.chronolist)
             
             
-            sys.stderr.write("Liste de CTs récupérées\n")  
+            #sys.stderr.write("Liste de CTs récupérées\n")  
           
           
             colors = ['#BAFFA8', '#FFFFD0']
@@ -329,9 +329,9 @@ if nbapp() > 1:
     print "L'application semble déjà lancée"
 else:
     try: 
-        print "Lancement de l'application"
+        sys.stderr.write("Lancement de l'application")
         MainFrame()  
-        print 'fin de la fenêtre principale'
+        sys.stderr.write("fin de la fenêtre principale")
     except:
         sys.stderr.write('Problème au lancement\n') 
         sys.stderr.write(traceback.format_exc()) 
