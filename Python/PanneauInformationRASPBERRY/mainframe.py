@@ -274,11 +274,8 @@ class CopieEcran(Thread):
     def run(self):
         while self.ok:
             try:
-                print "Copie d'écran demandée"
                 commands.getoutput('scrot screen.png')
-                print "Copie d'écran faite"
                 send(self.thename, self.thepasswd, 'Copie d\'écran', None, ['screen.png'])                
-                print "Copie d'écran envoyée"
             except Exception as e:
                 print "mainframe.py, ligne 261 : ", e
             time.sleep(self.screencopy_delay)
