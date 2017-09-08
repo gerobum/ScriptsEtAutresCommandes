@@ -101,6 +101,9 @@ class ReceiveMail(Thread):
                 nbmailingerror+=1
                 print "Nb erreurs ", nbmailingerror
                 print "Unexpected error in ReceiveMail: dans le box.logout() du emails = box.folder('INBOX')...", sys.exc_info()[0]
+                if nbmailingerror > 10:
+                    self.parent.parent.restart_mail()
+                    
             return           
 
         try:
@@ -401,7 +404,7 @@ class Mailing(Thread):
             try:
                 som = ReceiveMail(self)
                 som.start()
-                #time.sleep(300)
+                time.sleep(5)
                 self.__switchscreen()
                 self.__writelabels()
                    

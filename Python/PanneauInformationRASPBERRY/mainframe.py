@@ -106,6 +106,11 @@ class MainFrame(Tk):
         self.purge.start()
 ############################################################
         self.mainloop()  
+       
+    def restart_mail(self):
+        self.mail.the_end()
+        self.mail = Mailing(self)
+        self.mail.start()
         
     def maj_photo(self, i):
         try:
