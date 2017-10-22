@@ -1,0 +1,11 @@
+#!/bin/bash
+mkdir 800x600
+for i in *.jpg 
+do
+    nom=`basename "$i" .jpg`
+    echo $nom
+    convert $i -resize "800x600" 800x600/$i
+done    
+
+
+#cvlc 1.wma -I dummy -vvv --sout=#transcode\{acodec=flac,ab=192\}:std\{access=file,mux=raw,dst="B.flac"\} vlc:\\quit
